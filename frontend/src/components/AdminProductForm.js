@@ -1,0 +1,390 @@
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useLanguage } from '../App';
+import { 
+  Save, 
+  X, 
+  Plus, 
+  Minus, 
+  Upload,
+  Image as ImageIcon,
+  Euro,
+  Package,
+  MapPin
+} from 'lucide-react';
+import axios from 'axios';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
+
+const AdminProductForm = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { language } = useLanguage();
+  const isEdit = !!id;
+
+  const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [product, setProduct] = useState({
+    name: { fr: '', ar: '', en: '' },
+    description: { fr: '', ar: '', en: '' },
+    category: 'epices',
+    price: 0,
+    image_urls: [''],
+    origin: { fr: '', ar: '', en: '' },
+    in_stock: true
+  });
+
+  const categories = [
+    { value: 'epices', labelFr: 'Épices', labelAr: 'بهارات', labelEn: 'Spices', icon: '🌶️' },
+    { value: 'thes', labelFr: 'Thés', labelAr: 'شاي', labelEn: 'Teas', icon: '🍃' },
+    { value: 'robes-kabyles', labelFr: 'Robes Kabyles', labelAr: 'فساتين قبائلية', labelEn: 'Kabyle Dresses', icon: '👗' },
+    { value: 'bijoux-kabyles', labelFr: 'Bijoux Kabyles', labelAr: 'مجوهرات قبائلية', labelEn: 'Kabyle Jewelry', icon: '💎' }
+  ];
+
+  useEffect(() => {
+    if (isEdit) {
+      fetchProduct();
+    }
+  }, [id, isEdit]);
+
+  const fetchProduct = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${API}/products/${id}`);
+      setProduct(response.data);
+    } catch (error) {
+      console.error('Error fetching product:', error);
+      alert('Erreur lors du chargement du produit');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleInputChange = (field, lang, value) => {
+    if (lang) {
+      setProduct(prev => ({
+        ...prev,
+        [field]: {
+          ...prev[field],
+          [lang]: value
+        }
+      }));
+    } else {
+      setProduct(prev => ({ ...prev, [field]: value }));
+    }
+  };
+
+  const handleImageChange = (index, value) => {
+    const newImages = [...product.image_urls];
+    newImages[index] = value;
+    setProduct(prev => ({ ...prev, image_urls: newImages }));
+  };
+
+  const addImage = () => {
+    setProduct(prev => ({
+      ...prev,
+      image_urls: [...prev.image_urls, '']
+    }));
+  };
+
+  const removeImage = (index) => {
+    if (product.image_urls.length > 1) {
+      setProduct(prev => ({
+        ...prev,
+        image_urls: prev.image_urls.filter((_, i) => i !== index)
+      }));
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+
+    try {
+      const productData = {
+        name: product.name,
+        description: product.description,
+        category: product.category,
+        price: parseFloat(product.price),
+        image_urls: product.image_urls.filter(url => url.trim() !== ''),
+        origin: product.origin,
+        in_stock: product.in_stock
+      };
+
+      if (isEdit) {
+        await axios.put(`${API}/products/${id}`, productData);
+      } else {
+        await axios.post(`${API}/products`, productData);
+      }
+
+      alert(isEdit ? 'Produit mis à jour avec succès!' : 'Produit créé avec succès!');
+      navigate('/admin/products');
+    } catch (error) {
+      console.error('Error saving product:', error);
+      alert('Erreur lors de la sauvegarde du produit');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const getLocalizedLabel = (item) => {
+    return item[`label${language.charAt(0).toUpperCase() + language.slice(1)}`] || item.labelFr;
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-64">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-amber-600"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-6xl mx-auto space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">
+            {isEdit ? 
+              (language === 'ar' ? 'تحرير المنتج' : language === 'en' ? 'Edit Product' : 'Modifier le Produit') :
+              (language === 'ar' ? 'إضافة منتج جديد' : language === 'en' ? 'Add New Product' : 'Ajouter un Nouveau Produit')
+            }
+          </h1>
+          <p className="text-gray-600 mt-1">
+            {language === 'ar' ? 'املأ النموذج لإنشاء أو تحديث منتج' :
+             language === 'en' ? 'Fill out the form to create or update a product' :
+             'Remplissez le formulaire pour créer ou mettre à jour un produit'}
+          </p>
+        </div>
+        <button
+          onClick={() => navigate('/admin/products')}
+          className="flex items-center px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+        >
+          <X size={20} className="mr-2" />
+          {language === 'ar' ? 'إلغاء' : language === 'en' ? 'Cancel' : 'Annuler'}
+        </button>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-8">
+        {/* Basic Information */}
+        <div className="bg-white rounded-xl shadow-lg p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+            <Package className="mr-2" size={24} />
+            {language === 'ar' ? 'معلومات أساسية' : language === 'en' ? 'Basic Information' : 'Informations de Base'}
+          </h2>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Names */}
+            {['fr', 'ar', 'en'].map(lang => (
+              <div key={lang} className="space-y-2">
+                <label className="form-label">
+                  {language === 'ar' ? 'اسم المنتج' : language === 'en' ? 'Product Name' : 'Nom du Produit'} ({lang.toUpperCase()})
+                </label>
+                <input
+                  type="text"
+                  value={product.name[lang]}
+                  onChange={(e) => handleInputChange('name', lang, e.target.value)}
+                  className="form-input"
+                  required
+                  dir={lang === 'ar' ? 'rtl' : 'ltr'}
+                />
+              </div>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+            {/* Descriptions */}
+            {['fr', 'ar', 'en'].map(lang => (
+              <div key={lang} className="space-y-2">
+                <label className="form-label">
+                  {language === 'ar' ? 'وصف المنتج' : language === 'en' ? 'Product Description' : 'Description du Produit'} ({lang.toUpperCase()})
+                </label>
+                <textarea
+                  value={product.description[lang]}
+                  onChange={(e) => handleInputChange('description', lang, e.target.value)}
+                  className="form-input min-h-24"
+                  required
+                  dir={lang === 'ar' ? 'rtl' : 'ltr'}
+                />
+              </div>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+            {/* Origins */}
+            {['fr', 'ar', 'en'].map(lang => (
+              <div key={lang} className="space-y-2">
+                <label className="form-label flex items-center">
+                  <MapPin size={16} className="mr-1" />
+                  {language === 'ar' ? 'المنشأ' : language === 'en' ? 'Origin' : 'Origine'} ({lang.toUpperCase()})
+                </label>
+                <input
+                  type="text"
+                  value={product.origin[lang]}
+                  onChange={(e) => handleInputChange('origin', lang, e.target.value)}
+                  className="form-input"
+                  required
+                  dir={lang === 'ar' ? 'rtl' : 'ltr'}
+                  placeholder={language === 'ar' ? 'مثال: الجزائر، منطقة القبائل' :
+                              language === 'en' ? 'e.g: Algeria, Kabylie region' :
+                              'ex: Algérie, région de Kabylie'}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Category and Price */}
+        <div className="bg-white rounded-xl shadow-lg p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+            <Euro className="mr-2" size={24} />
+            {language === 'ar' ? 'الفئة والسعر' : language === 'en' ? 'Category and Price' : 'Catégorie et Prix'}
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="space-y-2">
+              <label className="form-label">
+                {language === 'ar' ? 'فئة المنتج' : language === 'en' ? 'Product Category' : 'Catégorie du Produit'}
+              </label>
+              <select
+                value={product.category}
+                onChange={(e) => handleInputChange('category', null, e.target.value)}
+                className="form-input"
+                required
+              >
+                {categories.map(cat => (
+                  <option key={cat.value} value={cat.value}>
+                    {cat.icon} {getLocalizedLabel(cat)}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="form-label flex items-center">
+                <Euro size={16} className="mr-1" />
+                {language === 'ar' ? 'السعر (يورو)' : language === 'en' ? 'Price (EUR)' : 'Prix (EUR)'}
+              </label>
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                value={product.price}
+                onChange={(e) => handleInputChange('price', null, e.target.value)}
+                className="form-input"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="form-label">
+                {language === 'ar' ? 'حالة المخزون' : language === 'en' ? 'Stock Status' : 'État du Stock'}
+              </label>
+              <select
+                value={product.in_stock}
+                onChange={(e) => handleInputChange('in_stock', null, e.target.value === 'true')}
+                className="form-input"
+              >
+                <option value={true}>
+                  {language === 'ar' ? 'متوفر' : language === 'en' ? 'In Stock' : 'En stock'}
+                </option>
+                <option value={false}>
+                  {language === 'ar' ? 'غير متوفر' : language === 'en' ? 'Out of Stock' : 'Rupture de stock'}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* Images */}
+        <div className="bg-white rounded-xl shadow-lg p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+            <ImageIcon className="mr-2" size={24} />
+            {language === 'ar' ? 'صور المنتج' : language === 'en' ? 'Product Images' : 'Images du Produit'}
+          </h2>
+
+          <div className="space-y-4">
+            {product.image_urls.map((url, index) => (
+              <div key={index} className="flex space-x-4">
+                <div className="flex-1 space-y-2">
+                  <label className="form-label">
+                    {language === 'ar' ? 'رابط الصورة' : language === 'en' ? 'Image URL' : 'URL de l\'image'} {index + 1}
+                  </label>
+                  <input
+                    type="url"
+                    value={url}
+                    onChange={(e) => handleImageChange(index, e.target.value)}
+                    className="form-input"
+                    placeholder="https://example.com/image.jpg"
+                    required={index === 0}
+                  />
+                </div>
+                {url && (
+                  <div className="w-24 h-24 flex-shrink-0">
+                    <img
+                      src={url}
+                      alt={`Preview ${index + 1}`}
+                      className="w-full h-full object-cover rounded-lg"
+                      onError={(e) => {
+                        e.target.src = 'https://images.unsplash.com/photo-1441986300917-64674bd600d8';
+                      }}
+                    />
+                  </div>
+                )}
+                <button
+                  type="button"
+                  onClick={() => removeImage(index)}
+                  className="p-2 text-red-600 hover:bg-red-50 rounded-lg self-start"
+                  disabled={product.image_urls.length === 1}
+                >
+                  <Minus size={16} />
+                </button>
+              </div>
+            ))}
+
+            <button
+              type="button"
+              onClick={addImage}
+              className="w-full flex items-center justify-center py-3 text-amber-600 hover:bg-amber-50 rounded-lg border-2 border-dashed border-amber-300"
+            >
+              <Plus size={16} className="mr-2" />
+              {language === 'ar' ? 'إضافة صورة' : language === 'en' ? 'Add Image' : 'Ajouter une Image'}
+            </button>
+          </div>
+        </div>
+
+        {/* Submit Button */}
+        <div className="flex items-center justify-end space-x-4 bg-white rounded-xl shadow-lg p-6">
+          <button
+            type="button"
+            onClick={() => navigate('/admin/products')}
+            className="px-6 py-3 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+          >
+            {language === 'ar' ? 'إلغاء' : language === 'en' ? 'Cancel' : 'Annuler'}
+          </button>
+          <button
+            type="submit"
+            disabled={saving}
+            className="btn-primary flex items-center px-6 py-3 disabled:opacity-50"
+          >
+            {saving ? (
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+            ) : (
+              <Save size={20} className="mr-2" />
+            )}
+            {saving ? 
+              (language === 'ar' ? 'جاري الحفظ...' : language === 'en' ? 'Saving...' : 'Sauvegarde...') :
+              (isEdit ? 
+                (language === 'ar' ? 'تحديث المنتج' : language === 'en' ? 'Update Product' : 'Mettre à jour') :
+                (language === 'ar' ? 'إنشاء المنتج' : language === 'en' ? 'Create Product' : 'Créer le produit')
+              )
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+export default AdminProductForm;
