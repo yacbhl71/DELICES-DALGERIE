@@ -10,9 +10,11 @@ class SoumamHeritageAPITester:
     def __init__(self, base_url="https://soumam-valley.preview.emergentagent.com/api"):
         self.base_url = base_url
         self.token = None
+        self.admin_token = None
         self.tests_run = 0
         self.tests_passed = 0
         self.user_id = None
+        self.uploaded_files = []  # Track uploaded files for cleanup
 
     def run_test(self, name, method, endpoint, expected_status, data=None, headers=None):
         """Run a single API test"""
