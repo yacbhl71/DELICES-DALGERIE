@@ -279,6 +279,62 @@ async def login(user_credentials: UserLogin):
 async def read_users_me(current_user: User = Depends(get_current_user)):
     return current_user
 
+# --- User Profile Routes ---
+@api_router.put("/users/me", response_model=User)
+async def update_user_profile(
+    user_update: UserUpdate,
+    current_user: User = Depends(get_current_user)
+):
+    """Update current user's profile"""
+    update_data = {}
+    
+    if user_update.full_name is not None:
+        update_data["full_name"] = user_update.full_name
+    
+    if update_data:
+        await db.users.update_one(
+            {"id": current_user.id},
+            {"$set": update_data}
+        )
+        
+        # Fetch updated user
+        updated_user = await db.users.find_one({"id": current_user.id})
+        return User(**updated_user)
+    
+    return current_user
+
+@api_router.put("/users/me/password")
+async def change_password(
+    password_data: Dict[str, str],
+    current_user: User = Depends(get_current_user)
+):
+    """Change current user's password"""
+    current_password = password_data.get("current_password")
+    new_password = password_data.get("new_password")
+    
+    if not current_password or not new_password:
+        raise HTTPException(
+            status_code=400,
+            detail="Both current and new passwords are required"
+        )
+    
+    # Verify current password
+    user_with_password = await db.users.find_one({"id": current_user.id})
+    if not verify_password(current_password, user_with_password.get("hashed_password")):
+        raise HTTPException(
+            status_code=400,
+            detail="Current password is incorrect"
+        )
+    
+    # Update password
+    hashed_password = get_password_hash(new_password)
+    await db.users.update_one(
+        {"id": current_user.id},
+        {"$set": {"hashed_password": hashed_password}}
+    )
+    
+    return {"message": "Password changed successfully"}
+
 # --- Recipe Routes ---
 @api_router.get("/recipes", response_model=List[Recipe])
 async def get_recipes():
