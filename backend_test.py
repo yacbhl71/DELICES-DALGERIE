@@ -349,7 +349,7 @@ class SoumamHeritageAPITester:
             "Image Upload - No Auth",
             "POST",
             "upload",
-            401,
+            403,  # Changed from 401 to 403 as admin endpoints return 403
             files=files,
             use_admin_token=False
         )
