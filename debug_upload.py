@@ -9,17 +9,29 @@ from PIL import Image
 
 def create_large_image(target_size_mb=11):
     """Create a large image for testing"""
-    # Create a large image that should exceed 10MB
-    # RGB images use 3 bytes per pixel
-    target_bytes = target_size_mb * 1024 * 1024
-    pixels_needed = target_bytes // 3
-    side_length = int(pixels_needed ** 0.5)
+    # Create a large uncompressed image
+    # Use a very large dimension with random colors to prevent compression
+    import random
     
-    print(f"Creating {side_length}x{side_length} image (target: {target_size_mb}MB)")
+    # Start with a large dimension
+    side_length = 4000  # 4000x4000 = 16M pixels = ~48MB uncompressed
     
-    img = Image.new('RGB', (side_length, side_length), color='blue')
+    print(f"Creating {side_length}x{side_length} image with random colors")
+    
+    # Create image with random pixels to prevent compression
+    pixels = []
+    for i in range(side_length * side_length):
+        pixels.append((
+            random.randint(0, 255),
+            random.randint(0, 255), 
+            random.randint(0, 255)
+        ))
+    
+    img = Image.new('RGB', (side_length, side_length))
+    img.putdata(pixels)
+    
     img_bytes = io.BytesIO()
-    img.save(img_bytes, format='JPEG', quality=95)
+    img.save(img_bytes, format='PNG')  # PNG for less compression
     img_bytes.seek(0)
     
     actual_size = len(img_bytes.getvalue())
