@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth, useLanguage } from '../App';
 import { User, Mail, Calendar, Settings, Heart, ShoppingBag, BookOpen, Edit3, Save, X } from 'lucide-react';
 
 const ProfilePage = () => {
   const { user, logout } = useAuth();
   const { t, language } = useLanguage();
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({
     full_name: user?.full_name || '',
