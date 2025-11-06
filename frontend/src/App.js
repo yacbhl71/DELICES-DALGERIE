@@ -225,6 +225,15 @@ function App() {
                   <Navigate to="/auth" />
                 )
               } />
+              <Route path="/admin/settings" element={
+                user?.role === 'admin' ? (
+                  <AdminLayout>
+                    <AdminSettings />
+                  </AdminLayout>
+                ) : (
+                  <Navigate to="/auth" />
+                )
+              } />
               
               {/* Admin Form Routes */}
               <Route path="/admin/recipes/new" element={
