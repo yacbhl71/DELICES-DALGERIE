@@ -243,28 +243,16 @@ const AdminRecipeForm = () => {
           </h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Image URL */}
+            {/* Image Upload */}
             <div className="space-y-2">
-              <label className="form-label">
-                {language === 'ar' ? 'رابط الصورة' : language === 'en' ? 'Image URL' : 'URL de l\'image'}
-              </label>
-              <input
-                type="url"
-                value={recipe.image_url}
-                onChange={(e) => handleInputChange('image_url', null, e.target.value)}
-                className="form-input"
-                placeholder="https://example.com/image.jpg"
+              <ImageUpload
+                label={language === 'ar' ? 'صورة الوصفة' : language === 'en' ? 'Recipe Image' : 'Image de la recette'}
+                maxImages={1}
+                existingImages={recipe.image_url ? [recipe.image_url] : []}
+                onUploadComplete={(images) => {
+                  handleInputChange('image_url', null, images[0] || '');
+                }}
               />
-              {recipe.image_url && (
-                <img
-                  src={recipe.image_url}
-                  alt="Preview"
-                  className="w-full h-32 object-cover rounded-lg mt-2"
-                  onError={(e) => {
-                    e.target.src = 'https://images.unsplash.com/photo-1546548970-71785318a17b';
-                  }}
-                />
-              )}
             </div>
 
             {/* Recipe Details */}
