@@ -15,7 +15,17 @@ const ImageUpload = ({
   const [uploading, setUploading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const fileInputRef = useRef(null);
-  const { toast } = useToast();
+  
+  // Simple toast replacement
+  const toast = (options) => {
+    const title = options.title || '';
+    const description = options.description || '';
+    if (options.variant === 'destructive') {
+      alert(`❌ ${title}\n${description}`);
+    } else {
+      alert(`✅ ${title}\n${description}`);
+    }
+  };
 
   const uploadImage = async (file) => {
     const formData = new FormData();
