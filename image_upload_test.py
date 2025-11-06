@@ -75,13 +75,25 @@ class ImageUploadTester:
 
     def create_large_image(self, size_mb=11):
         """Create a large image for size testing"""
-        # Calculate dimensions for approximately size_mb MB
-        pixels_needed = (size_mb * 1024 * 1024) // 3  # 3 bytes per RGB pixel
-        side_length = int(pixels_needed ** 0.5)
+        import random
         
-        img = Image.new('RGB', (side_length, side_length), color='blue')
+        # Create a large image with random pixels to prevent compression
+        side_length = 3000  # Should create ~27MB PNG
+        
+        # Create image with random pixels
+        pixels = []
+        for i in range(side_length * side_length):
+            pixels.append((
+                random.randint(0, 255),
+                random.randint(0, 255), 
+                random.randint(0, 255)
+            ))
+        
+        img = Image.new('RGB', (side_length, side_length))
+        img.putdata(pixels)
+        
         img_bytes = io.BytesIO()
-        img.save(img_bytes, format='JPEG', quality=95)
+        img.save(img_bytes, format='PNG')  # PNG to maintain size
         img_bytes.seek(0)
         return img_bytes
 
