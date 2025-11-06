@@ -759,11 +759,12 @@ const AdminSettings = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   {language === 'ar' ? 'صورة Open Graph' : language === 'en' ? 'Open Graph Image' : 'Image Open Graph'}
                 </label>
-                <ImageUpload
-                  maxImages={1}
-                  existingImages={settings.seo.og_image ? [settings.seo.og_image] : []}
-                  onUploadComplete={(images) => handleInputChange('seo', 'og_image', images[0] || '')}
-                  label={language === 'ar' ? 'صورة OG' : language === 'en' ? 'OG Image' : 'Image OG'}
+                <input
+                  type="text"
+                  value={settings.seo.og_image}
+                  onChange={(e) => handleInputChange('seo', 'og_image', e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  placeholder="https://example.com/og-image.png"
                 />
                 <p className="text-sm text-gray-500 mt-2">
                   {language === 'ar' ? 'الحجم الموصى به: 1200x630 بكسل' : language === 'en' ? 'Recommended size: 1200x630 pixels' : 'Taille recommandée : 1200x630 pixels'}
