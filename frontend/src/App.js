@@ -307,6 +307,10 @@ function App() {
                         path="/profile" 
                         element={user ? <ProfilePage /> : <Navigate to="/auth" />} 
                       />
+                      <Route 
+                        path="/account-settings" 
+                        element={user ? <AccountSettings /> : <Navigate to="/auth" />} 
+                      />
                     </Routes>
                   </main>
                 </>
