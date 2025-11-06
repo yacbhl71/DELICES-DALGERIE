@@ -537,6 +537,17 @@ async def delete_image(
         logger.error(f"Error deleting file: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error deleting file: {str(e)}")
 
+# --- File Serving Route ---
+@api_router.get("/uploads/{filename}")
+async def serve_uploaded_file(filename: str):
+    """Serve uploaded files through API"""
+    file_path = UPLOAD_DIR / filename
+    
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail="File not found")
+    
+    return FileResponse(file_path)
+
 # --- Basic Routes ---
 @api_router.get("/")
 async def root():
