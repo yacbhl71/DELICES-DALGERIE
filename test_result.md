@@ -206,9 +206,10 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Image Upload API Endpoint"
-    - "Static File Serving for Uploads"
     - "ImageUpload Component"
+    - "Recipe Form Image Upload Integration"
+    - "Product Form Image Upload Integration"
+    - "History Form Image Upload Integration"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
