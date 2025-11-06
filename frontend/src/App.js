@@ -24,6 +24,7 @@ import AdminProductForm from './components/AdminProductForm';
 import AdminHistoryForm from './components/AdminHistoryForm';
 import AdminAnalytics from './components/AdminAnalytics';
 import AdminSettings from './components/AdminSettings';
+import AdminSettingsTest from './components/AdminSettingsTest';
 import AccountSettings from './components/AccountSettings';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
