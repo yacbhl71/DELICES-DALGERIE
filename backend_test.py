@@ -1,7 +1,10 @@
 import requests
 import sys
 import json
+import os
+import io
 from datetime import datetime
+from PIL import Image
 
 class SoumamHeritageAPITester:
     def __init__(self, base_url="https://soumam-valley.preview.emergentagent.com/api"):
