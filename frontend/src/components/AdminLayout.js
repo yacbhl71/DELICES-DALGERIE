@@ -125,12 +125,21 @@ const AdminLayout = ({ children }) => {
 
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
           <div className="flex items-center space-x-3 mb-4">
-            <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center">
-              <Users size={16} className="text-amber-600" />
+            <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center flex-shrink-0">
+              <span className="text-white font-bold text-sm">
+                {user.full_name?.charAt(0).toUpperCase()}
+              </span>
             </div>
-            <div>
-              <p className="text-sm font-medium text-gray-900">{user.full_name}</p>
-              <p className="text-xs text-gray-500">Administrateur</p>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-gray-900 truncate" title={user.full_name}>
+                {user.full_name}
+              </p>
+              <p className="text-xs text-gray-500 capitalize">
+                {user.role === 'admin' 
+                  ? (language === 'ar' ? 'مسؤول' : language === 'en' ? 'Admin' : 'Administrateur')
+                  : (language === 'ar' ? 'مستخدم' : language === 'en' ? 'User' : 'Utilisateur')
+                }
+              </p>
             </div>
           </div>
           
