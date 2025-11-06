@@ -40,6 +40,13 @@ app = FastAPI(title="Soumam Heritage API")
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
+# Setup upload directory
+UPLOAD_DIR = Path(__file__).parent / "uploads"
+UPLOAD_DIR.mkdir(exist_ok=True)
+
+# Mount static files for serving uploaded images
+app.mount("/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")
+
 # --- Models ---
 
 # User Models
