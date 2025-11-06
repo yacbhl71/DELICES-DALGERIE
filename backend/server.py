@@ -467,6 +467,59 @@ async def delete_user_admin(user_id: str, admin_user: User = Depends(get_admin_u
     await db.users.delete_one({"id": user_id})
     return {"message": "User deleted successfully"}
 
+# --- Settings Routes ---
+@api_router.get("/admin/settings")
+async def get_settings(admin_user: User = Depends(get_admin_user)):
+    """Get site settings (admin only)"""
+    settings = await db.settings.find_one({"id": "site_settings"})
+    
+    if not settings:
+        # Return default settings if none exist
+        return {}
+    
+    # Remove MongoDB _id field
+    if "_id" in settings:
+        del settings["_id"]
+    
+    return settings
+
+@api_router.put("/admin/settings")
+async def update_settings(
+    settings_update: Dict[str, Any],
+    admin_user: User = Depends(get_admin_user)
+):
+    """Update site settings (admin only)"""
+    try:
+        # Get existing settings or create new
+        existing_settings = await db.settings.find_one({"id": "site_settings"})
+        
+        if existing_settings:
+            # Update existing settings
+            update_data = {
+                **existing_settings,
+                **settings_update,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }
+            
+            await db.settings.update_one(
+                {"id": "site_settings"},
+                {"$set": update_data}
+            )
+        else:
+            # Create new settings document
+            new_settings = {
+                "id": "site_settings",
+                **settings_update,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }
+            await db.settings.insert_one(new_settings)
+        
+        return {"success": True, "message": "Settings updated successfully"}
+        
+    except Exception as e:
+        logger.error(f"Error updating settings: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error updating settings: {str(e)}")
+
 # --- Image Upload Routes ---
 @api_router.post("/upload")
 async def upload_image(
