@@ -181,6 +181,19 @@ class AdminStats(BaseModel):
     recent_recipes: int
     recent_products: int
 
+# Settings Model
+class Settings(BaseModel):
+    id: str = Field(default="site_settings")
+    general: Optional[Dict[str, Any]] = None
+    configuration: Optional[Dict[str, Any]] = None
+    appearance: Optional[Dict[str, Any]] = None
+    seo: Optional[Dict[str, Any]] = None
+    notifications: Optional[Dict[str, Any]] = None
+    security: Optional[Dict[str, Any]] = None
+    media: Optional[Dict[str, Any]] = None
+    backup: Optional[Dict[str, Any]] = None
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
 # --- Authentication Functions ---
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
