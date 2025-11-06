@@ -454,6 +454,89 @@ async def delete_user_admin(user_id: str, admin_user: User = Depends(get_admin_u
     await db.users.delete_one({"id": user_id})
     return {"message": "User deleted successfully"}
 
+# --- Image Upload Routes ---
+@api_router.post("/upload")
+async def upload_image(
+    file: UploadFile = File(...),
+    admin_user: User = Depends(get_admin_user)
+):
+    """Upload an image file (admin only)"""
+    try:
+        # Validate file type
+        allowed_types = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"]
+        if file.content_type not in allowed_types:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Invalid file type. Allowed types: {', '.join(allowed_types)}"
+            )
+        
+        # Validate file size (max 10MB)
+        file_size = 0
+        chunk_size = 1024 * 1024  # 1MB chunks
+        
+        # Generate unique filename
+        file_extension = file.filename.split('.')[-1]
+        unique_filename = f"{uuid.uuid4()}.{file_extension}"
+        file_path = UPLOAD_DIR / unique_filename
+        
+        # Save file in chunks
+        async with aiofiles.open(file_path, 'wb') as f:
+            while True:
+                chunk = await file.read(chunk_size)
+                if not chunk:
+                    break
+                file_size += len(chunk)
+                
+                # Check size limit (10MB)
+                if file_size > 10 * 1024 * 1024:
+                    # Delete the file if it exceeds the limit
+                    if file_path.exists():
+                        file_path.unlink()
+                    raise HTTPException(
+                        status_code=400,
+                        detail="File size exceeds 10MB limit"
+                    )
+                
+                await f.write(chunk)
+        
+        # Return the URL
+        file_url = f"/uploads/{unique_filename}"
+        
+        return {
+            "success": True,
+            "filename": unique_filename,
+            "url": file_url,
+            "size": file_size
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error uploading file: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error uploading file: {str(e)}")
+
+@api_router.delete("/upload/{filename}")
+async def delete_image(
+    filename: str,
+    admin_user: User = Depends(get_admin_user)
+):
+    """Delete an uploaded image (admin only)"""
+    try:
+        file_path = UPLOAD_DIR / filename
+        
+        if not file_path.exists():
+            raise HTTPException(status_code=404, detail="File not found")
+        
+        file_path.unlink()
+        
+        return {"success": True, "message": "File deleted successfully"}
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error deleting file: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error deleting file: {str(e)}")
+
 # --- Basic Routes ---
 @api_router.get("/")
 async def root():
