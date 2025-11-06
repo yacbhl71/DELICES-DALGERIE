@@ -278,7 +278,7 @@ class ImageUploadTester:
             return False
         
         filename = self.uploaded_files[0]
-        static_url = f"https://soumam-valley.preview.emergentagent.com/uploads/{filename}"
+        static_url = f"https://soumam-valley.preview.emergentagent.com/api/uploads/{filename}"
         
         try:
             response = requests.get(static_url, timeout=10)
