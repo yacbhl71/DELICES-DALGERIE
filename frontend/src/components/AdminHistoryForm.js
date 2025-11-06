@@ -316,54 +316,14 @@ const AdminHistoryForm = () => {
             {language === 'ar' ? 'الصور' : language === 'en' ? 'Images' : 'Images'}
           </h2>
 
-          <div className="space-y-4">
-            {content.image_urls.map((url, index) => (
-              <div key={index} className="flex space-x-4">
-                <div className="flex-1 space-y-2">
-                  <label className="form-label">
-                    {language === 'ar' ? 'رابط الصورة' : language === 'en' ? 'Image URL' : 'URL de l\'image'} {index + 1}
-                  </label>
-                  <input
-                    type="url"
-                    value={url}
-                    onChange={(e) => handleImageChange(index, e.target.value)}
-                    className="form-input"
-                    placeholder="https://example.com/historical-image.jpg"
-                    required={index === 0}
-                  />
-                </div>
-                {url && (
-                  <div className="w-32 h-24 flex-shrink-0">
-                    <img
-                      src={url}
-                      alt={`Preview ${index + 1}`}
-                      className="w-full h-full object-cover rounded-lg"
-                      onError={(e) => {
-                        e.target.src = 'https://images.unsplash.com/photo-1441986300917-64674bd600d8';
-                      }}
-                    />
-                  </div>
-                )}
-                <button
-                  type="button"
-                  onClick={() => removeImage(index)}
-                  className="p-2 text-red-600 hover:bg-red-50 rounded-lg self-start"
-                  disabled={content.image_urls.length === 1}
-                >
-                  <Minus size={16} />
-                </button>
-              </div>
-            ))}
-
-            <button
-              type="button"
-              onClick={addImage}
-              className="w-full flex items-center justify-center py-3 text-amber-600 hover:bg-amber-50 rounded-lg border-2 border-dashed border-amber-300"
-            >
-              <Plus size={16} className="mr-2" />
-              {language === 'ar' ? 'إضافة صورة' : language === 'en' ? 'Add Image' : 'Ajouter une Image'}
-            </button>
-          </div>
+          <ImageUpload
+            label={language === 'ar' ? 'الصور' : language === 'en' ? 'Images' : 'Images'}
+            maxImages={5}
+            existingImages={content.image_urls.filter(url => url.trim() !== '')}
+            onUploadComplete={(images) => {
+              setContent(prev => ({ ...prev, image_urls: images.length > 0 ? images : [''] }));
+            }}
+          />
 
           <div className="mt-6 p-4 bg-green-50 rounded-lg">
             <h3 className="font-medium text-green-900 mb-2">
