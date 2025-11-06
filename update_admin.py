@@ -23,7 +23,7 @@ async def update_admin_role():
         
         # Mettre à jour le rôle
         result = await db.users.update_one(
-            {'email': 'propriétaire@soumam.com'},
+            {'email': 'admin.soumam@gmail.com'},
             {'$set': {'role': 'admin'}}
         )
         
@@ -31,7 +31,7 @@ async def update_admin_role():
             print('✅ Rôle admin mis à jour!')
             
             # Vérifier la mise à jour
-            user = await db.users.find_one({'email': 'propriétaire@soumam.com'})
+            user = await db.users.find_one({'email': 'admin.soumam@gmail.com'})
             print(f'👤 Utilisateur: {user["full_name"]}')
             print(f'📧 Email: {user["email"]}')
             print(f'👔 Rôle: {user["role"]}')
