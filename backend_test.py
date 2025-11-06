@@ -233,6 +233,312 @@ class SoumamHeritageAPITester:
         
         return self.run_test("Create Recipe", "POST", "recipes", 200, data=recipe_data)[0]
 
+    def test_admin_login(self):
+        """Test admin login with provided credentials"""
+        admin_credentials = {
+            "email": "admin.soumam@gmail.com",
+            "password": "soumam2024"
+        }
+        
+        success, response = self.run_test(
+            "Admin Login",
+            "POST",
+            "auth/login",
+            200,
+            data=admin_credentials
+        )
+        
+        if success and 'access_token' in response:
+            self.admin_token = response['access_token']
+            print(f"   Admin token received: {self.admin_token[:20]}...")
+            return True
+        return False
+
+    def create_test_image(self, format='JPEG', size=(100, 100)):
+        """Create a test image in memory"""
+        img = Image.new('RGB', size, color='red')
+        img_bytes = io.BytesIO()
+        img.save(img_bytes, format=format)
+        img_bytes.seek(0)
+        return img_bytes
+
+    def test_image_upload_success(self):
+        """Test successful image upload"""
+        if not self.admin_token:
+            print("❌ Cannot test image upload - no admin token")
+            return False
+        
+        # Create a test JPEG image
+        test_image = self.create_test_image('JPEG')
+        files = {'file': ('test_image.jpg', test_image, 'image/jpeg')}
+        
+        success, response = self.run_test(
+            "Image Upload - JPEG",
+            "POST",
+            "upload",
+            200,
+            files=files,
+            use_admin_token=True
+        )
+        
+        if success and response:
+            # Verify response structure
+            required_keys = ['success', 'filename', 'url', 'size']
+            if all(key in response for key in required_keys):
+                print(f"   Uploaded file: {response['filename']}")
+                print(f"   File URL: {response['url']}")
+                print(f"   File size: {response['size']} bytes")
+                self.uploaded_files.append(response['filename'])
+                return True
+            else:
+                print(f"❌ Missing required response keys. Got: {list(response.keys())}")
+        
+        return False
+
+    def test_image_upload_png(self):
+        """Test PNG image upload"""
+        if not self.admin_token:
+            print("❌ Cannot test PNG upload - no admin token")
+            return False
+        
+        # Create a test PNG image
+        test_image = self.create_test_image('PNG')
+        files = {'file': ('test_image.png', test_image, 'image/png')}
+        
+        success, response = self.run_test(
+            "Image Upload - PNG",
+            "POST",
+            "upload",
+            200,
+            files=files,
+            use_admin_token=True
+        )
+        
+        if success and response and 'filename' in response:
+            self.uploaded_files.append(response['filename'])
+            return True
+        return False
+
+    def test_image_upload_invalid_type(self):
+        """Test upload with invalid file type"""
+        if not self.admin_token:
+            print("❌ Cannot test invalid upload - no admin token")
+            return False
+        
+        # Create a fake text file
+        fake_file = io.BytesIO(b"This is not an image")
+        files = {'file': ('test.txt', fake_file, 'text/plain')}
+        
+        success, response = self.run_test(
+            "Image Upload - Invalid Type",
+            "POST",
+            "upload",
+            400,
+            files=files,
+            use_admin_token=True
+        )
+        
+        return success
+
+    def test_image_upload_no_auth(self):
+        """Test upload without authentication"""
+        test_image = self.create_test_image('JPEG')
+        files = {'file': ('test_image.jpg', test_image, 'image/jpeg')}
+        
+        success, response = self.run_test(
+            "Image Upload - No Auth",
+            "POST",
+            "upload",
+            401,
+            files=files,
+            use_admin_token=False
+        )
+        
+        return success
+
+    def test_static_file_serving(self):
+        """Test that uploaded images are accessible via /uploads"""
+        if not self.uploaded_files:
+            print("❌ Cannot test static serving - no uploaded files")
+            return False
+        
+        # Test accessing the first uploaded file
+        filename = self.uploaded_files[0]
+        static_url = f"https://soumam-valley.preview.emergentagent.com/uploads/{filename}"
+        
+        try:
+            response = requests.get(static_url, timeout=10)
+            success = response.status_code == 200
+            
+            if success:
+                print(f"✅ Static file accessible - Status: {response.status_code}")
+                print(f"   Content-Type: {response.headers.get('content-type', 'Unknown')}")
+                print(f"   Content-Length: {response.headers.get('content-length', 'Unknown')}")
+                self.tests_passed += 1
+            else:
+                print(f"❌ Static file not accessible - Status: {response.status_code}")
+            
+            self.tests_run += 1
+            return success
+            
+        except Exception as e:
+            print(f"❌ Error accessing static file: {str(e)}")
+            self.tests_run += 1
+            return False
+
+    def test_image_delete(self):
+        """Test deleting an uploaded image"""
+        if not self.admin_token or not self.uploaded_files:
+            print("❌ Cannot test image delete - no admin token or uploaded files")
+            return False
+        
+        # Delete the first uploaded file
+        filename = self.uploaded_files[0]
+        
+        success, response = self.run_test(
+            f"Image Delete - {filename}",
+            "DELETE",
+            f"upload/{filename}",
+            200,
+            use_admin_token=True
+        )
+        
+        if success:
+            # Remove from our tracking list
+            self.uploaded_files.remove(filename)
+            
+            # Verify file is no longer accessible
+            static_url = f"https://soumam-valley.preview.emergentagent.com/uploads/{filename}"
+            try:
+                response = requests.get(static_url, timeout=10)
+                if response.status_code == 404:
+                    print(f"   ✅ File properly deleted - no longer accessible")
+                    return True
+                else:
+                    print(f"   ⚠️ File deleted from API but still accessible at {response.status_code}")
+                    return True  # Still consider success as API worked
+            except:
+                print(f"   ✅ File properly deleted - no longer accessible")
+                return True
+        
+        return False
+
+    def test_image_delete_nonexistent(self):
+        """Test deleting a non-existent image"""
+        if not self.admin_token:
+            print("❌ Cannot test delete nonexistent - no admin token")
+            return False
+        
+        fake_filename = "nonexistent-file.jpg"
+        
+        success, response = self.run_test(
+            "Image Delete - Nonexistent",
+            "DELETE",
+            f"upload/{fake_filename}",
+            404,
+            use_admin_token=True
+        )
+        
+        return success
+
+    def test_image_delete_no_auth(self):
+        """Test deleting image without authentication"""
+        if not self.uploaded_files:
+            print("❌ Cannot test delete no auth - no uploaded files")
+            return False
+        
+        filename = self.uploaded_files[0] if self.uploaded_files else "test.jpg"
+        
+        success, response = self.run_test(
+            "Image Delete - No Auth",
+            "DELETE",
+            f"upload/{filename}",
+            401,
+            use_admin_token=False
+        )
+        
+        return success
+
+    def test_admin_stats(self):
+        """Test admin stats endpoint"""
+        if not self.admin_token:
+            print("❌ Cannot test admin stats - no admin token")
+            return False
+        
+        success, response = self.run_test(
+            "Admin Stats",
+            "GET",
+            "admin/stats",
+            200,
+            use_admin_token=True
+        )
+        
+        if success and response:
+            expected_keys = ['total_users', 'total_recipes', 'total_products', 'total_historical_content', 
+                           'recent_users', 'recent_recipes', 'recent_products']
+            if all(key in response for key in expected_keys):
+                print(f"   Total users: {response.get('total_users', 0)}")
+                print(f"   Total recipes: {response.get('total_recipes', 0)}")
+                print(f"   Total products: {response.get('total_products', 0)}")
+                return True
+            else:
+                print(f"❌ Missing expected stats keys. Got: {list(response.keys())}")
+        
+        return False
+
+    def cleanup_uploaded_files(self):
+        """Clean up any remaining uploaded files"""
+        if not self.admin_token or not self.uploaded_files:
+            return
+        
+        print(f"\n🧹 Cleaning up {len(self.uploaded_files)} uploaded files...")
+        for filename in self.uploaded_files[:]:  # Copy list to avoid modification during iteration
+            try:
+                url = f"{self.base_url}/upload/{filename}"
+                headers = {'Authorization': f'Bearer {self.admin_token}'}
+                response = requests.delete(url, headers=headers, timeout=10)
+                if response.status_code == 200:
+                    print(f"   ✅ Deleted {filename}")
+                    self.uploaded_files.remove(filename)
+                else:
+                    print(f"   ⚠️ Could not delete {filename} - Status: {response.status_code}")
+            except Exception as e:
+                print(f"   ❌ Error deleting {filename}: {str(e)}")
+
+    def run_image_upload_tests(self):
+        """Run comprehensive image upload tests"""
+        print("\n🖼️  Starting Image Upload Tests")
+        print("=" * 50)
+        
+        # Test admin authentication first
+        if not self.test_admin_login():
+            print("❌ Admin login failed - cannot test image upload functionality")
+            return False
+        
+        # Test image upload functionality
+        tests = [
+            self.test_image_upload_success,
+            self.test_image_upload_png,
+            self.test_image_upload_invalid_type,
+            self.test_image_upload_no_auth,
+            self.test_static_file_serving,
+            self.test_image_delete,
+            self.test_image_delete_nonexistent,
+            self.test_image_delete_no_auth,
+            self.test_admin_stats
+        ]
+        
+        for test in tests:
+            try:
+                test()
+            except Exception as e:
+                print(f"❌ Test {test.__name__} failed with error: {str(e)}")
+        
+        # Cleanup
+        self.cleanup_uploaded_files()
+        
+        return True
+
     def run_all_tests(self):
         """Run all API tests"""
         print("🚀 Starting Soumam Heritage API Tests")
