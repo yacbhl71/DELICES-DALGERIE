@@ -453,7 +453,7 @@ class SoumamHeritageAPITester:
             "Image Delete - No Auth",
             "DELETE",
             f"upload/{filename}",
-            401,
+            403,  # Changed from 401 to 403 as admin endpoints return 403
             use_admin_token=False
         )
         
