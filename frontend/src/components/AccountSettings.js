@@ -11,8 +11,6 @@ import {
   EyeOff
 } from 'lucide-react';
 import axios from 'axios';
-import { useToast } from '../hooks/use-toast';
-
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
@@ -20,7 +18,17 @@ const AccountSettings = () => {
   const { user, setUser } = useAuth();
   const { language } = useLanguage();
   const navigate = useNavigate();
-  const { toast } = useToast();
+  
+  // Simple toast replacement
+  const toast = (options) => {
+    const title = options.title || '';
+    const description = options.description || '';
+    if (options.variant === 'destructive') {
+      alert(`❌ ${title}\n${description}`);
+    } else {
+      alert(`✅ ${title}\n${description}`);
+    }
+  };
 
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
