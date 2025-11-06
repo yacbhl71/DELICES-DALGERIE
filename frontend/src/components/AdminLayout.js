@@ -124,8 +124,9 @@ const AdminLayout = ({ children }) => {
           })}
         </nav>
 
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
-          <div className="flex items-center space-x-3 mb-4">
+        {/* User section at bottom */}
+        <div className="p-4 border-t border-gray-200 flex-shrink-0 bg-gray-50">
+          <div className="flex items-center space-x-3 mb-3">
             <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center flex-shrink-0">
               <span className="text-white font-bold text-sm">
                 {user.full_name?.charAt(0).toUpperCase()}
