@@ -325,7 +325,7 @@ class ImageUploadTester:
                     self.log_test("Image Deletion", True, f"Successfully deleted {filename}")
                     
                     # Verify file is no longer accessible
-                    static_url = f"https://soumam-valley.preview.emergentagent.com/uploads/{filename}"
+                    static_url = f"https://soumam-valley.preview.emergentagent.com/api/uploads/{filename}"
                     verify_response = requests.get(static_url, timeout=10)
                     if verify_response.status_code == 404:
                         print("   ✅ File confirmed deleted from static serving")
