@@ -230,7 +230,7 @@ function App() {
               <Route path="/admin/settings" element={
                 user?.role === 'admin' ? (
                   <AdminLayout>
-                    <AdminSettings />
+                    <AdminSettingsTest />
                   </AdminLayout>
                 ) : (
                   <Navigate to="/auth" />
