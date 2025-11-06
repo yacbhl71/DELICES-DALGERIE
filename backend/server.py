@@ -499,8 +499,8 @@ async def upload_image(
                 
                 await f.write(chunk)
         
-        # Return the URL
-        file_url = f"/uploads/{unique_filename}"
+        # Return the URL (through API)
+        file_url = f"/api/uploads/{unique_filename}"
         
         return {
             "success": True,
