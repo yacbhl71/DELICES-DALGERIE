@@ -58,6 +58,11 @@ const AdminLayout = ({ children }) => {
       name: language === 'ar' ? 'التحليلات' : language === 'en' ? 'Analytics' : 'Analyses',
       href: '/admin/analytics',
       icon: BarChart3
+    },
+    {
+      name: language === 'ar' ? 'الإعدادات' : language === 'en' ? 'Settings' : 'Paramètres',
+      href: '/admin/settings',
+      icon: Settings
     }
   ];
 
