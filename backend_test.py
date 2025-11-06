@@ -566,6 +566,9 @@ class SoumamHeritageAPITester:
         self.test_get_historical_content()
         self.test_get_historical_content_by_region()
         
+        # Test image upload functionality
+        self.run_image_upload_tests()
+        
         # Print final results
         print("\n" + "=" * 50)
         print(f"📊 Final Results: {self.tests_passed}/{self.tests_run} tests passed")
