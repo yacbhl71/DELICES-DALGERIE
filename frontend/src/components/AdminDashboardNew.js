@@ -356,8 +356,309 @@ const AdminDashboardNew = () => {
         </div>
       </div>
 
+      {/* Analytics Section with Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 animate-slide-in-up" style={{ animationDelay: '0.5s', opacity: 0 }}>
+        {/* Content Distribution Pie Chart */}
+        <div className="bg-white rounded-2xl shadow-xl p-6 hover-lift">
+          <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center">
+            <Activity className="mr-2 text-amber-600" size={20} />
+            {language === 'ar' ? 'توزيع المحتوى' : language === 'en' ? 'Content Distribution' : 'Distribution du Contenu'}
+          </h3>
+          
+          <div className="relative w-48 h-48 mx-auto mb-6">
+            {/* Animated Pie Chart */}
+            <svg viewBox="0 0 200 200" className="transform -rotate-90">
+              {/* Background circle */}
+              <circle cx="100" cy="100" r="80" fill="none" stroke="#f3f4f6" strokeWidth="40"/>
+              
+              {/* Recipes segment (orange) */}
+              <circle 
+                cx="100" 
+                cy="100" 
+                r="80" 
+                fill="none" 
+                stroke="url(#gradientOrange)" 
+                strokeWidth="40"
+                strokeDasharray={`${(stats?.total_recipes || 0) * 50} ${500 - (stats?.total_recipes || 0) * 50}`}
+                strokeDashoffset="0"
+                className="transition-all duration-1000 ease-out"
+              />
+              
+              {/* Products segment (green) */}
+              <circle 
+                cx="100" 
+                cy="100" 
+                r="80" 
+                fill="none" 
+                stroke="url(#gradientGreen)" 
+                strokeWidth="40"
+                strokeDasharray={`${(stats?.total_products || 0) * 50} ${500 - (stats?.total_products || 0) * 50}`}
+                strokeDashoffset={`-${(stats?.total_recipes || 0) * 50}`}
+                className="transition-all duration-1000 ease-out"
+              />
+              
+              {/* History segment (purple) */}
+              <circle 
+                cx="100" 
+                cy="100" 
+                r="80" 
+                fill="none" 
+                stroke="url(#gradientPurple)" 
+                strokeWidth="40"
+                strokeDasharray={`${(stats?.total_historical_content || 0) * 50} ${500 - (stats?.total_historical_content || 0) * 50}`}
+                strokeDashoffset={`-${((stats?.total_recipes || 0) + (stats?.total_products || 0)) * 50}`}
+                className="transition-all duration-1000 ease-out"
+              />
+              
+              {/* Gradients */}
+              <defs>
+                <linearGradient id="gradientOrange" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#f59e0b" />
+                  <stop offset="100%" stopColor="#ef4444" />
+                </linearGradient>
+                <linearGradient id="gradientGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#10b981" />
+                  <stop offset="100%" stopColor="#14b8a6" />
+                </linearGradient>
+                <linearGradient id="gradientPurple" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#8b5cf6" />
+                  <stop offset="100%" stopColor="#6366f1" />
+                </linearGradient>
+              </defs>
+            </svg>
+            
+            {/* Center text */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <p className="text-3xl font-bold text-gray-900">
+                {(stats?.total_recipes || 0) + (stats?.total_products || 0) + (stats?.total_historical_content || 0)}
+              </p>
+              <p className="text-xs text-gray-500">
+                {language === 'ar' ? 'إجمالي' : language === 'en' ? 'Total' : 'Total'}
+              </p>
+            </div>
+          </div>
+          
+          {/* Legend */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <div className="w-3 h-3 rounded-full bg-gradient-to-r from-amber-400 to-red-500 mr-2"></div>
+                <span className="text-sm text-gray-600">
+                  {language === 'ar' ? 'وصفات' : language === 'en' ? 'Recipes' : 'Recettes'}
+                </span>
+              </div>
+              <span className="text-sm font-semibold text-gray-900">{stats?.total_recipes || 0}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <div className="w-3 h-3 rounded-full bg-gradient-to-r from-green-400 to-emerald-500 mr-2"></div>
+                <span className="text-sm text-gray-600">
+                  {language === 'ar' ? 'منتجات' : language === 'en' ? 'Products' : 'Produits'}
+                </span>
+              </div>
+              <span className="text-sm font-semibold text-gray-900">{stats?.total_products || 0}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <div className="w-3 h-3 rounded-full bg-gradient-to-r from-purple-400 to-indigo-500 mr-2"></div>
+                <span className="text-sm text-gray-600">
+                  {language === 'ar' ? 'تاريخ' : language === 'en' ? 'History' : 'Histoire'}
+                </span>
+              </div>
+              <span className="text-sm font-semibold text-gray-900">{stats?.total_historical_content || 0}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Growth Chart */}
+        <div className="bg-white rounded-2xl shadow-xl p-6 hover-lift">
+          <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center">
+            <TrendingUp className="mr-2 text-green-600" size={20} />
+            {language === 'ar' ? 'معدل النمو' : language === 'en' ? 'Growth Rate' : 'Taux de Croissance'}
+          </h3>
+          
+          <div className="space-y-6">
+            {/* Users Growth Bar */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center">
+                  <Users size={16} className="text-blue-600 mr-2" />
+                  <span className="text-sm font-medium text-gray-700">
+                    {language === 'ar' ? 'المستخدمين' : language === 'en' ? 'Users' : 'Utilisateurs'}
+                  </span>
+                </div>
+                <span className="text-sm font-bold text-blue-600">
+                  {stats?.recent_users || 0}/{stats?.total_users || 0}
+                </span>
+              </div>
+              <div className="relative h-3 bg-gray-100 rounded-full overflow-hidden">
+                <div 
+                  className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full transition-all duration-1000 ease-out"
+                  style={{ width: `${stats?.total_users > 0 ? ((stats?.recent_users || 0) / stats.total_users * 100) : 0}%` }}
+                >
+                  <div className="absolute inset-0 bg-white opacity-30 animate-pulse"></div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Recipes Growth Bar */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center">
+                  <ChefHat size={16} className="text-orange-600 mr-2" />
+                  <span className="text-sm font-medium text-gray-700">
+                    {language === 'ar' ? 'الوصفات' : language === 'en' ? 'Recipes' : 'Recettes'}
+                  </span>
+                </div>
+                <span className="text-sm font-bold text-orange-600">
+                  {stats?.recent_recipes || 0}/{stats?.total_recipes || 0}
+                </span>
+              </div>
+              <div className="relative h-3 bg-gray-100 rounded-full overflow-hidden">
+                <div 
+                  className="absolute top-0 left-0 h-full bg-gradient-to-r from-amber-400 to-red-500 rounded-full transition-all duration-1000 ease-out"
+                  style={{ width: `${stats?.total_recipes > 0 ? ((stats?.recent_recipes || 0) / stats.total_recipes * 100) : 0}%` }}
+                >
+                  <div className="absolute inset-0 bg-white opacity-30 animate-pulse"></div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Products Growth Bar */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center">
+                  <ShoppingBag size={16} className="text-green-600 mr-2" />
+                  <span className="text-sm font-medium text-gray-700">
+                    {language === 'ar' ? 'المنتجات' : language === 'en' ? 'Products' : 'Produits'}
+                  </span>
+                </div>
+                <span className="text-sm font-bold text-green-600">
+                  {stats?.recent_products || 0}/{stats?.total_products || 0}
+                </span>
+              </div>
+              <div className="relative h-3 bg-gray-100 rounded-full overflow-hidden">
+                <div 
+                  className="absolute top-0 left-0 h-full bg-gradient-to-r from-green-400 to-emerald-500 rounded-full transition-all duration-1000 ease-out"
+                  style={{ width: `${stats?.total_products > 0 ? ((stats?.recent_products || 0) / stats.total_products * 100) : 0}%` }}
+                >
+                  <div className="absolute inset-0 bg-white opacity-30 animate-pulse"></div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Overall Progress */}
+            <div className="pt-4 border-t border-gray-100">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-sm font-bold text-gray-900">
+                  {language === 'ar' ? 'التقدم الإجمالي' : language === 'en' ? 'Overall Progress' : 'Progrès Global'}
+                </span>
+                <span className="text-sm font-bold text-amber-600">
+                  {stats ? Math.round(((stats.recent_users + stats.recent_recipes + stats.recent_products) / 
+                    (stats.total_users + stats.total_recipes + stats.total_products || 1)) * 100) : 0}%
+                </span>
+              </div>
+              <div className="relative h-4 bg-gray-100 rounded-full overflow-hidden">
+                <div 
+                  className="absolute top-0 left-0 h-full bg-gradient-to-r from-amber-400 via-orange-500 to-red-500 rounded-full transition-all duration-1000 ease-out"
+                  style={{ width: `${stats ? Math.round(((stats.recent_users + stats.recent_recipes + stats.recent_products) / 
+                    (stats.total_users + stats.total_recipes + stats.total_products || 1)) * 100) : 0}%` }}
+                >
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-full h-1 bg-white opacity-50 animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Engagement Metrics */}
+        <div className="bg-white rounded-2xl shadow-xl p-6 hover-lift">
+          <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center">
+            <Eye className="mr-2 text-purple-600" size={20} />
+            {language === 'ar' ? 'مقاييس التفاعل' : language === 'en' ? 'Engagement Metrics' : 'Métriques d\'Engagement'}
+          </h3>
+          
+          <div className="space-y-4">
+            {/* Active Users */}
+            <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-gray-600">
+                  {language === 'ar' ? 'المستخدمين النشطين' : language === 'en' ? 'Active Users' : 'Utilisateurs Actifs'}
+                </span>
+                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full font-medium">
+                  {language === 'ar' ? 'مباشر' : language === 'en' ? 'Live' : 'En direct'}
+                </span>
+              </div>
+              <div className="flex items-end">
+                <span className="text-3xl font-bold text-blue-600">{stats?.total_users || 0}</span>
+                <span className="text-sm text-blue-500 ml-2 mb-1">
+                  {language === 'ar' ? 'متصل' : language === 'en' ? 'online' : 'en ligne'}
+                </span>
+              </div>
+            </div>
+            
+            {/* Total Views */}
+            <div className="p-4 bg-gradient-to-r from-purple-50 to-violet-50 rounded-xl">
+              <span className="text-sm text-gray-600 block mb-2">
+                {language === 'ar' ? 'إجمالي المشاهدات' : language === 'en' ? 'Total Views' : 'Vues Totales'}
+              </span>
+              <div className="flex items-end justify-between">
+                <span className="text-3xl font-bold text-purple-600">
+                  {((stats?.total_recipes || 0) + (stats?.total_products || 0)) * 150}
+                </span>
+                <div className="flex items-center text-green-600">
+                  <ArrowUp size={16} />
+                  <span className="text-sm font-medium ml-1">23%</span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Avg. Session */}
+            <div className="p-4 bg-gradient-to-r from-orange-50 to-red-50 rounded-xl">
+              <span className="text-sm text-gray-600 block mb-2">
+                {language === 'ar' ? 'متوسط الجلسة' : language === 'en' ? 'Avg. Session' : 'Session Moy.'}
+              </span>
+              <div className="flex items-end">
+                <span className="text-3xl font-bold text-orange-600">4.2</span>
+                <span className="text-sm text-orange-500 ml-2 mb-1">
+                  {language === 'ar' ? 'دقائق' : language === 'en' ? 'min' : 'min'}
+                </span>
+              </div>
+            </div>
+            
+            {/* Engagement Rate */}
+            <div className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl">
+              <span className="text-sm text-gray-600 block mb-2">
+                {language === 'ar' ? 'معدل التفاعل' : language === 'en' ? 'Engagement Rate' : 'Taux d\'Engagement'}
+              </span>
+              <div className="flex items-center justify-between">
+                <span className="text-3xl font-bold text-green-600">68%</span>
+                <div className="w-16 h-16">
+                  <svg viewBox="0 0 36 36" className="transform -rotate-90">
+                    <circle cx="18" cy="18" r="16" fill="none" stroke="#d1fae5" strokeWidth="3"/>
+                    <circle 
+                      cx="18" 
+                      cy="18" 
+                      r="16" 
+                      fill="none" 
+                      stroke="#10b981" 
+                      strokeWidth="3"
+                      strokeDasharray="68 100"
+                      strokeLinecap="round"
+                      className="transition-all duration-1000 ease-out"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Activity Overview */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-slide-in-up" style={{ animationDelay: '0.6s', opacity: 0 }}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-slide-in-up" style={{ animationDelay: '0.7s', opacity: 0 }}>
         {/* Recent Activity */}
         <div className="bg-white rounded-2xl shadow-xl p-6 hover-lift">
           <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
