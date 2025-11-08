@@ -14,7 +14,7 @@ import ProfilePage from './components/ProfilePage';
 
 // Admin Components
 import AdminLayout from './components/AdminLayout';
-import AdminDashboard from './components/AdminDashboard';
+import AdminDashboard from './components/AdminDashboardNew';
 import AdminRecipes from './components/AdminRecipes';
 import AdminProducts from './components/AdminProducts';
 import AdminUsers from './components/AdminUsers';
