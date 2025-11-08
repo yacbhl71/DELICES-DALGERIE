@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useLanguage } from '../App';
+import { useNavigate } from 'react-router-dom';
+import { useAuth, useLanguage } from '../App';
 import { 
   Users, 
   ChefHat, 
@@ -8,7 +9,12 @@ import {
   TrendingUp,
   Calendar,
   Activity,
-  Eye
+  Eye,
+  ArrowUp,
+  ArrowDown,
+  Plus,
+  Clock,
+  Sparkles
 } from 'lucide-react';
 import axios from 'axios';
 
@@ -16,17 +22,25 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 const AdminDashboard = () => {
+  const { user } = useAuth();
   const { language } = useLanguage();
+  const navigate = useNavigate();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [animateCards, setAnimateCards] = useState(false);
 
   useEffect(() => {
     fetchStats();
+    // Trigger animations after component mounts
+    setTimeout(() => setAnimateCards(true), 100);
   }, []);
 
   const fetchStats = async () => {
     try {
-      const response = await axios.get(`${API}/admin/stats`);
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${API}/admin/stats`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setStats(response.data);
     } catch (error) {
       console.error('Error fetching stats:', error);
