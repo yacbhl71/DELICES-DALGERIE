@@ -141,17 +141,17 @@ const AdminSettings = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      showToast(
-        language === 'ar' ? 'تم الحفظ' : language === 'en' ? 'Saved' : 'Enregistré',
-        language === 'ar' ? 'تم حفظ الإعدادات بنجاح' : language === 'en' ? 'Settings saved successfully' : 'Paramètres enregistrés avec succès'
-      );
+      toast({
+        title: language === 'ar' ? 'تم الحفظ' : language === 'en' ? 'Saved' : 'Enregistré',
+        description: language === 'ar' ? 'تم حفظ الإعدادات بنجاح' : language === 'en' ? 'Settings saved successfully' : 'Paramètres enregistrés avec succès'
+      });
     } catch (error) {
       console.error('Error saving settings:', error);
-      showToast(
-        language === 'ar' ? 'خطأ' : language === 'en' ? 'Error' : 'Erreur',
-        language === 'ar' ? 'فشل حفظ الإعدادات' : language === 'en' ? 'Failed to save settings' : 'Échec de l\'enregistrement',
-        'destructive'
-      );
+      toast({
+        title: language === 'ar' ? 'خطأ' : language === 'en' ? 'Error' : 'Erreur',
+        description: language === 'ar' ? 'فشل حفظ الإعدادات' : language === 'en' ? 'Failed to save settings' : 'Échec de l\'enregistrement',
+        variant: 'destructive'
+      });
     } finally {
       setSaving(false);
     }
