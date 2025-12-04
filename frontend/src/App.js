@@ -220,6 +220,15 @@ function App() {
                   <Navigate to="/auth" />
                 )
               } />
+              <Route path="/admin/contact" element={
+                user?.role === 'admin' ? (
+                  <AdminLayout>
+                    <AdminContact />
+                  </AdminLayout>
+                ) : (
+                  <Navigate to="/auth" />
+                )
+              } />
               <Route path="/admin/analytics" element={
                 user?.role === 'admin' ? (
                   <AdminLayout>
