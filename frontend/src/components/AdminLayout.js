@@ -51,6 +51,11 @@ const AdminLayout = ({ children }) => {
       icon: Users
     },
     {
+      name: language === 'ar' ? 'رسائل الاتصال' : language === 'en' ? 'Contact Messages' : 'Messages de Contact',
+      href: '/admin/contact',
+      icon: Mail
+    },
+    {
       name: language === 'ar' ? 'التحليلات' : language === 'en' ? 'Analytics' : 'Analyses',
       href: '/admin/analytics',
       icon: BarChart3
