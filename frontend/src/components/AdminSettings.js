@@ -18,24 +18,17 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 import ImageUpload from './ImageUpload';
+import { useToast } from '../hooks/use-toast';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 const AdminSettings = () => {
   const { language } = useLanguage();
+  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('general');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  
-  // Simple toast replacement
-  const showToast = (title, description, variant = 'default') => {
-    if (variant === 'destructive') {
-      alert(`❌ ${title}\n${description}`);
-    } else {
-      alert(`✅ ${title}\n${description}`);
-    }
-  };
 
   const [settings, setSettings] = useState({
     general: {
