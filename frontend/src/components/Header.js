@@ -72,7 +72,7 @@ const Header = () => {
             <div className="relative">
               <button
                 onClick={toggleLanguageMenu}
-                className="flex items-center space-x-2 px-3 py-2 text-gray-700 hover:text-amber-600 transition-colors duration-200"
+                className="flex items-center space-x-2 px-3 py-2 text-gray-700 hover:text-olive transition-colors duration-200"
               >
                 <Globe size={20} />
                 <span className="text-sm">
@@ -89,8 +89,8 @@ const Header = () => {
                         setLanguage(lang.code);
                         setIsLanguageMenuOpen(false);
                       }}
-                      className={`w-full text-left px-4 py-2 hover:bg-amber-50 transition-colors duration-200 flex items-center space-x-3 ${
-                        language === lang.code ? 'bg-amber-50 text-amber-600' : 'text-gray-700'
+                      className={`w-full text-left px-4 py-2 hover:bg-olive-light transition-colors duration-200 flex items-center space-x-3 ${
+                        language === lang.code ? 'bg-olive-light text-olive' : 'text-gray-700'
                       }`}
                     >
                       <span>{lang.flag}</span>
@@ -106,7 +106,7 @@ const Header = () => {
               <div className="flex items-center space-x-4">
                 <Link
                   to="/profile"
-                  className="flex items-center space-x-2 px-3 py-2 text-gray-700 hover:text-amber-600 transition-colors duration-200"
+                  className="flex items-center space-x-2 px-3 py-2 text-gray-700 hover:text-olive transition-colors duration-200"
                 >
                   <User size={20} />
                   <span className="text-sm">{user.full_name}</span>
@@ -132,7 +132,7 @@ const Header = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={toggleMenu}
-            className="md:hidden p-2 text-gray-700 hover:text-amber-600 transition-colors duration-200"
+            className="md:hidden p-2 text-gray-700 hover:text-olive transition-colors duration-200"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -144,28 +144,28 @@ const Header = () => {
             <div className="px-2 pt-2 pb-3 space-y-1">
               <Link
                 to="/"
-                className="block px-3 py-2 text-gray-700 hover:text-amber-600 hover:bg-amber-50 rounded-md transition-colors duration-200"
+                className="block px-3 py-2 text-gray-700 hover:text-olive hover:bg-olive-light rounded-md transition-colors duration-200"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t('home')}
               </Link>
               <Link
                 to="/recipes"
-                className="block px-3 py-2 text-gray-700 hover:text-amber-600 hover:bg-amber-50 rounded-md transition-colors duration-200"
+                className="block px-3 py-2 text-gray-700 hover:text-olive hover:bg-olive-light rounded-md transition-colors duration-200"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t('recipes')}
               </Link>
               <Link
                 to="/shop"
-                className="block px-3 py-2 text-gray-700 hover:text-amber-600 hover:bg-amber-50 rounded-md transition-colors duration-200"
+                className="block px-3 py-2 text-gray-700 hover:text-olive hover:bg-olive-light rounded-md transition-colors duration-200"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t('shop')}
               </Link>
               <Link
                 to="/history"
-                className="block px-3 py-2 text-gray-700 hover:text-amber-600 hover:bg-amber-50 rounded-md transition-colors duration-200"
+                className="block px-3 py-2 text-gray-700 hover:text-olive hover:bg-olive-light rounded-md transition-colors duration-200"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t('history')}
@@ -184,7 +184,7 @@ const Header = () => {
                           setIsMenuOpen(false);
                         }}
                         className={`w-full text-left px-3 py-2 rounded-md flex items-center space-x-3 transition-colors duration-200 ${
-                          language === lang.code ? 'bg-amber-50 text-amber-600' : 'text-gray-700 hover:bg-gray-50'
+                          language === lang.code ? 'bg-olive-light text-olive' : 'text-gray-700 hover:bg-gray-50'
                         }`}
                       >
                         <span>{lang.flag}</span>
@@ -200,7 +200,7 @@ const Header = () => {
                     <div className="space-y-2">
                       <Link
                         to="/profile"
-                        className="block w-full text-left px-3 py-2 text-gray-700 hover:text-amber-600 hover:bg-amber-50 rounded-md transition-colors duration-200"
+                        className="block w-full text-left px-3 py-2 text-gray-700 hover:text-olive hover:bg-olive-light rounded-md transition-colors duration-200"
                         onClick={() => setIsMenuOpen(false)}
                       >
                         {t('profile')} - {user.full_name}
