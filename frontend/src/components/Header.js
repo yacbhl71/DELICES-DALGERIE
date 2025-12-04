@@ -7,6 +7,7 @@ import { useCart } from '../contexts/CartContext';
 const Header = () => {
   const { language, setLanguage, t } = useLanguage();
   const { user, logout } = useAuth();
+  const { setIsCartOpen, getCartCount } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
   const navigate = useNavigate();
