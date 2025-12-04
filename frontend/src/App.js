@@ -15,11 +15,11 @@ import ProfilePage from './components/ProfilePage';
 // Admin Components
 import AdminLayout from './components/AdminLayout';
 import AdminDashboard from './components/AdminDashboardNew';
-import AdminRecipes from './components/AdminRecipes';
+// AdminRecipes removed - focus on dates and olive oil products
 import AdminProducts from './components/AdminProducts';
 import AdminUsers from './components/AdminUsers';
 import AdminHistory from './components/AdminHistory';
-import AdminRecipeForm from './components/AdminRecipeForm';
+// AdminRecipeForm removed
 import AdminProductForm from './components/AdminProductForm';
 import AdminHistoryForm from './components/AdminHistoryForm';
 import AdminAnalytics from './components/AdminAnalytics';
