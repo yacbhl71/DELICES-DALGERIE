@@ -149,10 +149,8 @@ const ShopPage = () => {
 
   const getCategoryIcon = (category) => {
     switch (category) {
-      case 'epices': return '🌶️';
-      case 'thes': return '🍃';
-      case 'robes-kabyles': return '👗';
-      case 'bijoux-kabyles': return '💎';
+      case 'dates': return '🌴';
+      case 'olive-oil': return '🫒';
       default: return '🛍️';
     }
   };
