@@ -20,9 +20,11 @@ import AdminDashboard from './components/AdminDashboardNew';
 // AdminRecipes removed - focus on dates and olive oil products
 import AdminProducts from './components/AdminProducts';
 import AdminCategories from './components/AdminCategories';
+import AdminPages from './components/AdminPages';
 import AdminUsers from './components/AdminUsers';
 import AdminHistory from './components/AdminHistory';
 import AdminContact from './components/AdminContact';
+import CustomPageView from './components/CustomPageView';
 // AdminRecipeForm removed
 import AdminProductForm from './components/AdminProductForm';
 import AdminHistoryForm from './components/AdminHistoryForm';
