@@ -34,11 +34,7 @@ const AdminLayout = ({ children }) => {
       href: '/admin',
       icon: LayoutDashboard
     },
-    {
-      name: language === 'ar' ? 'الوصفات' : language === 'en' ? 'Recipes' : 'Recettes',
-      href: '/admin/recipes',
-      icon: ChefHat
-    },
+    // Recipes removed - focusing on dates and olive oil products
     {
       name: language === 'ar' ? 'المنتجات' : language === 'en' ? 'Products' : 'Produits',
       href: '/admin/products',
