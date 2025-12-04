@@ -12,6 +12,7 @@ import HistoryPage from './components/HistoryPage';
 import ContactPage from './components/ContactPage';
 import AuthPage from './components/AuthPage';
 import ProfilePage from './components/ProfilePage';
+import { Toaster } from './components/ui/toaster';
 
 // Admin Components
 import AdminLayout from './components/AdminLayout';
