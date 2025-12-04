@@ -14,6 +14,8 @@ import ContactPage from './components/ContactPage';
 import AuthPage from './components/AuthPage';
 import ProfilePage from './components/ProfilePage';
 import { Toaster } from './components/ui/toaster';
+import Cart from './components/Cart';
+import CheckoutPage from './components/CheckoutPage';
 
 // Admin Components
 import AdminLayout from './components/AdminLayout';
