@@ -314,6 +314,7 @@ function App() {
                       {/* Recipes removed - Délices et Trésors d'Algérie focuses on dates and olive oil */}
                       <Route path="/shop" element={<ShopPage />} />
                       <Route path="/history" element={<HistoryPage />} />
+                      <Route path="/contact" element={<ContactPage />} />
                       <Route path="/auth" element={<AuthPage />} />
                       <Route 
                         path="/profile" 
