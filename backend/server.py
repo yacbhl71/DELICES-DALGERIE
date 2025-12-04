@@ -194,6 +194,25 @@ class Settings(BaseModel):
     backup: Optional[Dict[str, Any]] = None
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+# Contact Models
+class ContactMessage(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    email: EmailStr
+    subject: str
+    message: str
+    status: str = "new"  # "new", "read", "replied"
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class ContactMessageCreate(BaseModel):
+    name: str
+    email: EmailStr
+    subject: str
+    message: str
+
+class ContactMessageUpdate(BaseModel):
+    status: Optional[str] = None
+
 # --- Authentication Functions ---
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
