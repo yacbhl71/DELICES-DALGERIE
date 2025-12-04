@@ -84,8 +84,8 @@ const AdminLayout = ({ children }) => {
         {/* Header */}
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 flex-shrink-0">
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-gradient-to-r from-amber-600 to-orange-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">SH</span>
+            <div className="w-8 h-8 bg-gradient-to-r from-olive to-green-700 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-sm">DT</span>
             </div>
             <span className="text-lg font-semibold text-gray-900">Admin Panel</span>
           </div>
