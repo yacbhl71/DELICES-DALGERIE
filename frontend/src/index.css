@@ -84,3 +84,54 @@ code {
     @apply bg-background text-foreground;
     }
 }
+
+/* Délices et Trésors d'Algérie - Theme Colors */
+@layer utilities {
+  .text-olive {
+    color: #6B7D3C;
+  }
+  .text-olive-dark {
+    color: #4A5729;
+  }
+  .text-gold {
+    color: #B8956A;
+  }
+  .text-brown {
+    color: #8B6F47;
+  }
+  
+  .bg-olive {
+    background-color: #6B7D3C;
+  }
+  .bg-olive-light {
+    background-color: #808C3E;
+  }
+  .bg-olive-dark {
+    background-color: #4A5729;
+  }
+  .bg-gold {
+    background-color: #B8956A;
+  }
+  .bg-brown {
+    background-color: #8B6F47;
+  }
+  
+  .from-olive { --tw-gradient-from: #6B7D3C; }
+  .via-olive { --tw-gradient-via: #808C3E; }
+  .to-gold { --tw-gradient-to: #B8956A; }
+  .to-brown { --tw-gradient-to: #8B6F47; }
+  
+  .border-olive {
+    border-color: #6B7D3C;
+  }
+  .border-gold {
+    border-color: #B8956A;
+  }
+  
+  .hover\:bg-olive:hover {
+    background-color: #6B7D3C;
+  }
+  .hover\:text-olive:hover {
+    color: #6B7D3C;
+  }
+}
