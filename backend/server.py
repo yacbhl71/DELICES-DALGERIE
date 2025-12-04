@@ -155,6 +155,72 @@ class Settings(BaseModel):
     backup: Optional[Dict[str, Any]] = None
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+# Customization Model
+class SiteCustomization(BaseModel):
+    id: str = Field(default="site_customization")
+    # Brand Identity
+    site_name: str = "Délices et Trésors d'Algérie"
+    site_slogan: Dict[str, str] = {
+        "fr": "Découvrez nos trésors : dattes Deglet Nour et huile d'olive kabyle authentique",
+        "en": "Discover our treasures: Deglet Nour dates and authentic Kabyle olive oil",
+        "ar": "اكتشف كنوزنا: تمور دقلة نور وزيت الزيتون القبائلي الأصيل"
+    }
+    logo_url: Optional[str] = None
+    
+    # Colors
+    primary_color: str = "#6B8E23"  # Olive green
+    secondary_color: str = "#8B7355"  # Golden brown
+    accent_color: str = "#F59E0B"  # Amber
+    
+    # Contact Info
+    contact_email: str = "contact@delices-algerie.com"
+    contact_phone: Optional[str] = None
+    contact_address: Dict[str, str] = {
+        "fr": "Algérie",
+        "en": "Algeria",
+        "ar": "الجزائر"
+    }
+    
+    # Page Texts
+    home_title: Dict[str, str] = {
+        "fr": "Délices et Trésors d'Algérie",
+        "en": "Delights and Treasures of Algeria",
+        "ar": "لذائذ وكنوز الجزائر"
+    }
+    home_subtitle: Dict[str, str] = {
+        "fr": "Découvrez l'authenticité du terroir algérien",
+        "en": "Discover the authenticity of Algerian terroir",
+        "ar": "اكتشف أصالة التراب الجزائري"
+    }
+    
+    shop_title: Dict[str, str] = {
+        "fr": "Boutique Délices et Trésors d'Algérie",
+        "en": "Délices et Trésors d'Algérie Shop",
+        "ar": "متجر لذائذ وكنوز الجزائر"
+    }
+    shop_description: Dict[str, str] = {
+        "fr": "Découvrez nos trésors : dattes Deglet Nour et huile d'olive kabyle authentique",
+        "en": "Discover our treasures: Deglet Nour dates and authentic Kabyle olive oil",
+        "ar": "اكتشف كنوزنا: تمور دقلة نور وزيت الزيتون القبائلي الأصيل"
+    }
+    
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class CustomizationUpdate(BaseModel):
+    site_name: Optional[str] = None
+    site_slogan: Optional[Dict[str, str]] = None
+    logo_url: Optional[str] = None
+    primary_color: Optional[str] = None
+    secondary_color: Optional[str] = None
+    accent_color: Optional[str] = None
+    contact_email: Optional[str] = None
+    contact_phone: Optional[str] = None
+    contact_address: Optional[Dict[str, str]] = None
+    home_title: Optional[Dict[str, str]] = None
+    home_subtitle: Optional[Dict[str, str]] = None
+    shop_title: Optional[Dict[str, str]] = None
+    shop_description: Optional[Dict[str, str]] = None
+
 # Contact Models
 class ContactMessage(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
