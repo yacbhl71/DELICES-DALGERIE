@@ -13,7 +13,8 @@ import {
   X,
   Home,
   BarChart3,
-  Mail
+  Mail,
+  Palette
 } from 'lucide-react';
 
 const AdminLayout = ({ children }) => {
