@@ -240,24 +240,6 @@ function App() {
               } />
               
               {/* Admin Form Routes */}
-              <Route path="/admin/recipes/new" element={
-                user?.role === 'admin' ? (
-                  <AdminLayout>
-                    <AdminRecipeForm />
-                  </AdminLayout>
-                ) : (
-                  <Navigate to="/auth" />
-                )
-              } />
-              <Route path="/admin/recipes/edit/:id" element={
-                user?.role === 'admin' ? (
-                  <AdminLayout>
-                    <AdminRecipeForm />
-                  </AdminLayout>
-                ) : (
-                  <Navigate to="/auth" />
-                )
-              } />
               <Route path="/admin/products/new" element={
                 user?.role === 'admin' ? (
                   <AdminLayout>
