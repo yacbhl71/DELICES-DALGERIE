@@ -50,6 +50,11 @@ const AdminLayout = ({ children }) => {
       icon: Layers
     },
     {
+      name: language === 'ar' ? 'الصفحات' : language === 'en' ? 'Pages' : 'Pages',
+      href: '/admin/pages',
+      icon: FileText
+    },
+    {
       name: language === 'ar' ? 'المحتوى التاريخي' : language === 'en' ? 'Historical Content' : 'Contenu Historique',
       href: '/admin/history',
       icon: BookOpen
