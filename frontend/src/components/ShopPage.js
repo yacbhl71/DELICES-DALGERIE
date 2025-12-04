@@ -178,14 +178,14 @@ const ShopPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              {language === 'ar' ? 'متجر سومام هيريتاج' :
-               language === 'en' ? 'Soumam Heritage Shop' :
-               'Boutique Soumam Heritage'}
+              {language === 'ar' ? 'متجر لذائذ وكنوز الجزائر' :
+               language === 'en' ? 'Délices et Trésors d\'Algérie Shop' :
+               'Boutique Délices et Trésors d\'Algérie'}
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              {language === 'ar' ? 'اكتشف منتجاتنا الأصيلة من البهارات والشاي والملابس والمجوهرات القبائلية' :
-               language === 'en' ? 'Discover our authentic products: spices, teas, clothing and Kabyle jewelry' :
-               'Découvrez nos produits authentiques : épices, thés, vêtements et bijoux kabyles'}
+              {language === 'ar' ? 'اكتشف كنوزنا: تمور دقلة نور وزيت الزيتون القبائلي الأصيل' :
+               language === 'en' ? 'Discover our treasures: Deglet Nour dates and authentic Kabyle olive oil' :
+               'Découvrez nos trésors : dattes Deglet Nour et huile d\'olive kabyle authentique'}
             </p>
           </div>
         </div>
