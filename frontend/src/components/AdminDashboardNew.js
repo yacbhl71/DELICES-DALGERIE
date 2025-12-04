@@ -74,16 +74,6 @@ const AdminDashboardNew = () => {
       percentage: '+12%'
     },
     {
-      title: language === 'ar' ? 'الوصفات' : language === 'en' ? 'Recipes' : 'Recettes',
-      value: stats?.total_recipes || 0,
-      recent: stats?.recent_recipes || 0,
-      icon: ChefHat,
-      gradient: 'from-amber-400 via-orange-500 to-red-500',
-      bgGradient: 'from-amber-50 to-orange-100',
-      textColor: 'text-orange-600',
-      percentage: '+8%'
-    },
-    {
       title: language === 'ar' ? 'المنتجات' : language === 'en' ? 'Products' : 'Produits',
       value: stats?.total_products || 0,
       recent: stats?.recent_products || 0,
