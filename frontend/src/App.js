@@ -300,7 +300,7 @@ function App() {
                   <main>
                     <Routes>
                       <Route path="/" element={<HomePage />} />
-                      <Route path="/recipes" element={<RecipesPage />} />
+                      {/* Recipes removed - Délices et Trésors d'Algérie focuses on dates and olive oil */}
                       <Route path="/shop" element={<ShopPage />} />
                       <Route path="/history" element={<HistoryPage />} />
                       <Route path="/auth" element={<AuthPage />} />
