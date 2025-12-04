@@ -186,41 +186,59 @@ export default function AdminCategories() {
         {categories.map((category) => (
           <div
             key={category.id}
-            className={`bg-white rounded-lg shadow p-6 ${!category.is_active ? 'opacity-50' : ''}`}
+            className={`bg-white rounded-lg shadow overflow-hidden ${!category.is_active ? 'opacity-50' : ''}`}
           >
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center space-x-3">
-                <span className="text-4xl">{category.icon}</span>
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900">{category.name.fr}</h3>
-                  <p className="text-sm text-gray-500">/{category.slug}</p>
-                </div>
+            {/* Category Image */}
+            {category.image_url ? (
+              <div className="h-40 overflow-hidden">
+                <img 
+                  src={category.image_url} 
+                  alt={category.name.fr}
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <div className="flex space-x-2">
-                <button
-                  onClick={() => handleOpenModal(category)}
-                  className="text-blue-600 hover:text-blue-800 transition"
-                >
-                  <Edit size={18} />
-                </button>
-                <button
-                  onClick={() => handleDelete(category.id)}
-                  className="text-red-600 hover:text-red-800 transition"
-                >
-                  <Trash2 size={18} />
-                </button>
+            ) : (
+              <div className="h-40 bg-gradient-to-br from-[#6B8E23] to-[#8B7355] flex items-center justify-center">
+                <span className="text-7xl">{category.icon}</span>
               </div>
-            </div>
-            
-            {category.description?.fr && (
-              <p className="text-sm text-gray-600 mb-3">{category.description.fr}</p>
             )}
             
-            <div className="flex items-center justify-between text-sm">
-              <span className={`px-2 py-1 rounded ${category.is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
-                {category.is_active ? 'Active' : 'Inactive'}
-              </span>
-              <span className="text-gray-500">Ordre: {category.order}</span>
+            {/* Category Info */}
+            <div className="p-6">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex-1">
+                  <div className="flex items-center space-x-2 mb-1">
+                    {!category.image_url && <span className="text-2xl">{category.icon}</span>}
+                    <h3 className="text-lg font-bold text-gray-900">{category.name.fr}</h3>
+                  </div>
+                  <p className="text-sm text-gray-500">/{category.slug}</p>
+                </div>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => handleOpenModal(category)}
+                    className="text-blue-600 hover:text-blue-800 transition"
+                  >
+                    <Edit size={18} />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(category.id)}
+                    className="text-red-600 hover:text-red-800 transition"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              </div>
+              
+              {category.description?.fr && (
+                <p className="text-sm text-gray-600 mb-3 line-clamp-2">{category.description.fr}</p>
+              )}
+              
+              <div className="flex items-center justify-between text-sm">
+                <span className={`px-2 py-1 rounded ${category.is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                  {category.is_active ? 'Active' : 'Inactive'}
+                </span>
+                <span className="text-gray-500">Ordre: {category.order}</span>
+              </div>
             </div>
           </div>
         ))}
