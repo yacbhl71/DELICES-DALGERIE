@@ -322,13 +322,13 @@ const ShopPage = () => {
 
                 <div className="flex space-x-2">
                   <button 
-                    className="flex-1 btn-primary flex items-center justify-center"
-                    disabled={!product.in_stock}
+                    onClick={() => addToCart(product, 1)}
+                    className="flex-1 bg-[#6B8E23] text-white px-4 py-3 rounded-lg hover:bg-[#5a7a1d] transition flex items-center justify-center font-semibold"
                   >
-                    <ShoppingBag className="mr-2" size={18} />
-                    {language === 'ar' ? 'اتصل للطلب' :
-                     language === 'en' ? 'Contact to Order' :
-                     'Contacter pour commander'}
+                    <ShoppingCart className="mr-2" size={18} />
+                    {language === 'ar' ? 'أضف إلى السلة' :
+                     language === 'en' ? 'Add to Cart' :
+                     'Ajouter au panier'}
                   </button>
                   <button className="bg-gray-100 text-gray-600 p-3 rounded-lg hover:bg-gray-200 transition-colors duration-200">
                     <Eye size={18} />
