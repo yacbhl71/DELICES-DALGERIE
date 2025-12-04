@@ -7,7 +7,7 @@ from datetime import datetime
 from PIL import Image
 
 class SoumamHeritageAPITester:
-    def __init__(self, base_url="https://soumam-valley.preview.emergentagent.com/api"):
+    def __init__(self, base_url="https://algerian-shop-2.preview.emergentagent.com/api"):
         self.base_url = base_url
         self.token = None
         self.admin_token = None
@@ -364,7 +364,7 @@ class SoumamHeritageAPITester:
         
         # Test accessing the first uploaded file
         filename = self.uploaded_files[0]
-        static_url = f"https://soumam-valley.preview.emergentagent.com/uploads/{filename}"
+        static_url = f"https://algerian-shop-2.preview.emergentagent.com/uploads/{filename}"
         
         try:
             response = requests.get(static_url, timeout=10)
@@ -408,7 +408,7 @@ class SoumamHeritageAPITester:
             self.uploaded_files.remove(filename)
             
             # Verify file is no longer accessible
-            static_url = f"https://soumam-valley.preview.emergentagent.com/uploads/{filename}"
+            static_url = f"https://algerian-shop-2.preview.emergentagent.com/uploads/{filename}"
             try:
                 response = requests.get(static_url, timeout=10)
                 if response.status_code == 404:
