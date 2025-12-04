@@ -411,6 +411,65 @@ async def change_password(
     
     return {"message": "Password changed successfully"}
 
+# --- Category Routes ---
+@api_router.get("/categories", response_model=List[Category])
+async def get_categories():
+    """Get all active categories (public)"""
+    categories = await db.categories.find({"is_active": True}, {"_id": 0}).sort("order", 1).to_list(1000)
+    return [Category(**cat) for cat in categories]
+
+@api_router.get("/admin/categories", response_model=List[Category])
+async def get_all_categories_admin(admin: User = Depends(get_admin_user)):
+    """Get all categories including inactive (admin only)"""
+    categories = await db.categories.find({}, {"_id": 0}).sort("order", 1).to_list(1000)
+    return [Category(**cat) for cat in categories]
+
+@api_router.post("/admin/categories", response_model=Category)
+async def create_category(category_data: CategoryCreate, admin: User = Depends(get_admin_user)):
+    """Create a new category (admin only)"""
+    category = Category(**category_data.model_dump())
+    await db.categories.insert_one(category.model_dump())
+    return category
+
+@api_router.get("/admin/categories/{category_id}", response_model=Category)
+async def get_category_admin(category_id: str, admin: User = Depends(get_admin_user)):
+    """Get a specific category (admin only)"""
+    category = await db.categories.find_one({"id": category_id}, {"_id": 0})
+    if not category:
+        raise HTTPException(status_code=404, detail="Category not found")
+    return Category(**category)
+
+@api_router.put("/admin/categories/{category_id}", response_model=Category)
+async def update_category(category_id: str, category_data: CategoryUpdate, admin: User = Depends(get_admin_user)):
+    """Update a category (admin only)"""
+    category = await db.categories.find_one({"id": category_id}, {"_id": 0})
+    if not category:
+        raise HTTPException(status_code=404, detail="Category not found")
+    
+    update_data = {k: v for k, v in category_data.model_dump().items() if v is not None}
+    if update_data:
+        await db.categories.update_one({"id": category_id}, {"$set": update_data})
+        category.update(update_data)
+    
+    return Category(**category)
+
+@api_router.delete("/admin/categories/{category_id}")
+async def delete_category(category_id: str, admin: User = Depends(get_admin_user)):
+    """Delete a category (admin only)"""
+    # Check if any products use this category
+    products_count = await db.products.count_documents({"category": category_id})
+    if products_count > 0:
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Cannot delete category. {products_count} product(s) are using this category."
+        )
+    
+    result = await db.categories.delete_one({"id": category_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Category not found")
+    
+    return {"message": "Category deleted successfully"}
+
 # --- Product Routes ---
 @api_router.get("/products", response_model=List[Product])
 async def get_products(category: Optional[str] = None):
