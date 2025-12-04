@@ -78,46 +78,6 @@ class Token(BaseModel):
     access_token: str
     token_type: str
 
-# Recipe Models
-class Recipe(BaseModel):
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    title: Dict[str, str]  # {"fr": "Couscous", "ar": "كسكس", "en": "Couscous"}
-    description: Dict[str, str]
-    ingredients: Dict[str, List[str]]
-    instructions: Dict[str, List[str]]
-    image_url: str
-    prep_time: int  # minutes
-    cook_time: int  # minutes
-    servings: int
-    difficulty: str  # "facile", "moyen", "difficile"
-    category: str
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    created_by: Optional[str] = None
-
-class RecipeCreate(BaseModel):
-    title: Dict[str, str]
-    description: Dict[str, str]
-    ingredients: Dict[str, List[str]]
-    instructions: Dict[str, List[str]]
-    image_url: str
-    prep_time: int
-    cook_time: int
-    servings: int
-    difficulty: str
-    category: str
-
-class RecipeUpdate(BaseModel):
-    title: Optional[Dict[str, str]] = None
-    description: Optional[Dict[str, str]] = None
-    ingredients: Optional[Dict[str, List[str]]] = None
-    instructions: Optional[Dict[str, List[str]]] = None
-    image_url: Optional[str] = None
-    prep_time: Optional[int] = None
-    cook_time: Optional[int] = None
-    servings: Optional[int] = None
-    difficulty: Optional[str] = None
-    category: Optional[str] = None
-
 # Product Models
 class Product(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
