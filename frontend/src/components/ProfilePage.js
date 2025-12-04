@@ -333,6 +333,19 @@ const ProfilePage = () => {
                  'Actions Rapides'}
               </h3>
               <div className="space-y-3">
+                {user?.role === 'admin' && (
+                  <button 
+                    onClick={() => navigate('/admin')}
+                    className="w-full text-left p-3 hover:bg-olive-light rounded-lg transition-colors duration-200 flex items-center text-olive font-semibold"
+                  >
+                    <Settings size={20} className="mr-3" />
+                    <span>
+                      {language === 'ar' ? 'لوحة الإدارة' :
+                       language === 'en' ? 'Admin Panel' :
+                       'Panel Administrateur'}
+                    </span>
+                  </button>
+                )}
                 <button 
                   onClick={() => navigate('/account-settings')}
                   className="w-full text-left p-3 hover:bg-gray-50 rounded-lg transition-colors duration-200 flex items-center"
