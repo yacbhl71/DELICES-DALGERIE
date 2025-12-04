@@ -177,9 +177,10 @@ function App() {
   return (
     <LanguageContext.Provider value={{ language, setLanguage, t }}>
       <AuthContext.Provider value={{ user, login, register, logout }}>
-        <div className="App">
-          <Toaster />
-          <BrowserRouter>
+        <CartProvider>
+          <div className="App">
+            <Toaster />
+            <BrowserRouter>
             <Routes>
               {/* Admin Routes */}
               <Route path="/admin" element={
