@@ -846,6 +846,66 @@ async def delete_contact_message(message_id: str, admin: User = Depends(get_admi
     
     return {"message": "Contact message deleted successfully"}
 
+# --- Custom Pages Routes ---
+@api_router.get("/pages", response_model=List[CustomPage])
+async def get_published_pages():
+    """Get all published pages (public)"""
+    pages = await db.custom_pages.find({"is_published": True}, {"_id": 0}).sort("menu_order", 1).to_list(1000)
+    return [CustomPage(**page) for page in pages]
+
+@api_router.get("/pages/{slug}", response_model=CustomPage)
+async def get_page_by_slug(slug: str):
+    """Get a specific published page by slug (public)"""
+    page = await db.custom_pages.find_one({"slug": slug, "is_published": True}, {"_id": 0})
+    if not page:
+        raise HTTPException(status_code=404, detail="Page not found")
+    return CustomPage(**page)
+
+@api_router.get("/admin/pages", response_model=List[CustomPage])
+async def get_all_pages_admin(admin: User = Depends(get_admin_user)):
+    """Get all pages including drafts (admin only)"""
+    pages = await db.custom_pages.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    return [CustomPage(**page) for page in pages]
+
+@api_router.post("/admin/pages", response_model=CustomPage)
+async def create_page(page_data: CustomPageCreate, admin: User = Depends(get_admin_user)):
+    """Create a new custom page (admin only)"""
+    page = CustomPage(**page_data.model_dump())
+    await db.custom_pages.insert_one(page.model_dump())
+    return page
+
+@api_router.get("/admin/pages/{page_id}", response_model=CustomPage)
+async def get_page_admin(page_id: str, admin: User = Depends(get_admin_user)):
+    """Get a specific page (admin only)"""
+    page = await db.custom_pages.find_one({"id": page_id}, {"_id": 0})
+    if not page:
+        raise HTTPException(status_code=404, detail="Page not found")
+    return CustomPage(**page)
+
+@api_router.put("/admin/pages/{page_id}", response_model=CustomPage)
+async def update_page(page_id: str, page_data: CustomPageUpdate, admin: User = Depends(get_admin_user)):
+    """Update a custom page (admin only)"""
+    page = await db.custom_pages.find_one({"id": page_id}, {"_id": 0})
+    if not page:
+        raise HTTPException(status_code=404, detail="Page not found")
+    
+    update_data = {k: v for k, v in page_data.model_dump().items() if v is not None}
+    update_data["updated_at"] = datetime.now(timezone.utc)
+    
+    if update_data:
+        await db.custom_pages.update_one({"id": page_id}, {"$set": update_data})
+        page.update(update_data)
+    
+    return CustomPage(**page)
+
+@api_router.delete("/admin/pages/{page_id}")
+async def delete_page(page_id: str, admin: User = Depends(get_admin_user)):
+    """Delete a custom page (admin only)"""
+    result = await db.custom_pages.delete_one({"id": page_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Page not found")
+    return {"message": "Page deleted successfully"}
+
 # --- Customization Routes ---
 @api_router.get("/customization", response_model=SiteCustomization)
 async def get_customization():
