@@ -150,7 +150,7 @@ const ShopPage = () => {
   const getCategoryIcon = (category) => {
     switch (category) {
       case 'dates': return '🌴';
-      case 'olive-oil': return '🫒';
+      case 'huile-olive': return '🫒';
       default: return '🛍️';
     }
   };
