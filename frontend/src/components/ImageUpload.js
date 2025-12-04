@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react';
 import axios from 'axios';
+import { useToast } from '../hooks/use-toast';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -15,17 +16,7 @@ const ImageUpload = ({
   const [uploading, setUploading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const fileInputRef = useRef(null);
-  
-  // Simple toast replacement
-  const toast = (options) => {
-    const title = options.title || '';
-    const description = options.description || '';
-    if (options.variant === 'destructive') {
-      alert(`❌ ${title}\n${description}`);
-    } else {
-      alert(`✅ ${title}\n${description}`);
-    }
-  };
+  const { toast } = useToast();
 
   const uploadImage = async (file) => {
     const formData = new FormData();
