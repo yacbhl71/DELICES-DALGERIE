@@ -4,6 +4,12 @@ from email.mime.multipart import MIMEMultipart
 import os
 from typing import Optional
 import logging
+from dotenv import load_dotenv
+from pathlib import Path
+
+# Load environment variables
+ROOT_DIR = Path(__file__).parent
+load_dotenv(ROOT_DIR / '.env')
 
 logger = logging.getLogger(__name__)
 
