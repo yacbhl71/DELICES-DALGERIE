@@ -188,7 +188,7 @@ const AdminLayout = ({ children }) => {
           `}</style>
           
           {/* Gradient Background */}
-          <div className="relative bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 animate-gradient">
+          <div className="relative bg-gradient-to-r from-olive via-green-700 to-brown animate-gradient">
             {/* Animated Background Shapes */}
             <div className="absolute inset-0 overflow-hidden">
               {/* Large Circle */}
