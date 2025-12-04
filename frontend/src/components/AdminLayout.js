@@ -15,7 +15,8 @@ import {
   BarChart3,
   Mail,
   Palette,
-  Layers
+  Layers,
+  FileText
 } from 'lucide-react';
 
 const AdminLayout = ({ children }) => {
