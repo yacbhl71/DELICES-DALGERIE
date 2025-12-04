@@ -182,8 +182,8 @@ function App() {
         <CartProvider>
           <div className="App">
             <Toaster />
-            <Cart />
             <BrowserRouter>
+              <Cart />
             <Routes>
               {/* Admin Routes */}
               <Route path="/admin" element={
