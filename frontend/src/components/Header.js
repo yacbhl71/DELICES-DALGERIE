@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage, useAuth } from '../App';
-import { Menu, X, Globe, User, LogOut } from 'lucide-react';
+import { Menu, X, Globe, User, LogOut, ShoppingCart } from 'lucide-react';
+import { useCart } from '../contexts/CartContext';
 
 const Header = () => {
   const { language, setLanguage, t } = useLanguage();
