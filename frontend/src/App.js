@@ -6,7 +6,7 @@ import './App.css';
 // Components
 import Header from './components/Header';
 import HomePage from './components/HomePage';
-import RecipesPage from './components/RecipesPage';
+// RecipesPage removed - focusing on dates and olive oil
 import ShopPage from './components/ShopPage';
 import HistoryPage from './components/HistoryPage';
 import AuthPage from './components/AuthPage';
