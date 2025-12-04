@@ -109,6 +109,19 @@ const Header = () => {
               )}
             </div>
 
+            {/* Cart Button */}
+            <button
+              onClick={() => setIsCartOpen(true)}
+              className="relative p-2 text-gray-700 hover:text-olive transition-colors duration-200"
+            >
+              <ShoppingCart size={24} />
+              {getCartCount() > 0 && (
+                <span className="absolute -top-1 -right-1 bg-[#6B8E23] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                  {getCartCount()}
+                </span>
+              )}
+            </button>
+
             {/* Auth Section */}
             {user ? (
               <div className="flex items-center space-x-4">
