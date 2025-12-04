@@ -726,6 +726,47 @@ async def delete_contact_message(message_id: str, admin: User = Depends(get_admi
     
     return {"message": "Contact message deleted successfully"}
 
+# --- Customization Routes ---
+@api_router.get("/customization", response_model=SiteCustomization)
+async def get_customization():
+    """Get site customization settings (public)"""
+    customization = await db.customization.find_one({"id": "site_customization"}, {"_id": 0})
+    
+    if not customization:
+        # Return default values if not found
+        default_customization = SiteCustomization()
+        await db.customization.insert_one(default_customization.model_dump())
+        return default_customization
+    
+    return SiteCustomization(**customization)
+
+@api_router.put("/admin/customization", response_model=SiteCustomization)
+async def update_customization(
+    customization_data: CustomizationUpdate,
+    admin: User = Depends(get_admin_user)
+):
+    """Update site customization (admin only)"""
+    # Get existing customization or create default
+    existing = await db.customization.find_one({"id": "site_customization"}, {"_id": 0})
+    
+    if not existing:
+        existing = SiteCustomization().model_dump()
+        await db.customization.insert_one(existing)
+    
+    # Update with new data
+    update_data = {k: v for k, v in customization_data.model_dump().items() if v is not None}
+    update_data["updated_at"] = datetime.now(timezone.utc)
+    
+    if update_data:
+        await db.customization.update_one(
+            {"id": "site_customization"},
+            {"$set": update_data}
+        )
+    
+    # Return updated customization
+    updated = await db.customization.find_one({"id": "site_customization"}, {"_id": 0})
+    return SiteCustomization(**updated)
+
 # --- Basic Routes ---
 @api_router.get("/")
 async def root():
