@@ -9,6 +9,7 @@ import HomePage from './components/HomePageNew';
 // RecipesPage removed - focusing on dates and olive oil
 import ShopPage from './components/ShopPage';
 import HistoryPage from './components/HistoryPage';
+import ContactPage from './components/ContactPage';
 import AuthPage from './components/AuthPage';
 import ProfilePage from './components/ProfilePage';
 
@@ -19,6 +20,7 @@ import AdminDashboard from './components/AdminDashboardNew';
 import AdminProducts from './components/AdminProducts';
 import AdminUsers from './components/AdminUsers';
 import AdminHistory from './components/AdminHistory';
+import AdminContact from './components/AdminContact';
 // AdminRecipeForm removed
 import AdminProductForm from './components/AdminProductForm';
 import AdminHistoryForm from './components/AdminHistoryForm';
