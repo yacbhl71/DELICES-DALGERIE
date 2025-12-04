@@ -340,6 +340,7 @@ function App() {
             </Routes>
           </BrowserRouter>
         </div>
+        </CartProvider>
       </AuthContext.Provider>
     </LanguageContext.Provider>
   );
