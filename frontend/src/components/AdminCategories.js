@@ -305,7 +305,7 @@ export default function AdminCategories() {
                 <p className="text-xs text-gray-500 mt-1">Utilisé dans l'URL (ex: /shop/dattes)</p>
               </div>
 
-              {/* Icon */}
+              {/* Icon & Order */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -330,6 +330,28 @@ export default function AdminCategories() {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
                   />
                 </div>
+              </div>
+
+              {/* Image Upload */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Image de la Catégorie (optionnel)
+                </label>
+                <ImageUpload
+                  existingImages={formData.image_url ? [formData.image_url] : []}
+                  maxImages={1}
+                  onUploadComplete={(urls) => setFormData(prev => ({ ...prev, image_url: urls[0] || null }))}
+                  label="Image de catégorie"
+                />
+                {formData.image_url && (
+                  <div className="mt-3">
+                    <img 
+                      src={formData.image_url} 
+                      alt="Aperçu" 
+                      className="h-32 w-full object-cover rounded-lg"
+                    />
+                  </div>
+                )}
               </div>
 
               {/* Description - Multilingual */}
