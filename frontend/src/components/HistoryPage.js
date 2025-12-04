@@ -64,27 +64,27 @@ const HistoryPage = () => {
   const regions = [
     {
       value: 'algerie',
-      labelFr: 'Algérie',
-      labelAr: 'الجزائر',
-      labelEn: 'Algeria',
+      labelFr: 'Nos Trésors',
+      labelAr: 'كنوزنا',
+      labelEn: 'Our Treasures',
       icon: MapPin,
-      color: 'from-green-500 to-red-500'
+      color: 'from-olive to-green-700'
     },
     {
       value: 'kabylie',
-      labelFr: 'Kabylie',
-      labelAr: 'القبائل',
-      labelEn: 'Kabylie',
+      labelFr: 'Huile d\'Olive',
+      labelAr: 'زيت الزيتون',
+      labelEn: 'Olive Oil',
       icon: Mountain,
-      color: 'from-blue-500 to-green-500'
+      color: 'from-olive to-green-600'
     },
     {
       value: 'vallee-soumam',
-      labelFr: 'Vallée de Soumam',
-      labelAr: 'وادي الصومام',
-      labelEn: 'Soumam Valley',
+      labelFr: 'Dattes Deglet Nour',
+      labelAr: 'تمور دقلة نور',
+      labelEn: 'Deglet Nour Dates',
       icon: Users,
-      color: 'from-amber-500 to-orange-500'
+      color: 'from-gold to-brown'
     }
   ];
 
