@@ -182,6 +182,7 @@ function App() {
         <CartProvider>
           <div className="App">
             <Toaster />
+            <Cart />
             <BrowserRouter>
             <Routes>
               {/* Admin Routes */}
