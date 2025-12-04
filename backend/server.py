@@ -251,6 +251,37 @@ class CustomizationUpdate(BaseModel):
     shop_title: Optional[Dict[str, str]] = None
     shop_description: Optional[Dict[str, str]] = None
 
+# Custom Page Models
+class CustomPage(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: Dict[str, str]  # {"fr": "Mentions légales", "en": "Legal notice", "ar": "..."}
+    slug: str  # URL-friendly: "mentions-legales"
+    content: Dict[str, str]  # HTML content in 3 languages
+    meta_description: Optional[Dict[str, str]] = None
+    is_published: bool = True
+    show_in_menu: bool = False  # Display in navigation menu
+    menu_order: int = 0
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class CustomPageCreate(BaseModel):
+    title: Dict[str, str]
+    slug: str
+    content: Dict[str, str]
+    meta_description: Optional[Dict[str, str]] = None
+    is_published: Optional[bool] = True
+    show_in_menu: Optional[bool] = False
+    menu_order: Optional[int] = 0
+
+class CustomPageUpdate(BaseModel):
+    title: Optional[Dict[str, str]] = None
+    slug: Optional[str] = None
+    content: Optional[Dict[str, str]] = None
+    meta_description: Optional[Dict[str, str]] = None
+    is_published: Optional[bool] = None
+    show_in_menu: Optional[bool] = None
+    menu_order: Optional[int] = None
+
 # Contact Models
 class ContactMessage(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
