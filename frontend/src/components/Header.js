@@ -64,6 +64,12 @@ const Header = () => {
             >
               {t('history')}
             </Link>
+            <Link 
+              to="/contact" 
+              className="text-gray-700 hover:text-olive font-medium transition-colors duration-200"
+            >
+              {language === 'ar' ? 'اتصل بنا' : language === 'en' ? 'Contact' : 'Contact'}
+            </Link>
           </div>
 
           {/* Right Side - Language Selector & Auth */}
