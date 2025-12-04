@@ -97,15 +97,9 @@ const AdminDashboardNew = () => {
 
   const quickActions = [
     {
-      title: language === 'ar' ? 'إضافة وصفة' : language === 'en' ? 'Add Recipe' : 'Ajouter Recette',
-      icon: ChefHat,
-      gradient: 'from-amber-400 to-orange-600',
-      path: '/admin/recipes/new'
-    },
-    {
       title: language === 'ar' ? 'إضافة منتج' : language === 'en' ? 'Add Product' : 'Ajouter Produit',
       icon: ShoppingBag,
-      gradient: 'from-green-400 to-emerald-600',
+      gradient: 'from-olive to-green-700',
       path: '/admin/products/new'
     },
     {
