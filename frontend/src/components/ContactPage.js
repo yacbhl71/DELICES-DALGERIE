@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../App';
 import { Mail, Phone, MapPin, Send, Check } from 'lucide-react';
+import axios from 'axios';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
 
 const ContactPage = () => {
   const { language } = useLanguage();
@@ -13,28 +17,41 @@ const ContactPage = () => {
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
     
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    setSubmitted(true);
-    setLoading(false);
-    
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: ''
+    try {
+      // Submit to actual API
+      await axios.post(`${API}/contact`, {
+        name: formData.name,
+        email: formData.email,
+        subject: formData.subject || 'Demande de contact',
+        message: formData.message
       });
-    }, 3000);
+      
+      setSubmitted(true);
+      setLoading(false);
+      
+      // Reset form after 3 seconds
+      setTimeout(() => {
+        setSubmitted(false);
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: ''
+        });
+      }, 3000);
+    } catch (err) {
+      console.error('Error submitting contact form:', err);
+      setError(err.response?.data?.detail || 'Une erreur est survenue. Veuillez réessayer.');
+      setLoading(false);
+    }
   };
 
   const handleChange = (e) => {
