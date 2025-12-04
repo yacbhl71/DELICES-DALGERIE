@@ -9,6 +9,7 @@ const API = `${BACKEND_URL}/api`;
 
 const ShopPage = () => {
   const { t, language } = useLanguage();
+  const { addToCart } = useCart();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
