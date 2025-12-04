@@ -135,12 +135,12 @@ class HistoricalContentUpdate(BaseModel):
 # Admin Statistics Model
 class AdminStats(BaseModel):
     total_users: int
-    total_recipes: int
     total_products: int
     total_historical_content: int
+    total_contact_messages: int
     recent_users: int
-    recent_recipes: int
     recent_products: int
+    recent_contact_messages: int
 
 # Settings Model
 class Settings(BaseModel):
