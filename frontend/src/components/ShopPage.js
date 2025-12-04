@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../App';
-import { ShoppingBag, Star, Search, Filter, Heart, Eye } from 'lucide-react';
+import { ShoppingBag, Star, Search, Filter, Heart, Eye, ShoppingCart } from 'lucide-react';
 import axios from 'axios';
+import { useCart } from '../contexts/CartContext';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
