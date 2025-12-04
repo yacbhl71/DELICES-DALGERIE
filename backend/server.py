@@ -826,6 +826,159 @@ async def serve_uploaded_file(filename: str):
     
     return FileResponse(file_path)
 
+# --- Order Routes ---
+@api_router.post("/orders", response_model=Order)
+async def create_order(order_data: OrderCreate, background_tasks: BackgroundTasks):
+    """Create a new order (public)"""
+    # Calculate totals
+    subtotal = sum(item.price * item.quantity for item in order_data.items)
+    shipping_cost = 0.0  # Free shipping for now
+    total = subtotal + shipping_cost
+    
+    # Create order
+    order = Order(
+        **order_data.model_dump(),
+        subtotal=subtotal,
+        shipping_cost=shipping_cost,
+        total=total
+    )
+    
+    # Save to database
+    await db.orders.insert_one(order.model_dump())
+    
+    # Send confirmation email in background
+    background_tasks.add_task(
+        send_order_confirmation_email,
+        order
+    )
+    
+    return order
+
+@api_router.get("/orders/{order_id}", response_model=Order)
+async def get_order_public(order_id: str):
+    """Get order details (public - by order ID)"""
+    order = await db.orders.find_one({"id": order_id}, {"_id": 0})
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    return Order(**order)
+
+@api_router.get("/my-orders", response_model=List[Order])
+async def get_my_orders(current_user: User = Depends(get_current_user)):
+    """Get current user's orders"""
+    orders = await db.orders.find(
+        {"$or": [{"user_id": current_user.id}, {"customer_email": current_user.email}]},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(1000)
+    return [Order(**order) for order in orders]
+
+@api_router.get("/admin/orders", response_model=List[Order])
+async def get_all_orders_admin(admin: User = Depends(get_admin_user)):
+    """Get all orders (admin only)"""
+    orders = await db.orders.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    return [Order(**order) for order in orders]
+
+@api_router.get("/admin/orders/{order_id}", response_model=Order)
+async def get_order_admin(order_id: str, admin: User = Depends(get_admin_user)):
+    """Get order details (admin only)"""
+    order = await db.orders.find_one({"id": order_id}, {"_id": 0})
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    return Order(**order)
+
+@api_router.put("/admin/orders/{order_id}", response_model=Order)
+async def update_order_status(
+    order_id: str,
+    order_data: OrderUpdate,
+    admin: User = Depends(get_admin_user),
+    background_tasks: BackgroundTasks = None
+):
+    """Update order status (admin only)"""
+    order = await db.orders.find_one({"id": order_id}, {"_id": 0})
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    update_data = {k: v for k, v in order_data.model_dump().items() if v is not None}
+    update_data["updated_at"] = datetime.now(timezone.utc)
+    
+    if update_data:
+        await db.orders.update_one({"id": order_id}, {"$set": update_data})
+        order.update(update_data)
+    
+    # Send status update email if status changed
+    if "status" in update_data and background_tasks:
+        background_tasks.add_task(
+            send_order_status_email,
+            Order(**order)
+        )
+    
+    return Order(**order)
+
+def send_order_confirmation_email(order: Order):
+    """Send order confirmation email"""
+    try:
+        from email_service import email_service
+        
+        subject = f"Confirmation de commande #{order.order_number}"
+        
+        items_html = "".join([
+            f"<tr><td>{item.product_name}</td><td>{item.quantity}</td><td>{item.price:.2f} EUR</td></tr>"
+            for item in order.items
+        ])
+        
+        body_html = f"""
+        <html>
+        <body style="font-family: Arial, sans-serif;">
+            <h2 style="color: #6B8E23;">Merci pour votre commande !</h2>
+            <p>Bonjour {order.customer_name},</p>
+            <p>Votre commande <strong>#{order.order_number}</strong> a été reçue avec succès.</p>
+            <h3>Détails de la commande :</h3>
+            <table border="1" cellpadding="10" style="border-collapse: collapse;">
+                <tr><th>Produit</th><th>Quantité</th><th>Prix</th></tr>
+                {items_html}
+                <tr><td colspan="2"><strong>Total</strong></td><td><strong>{order.total:.2f} EUR</strong></td></tr>
+            </table>
+            <p><strong>Adresse de livraison :</strong><br>{order.shipping_address}<br>{order.shipping_city}</p>
+            <p>Nous vous contacterons bientôt pour confirmer la livraison.</p>
+            <p>Cordialement,<br>L'équipe Délices et Trésors d'Algérie</p>
+        </body>
+        </html>
+        """
+        
+        email_service.send_email(order.customer_email, subject, "Confirmation de commande", body_html)
+    except Exception as e:
+        print(f"Error sending order confirmation email: {e}")
+
+def send_order_status_email(order: Order):
+    """Send order status update email"""
+    try:
+        from email_service import email_service
+        
+        status_fr = {
+            "pending": "En attente",
+            "confirmed": "Confirmée",
+            "processing": "En préparation",
+            "shipped": "Expédiée",
+            "delivered": "Livrée",
+            "cancelled": "Annulée"
+        }
+        
+        subject = f"Mise à jour commande #{order.order_number}"
+        body_html = f"""
+        <html>
+        <body style="font-family: Arial, sans-serif;">
+            <h2 style="color: #6B8E23;">Mise à jour de votre commande</h2>
+            <p>Bonjour {order.customer_name},</p>
+            <p>Le statut de votre commande <strong>#{order.order_number}</strong> a été mis à jour :</p>
+            <p style="font-size: 18px; color: #6B8E23;"><strong>{status_fr.get(order.status, order.status)}</strong></p>
+            <p>Cordialement,<br>L'équipe Délices et Trésors d'Algérie</p>
+        </body>
+        </html>
+        """
+        
+        email_service.send_email(order.customer_email, subject, "Mise à jour commande", body_html)
+    except Exception as e:
+        print(f"Error sending status email: {e}")
+
 # --- Contact Routes ---
 @api_router.post("/contact", response_model=ContactMessage)
 async def create_contact_message(contact_data: ContactMessageCreate, background_tasks: BackgroundTasks):
