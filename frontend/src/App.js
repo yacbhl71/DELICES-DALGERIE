@@ -326,6 +326,7 @@ function App() {
                       <Route path="/shop" element={<ShopPage />} />
                       <Route path="/history" element={<HistoryPage />} />
                       <Route path="/contact" element={<ContactPage />} />
+                      <Route path="/checkout" element={<CheckoutPage />} />
                       <Route path="/page/:slug" element={<CustomPageView />} />
                       <Route path="/auth" element={<AuthPage />} />
                       <Route 
