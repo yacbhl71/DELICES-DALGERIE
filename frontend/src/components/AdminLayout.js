@@ -231,7 +231,7 @@ const AdminLayout = ({ children }) => {
                     <div className="w-2 h-2 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
                   </div>
                   <span className="text-white font-bold text-lg tracking-wider">
-                    SOUMAM HERITAGE
+                    DÉLICES ET TRÉSORS D'ALGÉRIE
                   </span>
                   <div className="flex space-x-2">
                     <div className="w-2 h-2 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.6s' }}></div>
