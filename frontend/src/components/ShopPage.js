@@ -111,10 +111,8 @@ const ShopPage = () => {
 
   const categories = [
     { value: 'all', labelFr: 'Tous produits', labelAr: 'جميع المنتجات', labelEn: 'All products' },
-    { value: 'epices', labelFr: 'Épices', labelAr: 'بهارات', labelEn: 'Spices' },
-    { value: 'thes', labelFr: 'Thés', labelAr: 'شاي', labelEn: 'Teas' },
-    { value: 'robes-kabyles', labelFr: 'Robes Kabyles', labelAr: 'فساتين قبائلية', labelEn: 'Kabyle Dresses' },
-    { value: 'bijoux-kabyles', labelFr: 'Bijoux Kabyles', labelAr: 'مجوهرات قبائلية', labelEn: 'Kabyle Jewelry' }
+    { value: 'dates', labelFr: 'Dattes', labelAr: 'تمور', labelEn: 'Dates' },
+    { value: 'olive-oil', labelFr: 'Huiles d\'Olive', labelAr: 'زيت الزيتون', labelEn: 'Olive Oils' }
   ];
 
   useEffect(() => {
