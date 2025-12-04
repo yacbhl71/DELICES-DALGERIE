@@ -363,27 +363,78 @@ export default function AdminCustomization() {
             <div className="border-b border-gray-200 pb-6">
               <h3 className="text-lg font-semibold mb-4">Page d'Accueil</h3>
               <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Titre Principal (Français)
-                  </label>
-                  <input
-                    type="text"
-                    value={customization.home_title.fr}
-                    onChange={(e) => updateMultilingualField('home_title', 'fr', e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Titre Principal (Français)
+                    </label>
+                    <input
+                      type="text"
+                      value={customization.home_title.fr}
+                      onChange={(e) => updateMultilingualField('home_title', 'fr', e.target.value)}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Title (English)
+                    </label>
+                    <input
+                      type="text"
+                      value={customization.home_title.en}
+                      onChange={(e) => updateMultilingualField('home_title', 'en', e.target.value)}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      العنوان (العربية)
+                    </label>
+                    <input
+                      type="text"
+                      value={customization.home_title.ar}
+                      onChange={(e) => updateMultilingualField('home_title', 'ar', e.target.value)}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
+                      dir="rtl"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Sous-titre (Français)
-                  </label>
-                  <textarea
-                    value={customization.home_subtitle.fr}
-                    onChange={(e) => updateMultilingualField('home_subtitle', 'fr', e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
-                    rows="2"
-                  />
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Sous-titre (Français)
+                    </label>
+                    <textarea
+                      value={customization.home_subtitle.fr}
+                      onChange={(e) => updateMultilingualField('home_subtitle', 'fr', e.target.value)}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
+                      rows="3"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Subtitle (English)
+                    </label>
+                    <textarea
+                      value={customization.home_subtitle.en}
+                      onChange={(e) => updateMultilingualField('home_subtitle', 'en', e.target.value)}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
+                      rows="3"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      العنوان الفرعي (العربية)
+                    </label>
+                    <textarea
+                      value={customization.home_subtitle.ar}
+                      onChange={(e) => updateMultilingualField('home_subtitle', 'ar', e.target.value)}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
+                      rows="3"
+                      dir="rtl"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -392,27 +443,78 @@ export default function AdminCustomization() {
             <div>
               <h3 className="text-lg font-semibold mb-4">Page Boutique</h3>
               <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Titre (Français)
-                  </label>
-                  <input
-                    type="text"
-                    value={customization.shop_title.fr}
-                    onChange={(e) => updateMultilingualField('shop_title', 'fr', e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Titre (Français)
+                    </label>
+                    <input
+                      type="text"
+                      value={customization.shop_title.fr}
+                      onChange={(e) => updateMultilingualField('shop_title', 'fr', e.target.value)}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Title (English)
+                    </label>
+                    <input
+                      type="text"
+                      value={customization.shop_title.en}
+                      onChange={(e) => updateMultilingualField('shop_title', 'en', e.target.value)}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      العنوان (العربية)
+                    </label>
+                    <input
+                      type="text"
+                      value={customization.shop_title.ar}
+                      onChange={(e) => updateMultilingualField('shop_title', 'ar', e.target.value)}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
+                      dir="rtl"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Description (Français)
-                  </label>
-                  <textarea
-                    value={customization.shop_description.fr}
-                    onChange={(e) => updateMultilingualField('shop_description', 'fr', e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
-                    rows="2"
-                  />
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Description (Français)
+                    </label>
+                    <textarea
+                      value={customization.shop_description.fr}
+                      onChange={(e) => updateMultilingualField('shop_description', 'fr', e.target.value)}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
+                      rows="3"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Description (English)
+                    </label>
+                    <textarea
+                      value={customization.shop_description.en}
+                      onChange={(e) => updateMultilingualField('shop_description', 'en', e.target.value)}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
+                      rows="3"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      الوصف (العربية)
+                    </label>
+                    <textarea
+                      value={customization.shop_description.ar}
+                      onChange={(e) => updateMultilingualField('shop_description', 'ar', e.target.value)}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
+                      rows="3"
+                      dir="rtl"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
