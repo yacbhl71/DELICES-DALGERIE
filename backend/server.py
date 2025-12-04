@@ -78,6 +78,36 @@ class Token(BaseModel):
     access_token: str
     token_type: str
 
+# Category Models
+class Category(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: Dict[str, str]  # {"fr": "Dattes", "en": "Dates", "ar": "تمور"}
+    slug: str  # URL-friendly name
+    description: Optional[Dict[str, str]] = None
+    icon: Optional[str] = "🛍️"  # Emoji or icon name
+    image_url: Optional[str] = None
+    order: int = 0  # For sorting
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class CategoryCreate(BaseModel):
+    name: Dict[str, str]
+    slug: str
+    description: Optional[Dict[str, str]] = None
+    icon: Optional[str] = "🛍️"
+    image_url: Optional[str] = None
+    order: Optional[int] = 0
+    is_active: Optional[bool] = True
+
+class CategoryUpdate(BaseModel):
+    name: Optional[Dict[str, str]] = None
+    slug: Optional[str] = None
+    description: Optional[Dict[str, str]] = None
+    icon: Optional[str] = None
+    image_url: Optional[str] = None
+    order: Optional[int] = None
+    is_active: Optional[bool] = None
+
 # Product Models
 class Product(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
