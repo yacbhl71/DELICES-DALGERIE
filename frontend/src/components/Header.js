@@ -156,13 +156,6 @@ const Header = () => {
                 {t('home')}
               </Link>
               <Link
-                to="/recipes"
-                className="block px-3 py-2 text-gray-700 hover:text-olive hover:bg-olive-light rounded-md transition-colors duration-200"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {t('recipes')}
-              </Link>
-              <Link
                 to="/shop"
                 className="block px-3 py-2 text-gray-700 hover:text-olive hover:bg-olive-light rounded-md transition-colors duration-200"
                 onClick={() => setIsMenuOpen(false)}
@@ -175,6 +168,13 @@ const Header = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t('history')}
+              </Link>
+              <Link
+                to="/contact"
+                className="block px-3 py-2 text-gray-700 hover:text-olive hover:bg-olive-light rounded-md transition-colors duration-200"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {language === 'ar' ? 'اتصل بنا' : language === 'en' ? 'Contact' : 'Contact'}
               </Link>
               
               <div className="border-t border-gray-200 pt-4">
