@@ -690,6 +690,67 @@ async def serve_uploaded_file(filename: str):
     
     return FileResponse(file_path)
 
+# --- Contact Routes ---
+@api_router.post("/contact", response_model=ContactMessage)
+async def create_contact_message(contact_data: ContactMessageCreate, background_tasks: BackgroundTasks):
+    """Submit a contact form message"""
+    # Create contact message
+    contact_dict = contact_data.model_dump()
+    contact_message = ContactMessage(**contact_dict)
+    
+    # Save to database
+    await db.contact_messages.insert_one(contact_message.model_dump())
+    
+    # Send email notification in background
+    background_tasks.add_task(
+        email_service.send_contact_notification,
+        contact_dict
+    )
+    
+    return contact_message
+
+@api_router.get("/admin/contact-messages", response_model=List[ContactMessage])
+async def get_contact_messages(admin: User = Depends(get_admin_user)):
+    """Get all contact messages (admin only)"""
+    messages = await db.contact_messages.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    return [ContactMessage(**msg) for msg in messages]
+
+@api_router.get("/admin/contact-messages/{message_id}", response_model=ContactMessage)
+async def get_contact_message(message_id: str, admin: User = Depends(get_admin_user)):
+    """Get a specific contact message (admin only)"""
+    message = await db.contact_messages.find_one({"id": message_id}, {"_id": 0})
+    if not message:
+        raise HTTPException(status_code=404, detail="Contact message not found")
+    return ContactMessage(**message)
+
+@api_router.put("/admin/contact-messages/{message_id}", response_model=ContactMessage)
+async def update_contact_message(message_id: str, update_data: ContactMessageUpdate, admin: User = Depends(get_admin_user)):
+    """Update contact message status (admin only)"""
+    message = await db.contact_messages.find_one({"id": message_id}, {"_id": 0})
+    if not message:
+        raise HTTPException(status_code=404, detail="Contact message not found")
+    
+    update_dict = {k: v for k, v in update_data.model_dump().items() if v is not None}
+    
+    if update_dict:
+        await db.contact_messages.update_one(
+            {"id": message_id},
+            {"$set": update_dict}
+        )
+        message.update(update_dict)
+    
+    return ContactMessage(**message)
+
+@api_router.delete("/admin/contact-messages/{message_id}")
+async def delete_contact_message(message_id: str, admin: User = Depends(get_admin_user)):
+    """Delete a contact message (admin only)"""
+    result = await db.contact_messages.delete_one({"id": message_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Contact message not found")
+    
+    return {"message": "Contact message deleted successfully"}
+
 # --- Basic Routes ---
 @api_router.get("/")
 async def root():
