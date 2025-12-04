@@ -315,57 +315,6 @@ async def change_password(
     
     return {"message": "Password changed successfully"}
 
-# --- Recipe Routes ---
-@api_router.get("/recipes", response_model=List[Recipe])
-async def get_recipes():
-    recipes = await db.recipes.find().to_list(1000)
-    return [Recipe(**recipe) for recipe in recipes]
-
-@api_router.post("/recipes", response_model=Recipe)
-async def create_recipe(recipe_data: RecipeCreate, current_user: User = Depends(get_current_user)):
-    recipe_dict = recipe_data.dict()
-    recipe_dict["created_by"] = current_user.id
-    recipe = Recipe(**recipe_dict)
-    await db.recipes.insert_one(recipe.dict())
-    return recipe
-
-@api_router.get("/recipes/{recipe_id}", response_model=Recipe)
-async def get_recipe(recipe_id: str):
-    recipe = await db.recipes.find_one({"id": recipe_id})
-    if not recipe:
-        raise HTTPException(status_code=404, detail="Recipe not found")
-    return Recipe(**recipe)
-
-@api_router.put("/recipes/{recipe_id}", response_model=Recipe)
-async def update_recipe(recipe_id: str, recipe_data: RecipeUpdate, current_user: User = Depends(get_current_user)):
-    recipe = await db.recipes.find_one({"id": recipe_id})
-    if not recipe:
-        raise HTTPException(status_code=404, detail="Recipe not found")
-    
-    # Check if user is admin or recipe creator
-    if current_user.role != "admin" and recipe.get("created_by") != current_user.id:
-        raise HTTPException(status_code=403, detail="Not authorized to update this recipe")
-    
-    update_data = {k: v for k, v in recipe_data.dict().items() if v is not None}
-    if update_data:
-        await db.recipes.update_one({"id": recipe_id}, {"$set": update_data})
-    
-    updated_recipe = await db.recipes.find_one({"id": recipe_id})
-    return Recipe(**updated_recipe)
-
-@api_router.delete("/recipes/{recipe_id}")
-async def delete_recipe(recipe_id: str, current_user: User = Depends(get_current_user)):
-    recipe = await db.recipes.find_one({"id": recipe_id})
-    if not recipe:
-        raise HTTPException(status_code=404, detail="Recipe not found")
-    
-    # Check if user is admin or recipe creator
-    if current_user.role != "admin" and recipe.get("created_by") != current_user.id:
-        raise HTTPException(status_code=403, detail="Not authorized to delete this recipe")
-    
-    await db.recipes.delete_one({"id": recipe_id})
-    return {"message": "Recipe deleted successfully"}
-
 # --- Product Routes ---
 @api_router.get("/products", response_model=List[Product])
 async def get_products(category: Optional[str] = None):
