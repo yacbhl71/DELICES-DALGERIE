@@ -401,24 +401,24 @@ async def delete_historical_content(content_id: str, admin_user: User = Depends(
 async def get_admin_stats(admin_user: User = Depends(get_admin_user)):
     # Calculate statistics
     total_users = await db.users.count_documents({})
-    total_recipes = await db.recipes.count_documents({})
     total_products = await db.products.count_documents({})
     total_historical_content = await db.historical_content.count_documents({})
+    total_contact_messages = await db.contact_messages.count_documents({})
     
     # Recent items (last 30 days)
     thirty_days_ago = datetime.now(timezone.utc) - timedelta(days=30)
     recent_users = await db.users.count_documents({"created_at": {"$gte": thirty_days_ago}})
-    recent_recipes = await db.recipes.count_documents({"created_at": {"$gte": thirty_days_ago}})
     recent_products = await db.products.count_documents({"created_at": {"$gte": thirty_days_ago}})
+    recent_contact_messages = await db.contact_messages.count_documents({"created_at": {"$gte": thirty_days_ago}})
     
     return AdminStats(
         total_users=total_users,
-        total_recipes=total_recipes,
         total_products=total_products,
         total_historical_content=total_historical_content,
+        total_contact_messages=total_contact_messages,
         recent_users=recent_users,
-        recent_recipes=recent_recipes,
-        recent_products=recent_products
+        recent_products=recent_products,
+        recent_contact_messages=recent_contact_messages
     )
 
 @api_router.get("/admin/users", response_model=List[User])
