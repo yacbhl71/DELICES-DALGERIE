@@ -282,6 +282,47 @@ class CustomPageUpdate(BaseModel):
     show_in_menu: Optional[bool] = None
     menu_order: Optional[int] = None
 
+# Order Models
+class OrderItem(BaseModel):
+    product_id: str
+    product_name: str
+    quantity: int
+    price: float
+    image_url: Optional[str] = None
+
+class Order(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    order_number: str = Field(default_factory=lambda: f"ORD-{datetime.now().strftime('%Y%m%d')}-{str(uuid.uuid4())[:8].upper()}")
+    user_id: Optional[str] = None
+    customer_name: str
+    customer_email: EmailStr
+    customer_phone: str
+    shipping_address: str
+    shipping_city: str
+    shipping_postal_code: Optional[str] = None
+    items: List[OrderItem]
+    subtotal: float
+    shipping_cost: float = 0.0
+    total: float
+    status: str = "pending"  # pending, confirmed, processing, shipped, delivered, cancelled
+    notes: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class OrderCreate(BaseModel):
+    customer_name: str
+    customer_email: EmailStr
+    customer_phone: str
+    shipping_address: str
+    shipping_city: str
+    shipping_postal_code: Optional[str] = None
+    items: List[OrderItem]
+    notes: Optional[str] = None
+
+class OrderUpdate(BaseModel):
+    status: Optional[str] = None
+    notes: Optional[str] = None
+
 # Contact Models
 class ContactMessage(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
