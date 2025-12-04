@@ -112,7 +112,7 @@ const ShopPage = () => {
   const categories = [
     { value: 'all', labelFr: 'Tous produits', labelAr: 'جميع المنتجات', labelEn: 'All products' },
     { value: 'dates', labelFr: 'Dattes', labelAr: 'تمور', labelEn: 'Dates' },
-    { value: 'olive-oil', labelFr: 'Huiles d\'Olive', labelAr: 'زيت الزيتون', labelEn: 'Olive Oils' }
+    { value: 'huile-olive', labelFr: 'Huiles d\'Olive', labelAr: 'زيت الزيتون', labelEn: 'Olive Oils' }
   ];
 
   useEffect(() => {
