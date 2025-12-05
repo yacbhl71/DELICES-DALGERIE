@@ -348,6 +348,10 @@ function App() {
                         path="/account-settings" 
                         element={user ? <AccountSettings /> : <Navigate to="/auth" />} 
                       />
+                      <Route 
+                        path="/profile/orders" 
+                        element={user ? <MyOrders /> : <Navigate to="/auth" />} 
+                      />
                     </Routes>
                   </main>
                 </>
