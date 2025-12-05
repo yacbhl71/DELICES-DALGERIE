@@ -232,6 +232,23 @@ const AdminLayout = ({ children }) => {
 
       {/* Main content */}
       <div className="lg:pl-64 min-h-screen bg-gray-50">
+        {/* Mobile/Tablet Header with Menu Button */}
+        <div className="lg:hidden sticky top-0 z-10 bg-white shadow-sm border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="p-2 text-gray-700 hover:text-amber-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+          >
+            <Menu size={24} />
+          </button>
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-gradient-to-r from-olive to-green-700 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-sm">DT</span>
+            </div>
+            <span className="text-lg font-semibold text-gray-900">Admin Panel</span>
+          </div>
+          <div className="w-10"></div> {/* Spacer for centering */}
+        </div>
+        
         {/* Page content */}
         <main className="p-6">
           {children}
