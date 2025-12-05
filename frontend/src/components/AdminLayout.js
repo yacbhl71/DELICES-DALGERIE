@@ -16,7 +16,8 @@ import {
   Mail,
   Palette,
   Layers,
-  FileText
+  FileText,
+  MessageSquare
 } from 'lucide-react';
 
 const AdminLayout = ({ children }) => {
