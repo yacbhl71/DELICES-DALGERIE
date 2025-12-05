@@ -1,34 +1,61 @@
 import React, { useState, useEffect } from 'react';
+import { useLanguage } from '../App';
+import { Save, Upload, Palette, Type, Image as ImageIcon } from 'lucide-react';
 import axios from 'axios';
-import { Save, Palette, Type, Mail, Phone, MapPin, Image as ImageIcon, RefreshCw } from 'lucide-react';
-import { useToast } from '../hooks/use-toast';
 import ImageUpload from './ImageUpload';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-export default function AdminCustomization() {
-  const { toast } = useToast();
-  const [loading, setLoading] = useState(true);
+const AdminCustomization = () => {
+  const { language } = useLanguage();
+  const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [customization, setCustomization] = useState(null);
+  const [settings, setSettings] = useState({
+    site_name: { fr: '', ar: '', en: '' },
+    tagline: { fr: '', ar: '', en: '' },
+    logo_url: '',
+    favicon_url: '',
+    primary_color: '#6B8E23',
+    secondary_color: '#8B7355',
+    accent_color: '#F59E0B',
+    font_heading: 'Inter',
+    font_body: 'Inter'
+  });
+
+  const colorPresets = [
+    { name: 'Olive Green', primary: '#6B8E23', secondary: '#8B7355', accent: '#F59E0B' },
+    { name: 'Ocean Blue', primary: '#0EA5E9', secondary: '#3B82F6', accent: '#F59E0B' },
+    { name: 'Royal Purple', primary: '#9333EA', secondary: '#A855F7', accent: '#F59E0B' },
+    { name: 'Rose Gold', primary: '#EC4899', secondary: '#F472B6', accent: '#FCD34D' },
+    { name: 'Forest', primary: '#059669', secondary: '#10B981', accent: '#FCD34D' }
+  ];
+
+  const fontOptions = [
+    'Inter',
+    'Roboto',
+    'Open Sans',
+    'Lato',
+    'Montserrat',
+    'Poppins',
+    'Playfair Display',
+    'Merriweather'
+  ];
 
   useEffect(() => {
-    fetchCustomization();
+    fetchSettings();
   }, []);
 
-  const fetchCustomization = async () => {
+  const fetchSettings = async () => {
+    setLoading(true);
     try {
-      const response = await axios.get(`${API}/customization`);
-      setCustomization(response.data);
-      setLoading(false);
+      const response = await axios.get(`${API}/admin/customization`);
+      if (response.data) {
+        setSettings({ ...settings, ...response.data });
+      }
     } catch (error) {
-      console.error('Error fetching customization:', error);
-      toast({
-        title: 'Erreur',
-        description: 'Impossible de charger les paramètres de personnalisation',
-        variant: 'destructive'
-      });
+      console.error('Error fetching settings:', error);
+    } finally {
       setLoading(false);
     }
   };
@@ -36,512 +63,296 @@ export default function AdminCustomization() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const token = localStorage.getItem('token');
-      await axios.put(
-        `${API}/admin/customization`,
-        customization,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
-
-      toast({
-        title: 'Sauvegardé',
-        description: 'Les paramètres ont été enregistrés avec succès'
-      });
-
-      // Reload the page to apply changes
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
+      await axios.put(`${API}/admin/customization`, settings);
+      alert(language === 'ar' ? 'تم الحفظ بنجاح!' : language === 'en' ? 'Saved successfully!' : 'Sauvegarde réussie!');
+      // Apply colors immediately
+      applyColors();
     } catch (error) {
-      console.error('Error saving customization:', error);
-      toast({
-        title: 'Erreur',
-        description: 'Impossible de sauvegarder les paramètres',
-        variant: 'destructive'
-      });
+      console.error('Error saving settings:', error);
+      alert(language === 'ar' ? 'خطأ في الحفظ' : language === 'en' ? 'Save error' : 'Erreur de sauvegarde');
     } finally {
       setSaving(false);
     }
   };
 
-  const updateField = (field, value) => {
-    setCustomization(prev => ({
-      ...prev,
-      [field]: value
-    }));
+  const applyColors = () => {
+    document.documentElement.style.setProperty('--color-primary', settings.primary_color);
+    document.documentElement.style.setProperty('--color-secondary', settings.secondary_color);
+    document.documentElement.style.setProperty('--color-accent', settings.accent_color);
   };
 
-  const updateMultilingualField = (field, language, value) => {
-    setCustomization(prev => ({
+  const handleInputChange = (field, lang, value) => {
+    if (lang) {
+      setSettings(prev => ({
+        ...prev,
+        [field]: { ...prev[field], [lang]: value }
+      }));
+    } else {
+      setSettings(prev => ({ ...prev, [field]: value }));
+    }
+  };
+
+  const applyColorPreset = (preset) => {
+    setSettings(prev => ({
       ...prev,
-      [field]: {
-        ...prev[field],
-        [language]: value
-      }
+      primary_color: preset.primary,
+      secondary_color: preset.secondary,
+      accent_color: preset.accent
     }));
   };
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#6B8E23]"></div>
+      <div className="flex items-center justify-center min-h-64">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-amber-600"></div>
       </div>
     );
   }
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Personnalisation du Site</h1>
-        <p className="text-gray-600">Personnalisez l'apparence et le contenu de votre site</p>
-      </div>
-
-      {/* Save Button - Fixed at top */}
-      <div className="mb-6 flex justify-end">
-        <button
-          onClick={handleSave}
-          disabled={saving}
-          className="flex items-center space-x-2 bg-[#6B8E23] text-white px-6 py-3 rounded-lg hover:bg-[#5a7a1d] transition disabled:opacity-50"
-        >
-          {saving ? (
-            <>
-              <RefreshCw className="animate-spin" size={20} />
-              <span>Sauvegarde...</span>
-            </>
-          ) : (
-            <>
-              <Save size={20} />
-              <span>Sauvegarder les modifications</span>
-            </>
-          )}
+    <div className="max-w-6xl mx-auto space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">
+            {language === 'ar' ? 'التخصيص' : language === 'en' ? 'Customization' : 'Personnalisation'}
+          </h1>
+          <p className="text-gray-600 mt-1">
+            {language === 'ar' ? 'خصص مظهر موقعك' : language === 'en' ? 'Customize your site appearance' : 'Personnalisez l\'apparence de votre site'}
+          </p>
+        </div>
+        <button onClick={handleSave} disabled={saving} className="btn-primary flex items-center">
+          <Save size={20} className="mr-2" />
+          {saving ? (language === 'ar' ? 'جاري الحفظ...' : language === 'en' ? 'Saving...' : 'Sauvegarde...') :
+                   (language === 'ar' ? 'حفظ' : language === 'en' ? 'Save' : 'Enregistrer')}
         </button>
       </div>
 
-      <div className="space-y-6">
-        {/* Brand Identity Section */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center mb-4">
-            <Type className="text-[#6B8E23] mr-2" size={24} />
-            <h2 className="text-2xl font-bold text-gray-900">Identité de la Marque</h2>
+      {/* Branding Section */}
+      <div className="bg-white rounded-xl shadow-lg p-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+          <ImageIcon className="mr-2" size={24} />
+          {language === 'ar' ? 'العلامة التجارية' : language === 'en' ? 'Branding' : 'Image de marque'}
+        </h2>
+
+        <div className="space-y-6">
+          {/* Site Name */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {['fr', 'ar', 'en'].map(lang => (
+              <div key={lang}>
+                <label className="form-label">
+                  {language === 'ar' ? 'اسم الموقع' : language === 'en' ? 'Site Name' : 'Nom du site'} ({lang.toUpperCase()})
+                </label>
+                <input
+                  type="text"
+                  value={settings.site_name[lang]}
+                  onChange={(e) => handleInputChange('site_name', lang, e.target.value)}
+                  className="form-input"
+                  placeholder="Délices et Trésors"
+                />
+              </div>
+            ))}
           </div>
 
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Nom du Site
-              </label>
+          {/* Tagline */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {['fr', 'ar', 'en'].map(lang => (
+              <div key={lang}>
+                <label className="form-label">
+                  {language === 'ar' ? 'الشعار' : language === 'en' ? 'Tagline' : 'Slogan'} ({lang.toUpperCase()})
+                </label>
+                <input
+                  type="text"
+                  value={settings.tagline[lang]}
+                  onChange={(e) => handleInputChange('tagline', lang, e.target.value)}
+                  className="form-input"
+                  placeholder="Saveurs authentiques d'Algérie"
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Logo */}
+          <div>
+            <label className="form-label mb-3">
+              {language === 'ar' ? 'الشعار' : language === 'en' ? 'Logo' : 'Logo'}
+            </label>
+            <ImageUpload
+              label="Logo"
+              maxImages={1}
+              existingImages={settings.logo_url ? [settings.logo_url] : []}
+              onUploadComplete={(images) => {
+                setSettings(prev => ({ ...prev, logo_url: images[0] || '' }));
+              }}
+            />
+          </div>
+
+          {/* Favicon */}
+          <div>
+            <label className="form-label mb-3">
+              {language === 'ar' ? 'أيقونة المفضلة' : language === 'en' ? 'Favicon' : 'Favicon'}
+            </label>
+            <ImageUpload
+              label="Favicon"
+              maxImages={1}
+              existingImages={settings.favicon_url ? [settings.favicon_url] : []}
+              onUploadComplete={(images) => {
+                setSettings(prev => ({ ...prev, favicon_url: images[0] || '' }));
+              }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Colors Section */}
+      <div className="bg-white rounded-xl shadow-lg p-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+          <Palette className="mr-2" size={24} />
+          {language === 'ar' ? 'الألوان' : language === 'en' ? 'Colors' : 'Couleurs'}
+        </h2>
+
+        {/* Color Presets */}
+        <div className="mb-6">
+          <label className="form-label mb-3">
+            {language === 'ar' ? 'المجموعات الجاهزة' : language === 'en' ? 'Color Presets' : 'Préréglages de couleurs'}
+          </label>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            {colorPresets.map((preset, index) => (
+              <button
+                key={index}
+                onClick={() => applyColorPreset(preset)}
+                className="p-4 border-2 border-gray-200 rounded-lg hover:border-amber-500 transition-colors"
+              >
+                <div className="flex space-x-2 mb-2">
+                  <div className="w-8 h-8 rounded" style={{ backgroundColor: preset.primary }}></div>
+                  <div className="w-8 h-8 rounded" style={{ backgroundColor: preset.secondary }}></div>
+                  <div className="w-8 h-8 rounded" style={{ backgroundColor: preset.accent }}></div>
+                </div>
+                <p className="text-sm font-medium text-gray-700">{preset.name}</p>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Custom Colors */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div>
+            <label className="form-label">
+              {language === 'ar' ? 'اللون الأساسي' : language === 'en' ? 'Primary Color' : 'Couleur primaire'}
+            </label>
+            <div className="flex items-center space-x-3">
+              <input
+                type="color"
+                value={settings.primary_color}
+                onChange={(e) => handleInputChange('primary_color', null, e.target.value)}
+                className="h-12 w-20 border border-gray-300 rounded cursor-pointer"
+              />
               <input
                 type="text"
-                value={customization.site_name}
-                onChange={(e) => updateField('site_name', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
-                placeholder="Délices et Trésors d'Algérie"
+                value={settings.primary_color}
+                onChange={(e) => handleInputChange('primary_color', null, e.target.value)}
+                className="form-input flex-1"
               />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Slogan (Français)
-              </label>
-              <textarea
-                value={customization.site_slogan.fr}
-                onChange={(e) => updateMultilingualField('site_slogan', 'fr', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
-                rows="2"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Slogan (English)
-              </label>
-              <textarea
-                value={customization.site_slogan.en}
-                onChange={(e) => updateMultilingualField('site_slogan', 'en', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
-                rows="2"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Slogan (العربية)
-              </label>
-              <textarea
-                value={customization.site_slogan.ar}
-                onChange={(e) => updateMultilingualField('site_slogan', 'ar', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
-                rows="2"
-                dir="rtl"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Logo
-              </label>
-              <ImageUpload
-                existingImages={customization.logo_url ? [customization.logo_url] : []}
-                maxImages={1}
-                onUploadComplete={(urls) => updateField('logo_url', urls[0])}
-                label="Logo du site"
-              />
-              {customization.logo_url && (
-                <div className="mt-2">
-                  <img src={customization.logo_url} alt="Logo" className="h-16 object-contain" />
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Colors Section */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center mb-4">
-            <Palette className="text-[#6B8E23] mr-2" size={24} />
-            <h2 className="text-2xl font-bold text-gray-900">Couleurs</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Couleur Primaire (Olive)
-              </label>
-              <div className="flex items-center space-x-3">
-                <input
-                  type="color"
-                  value={customization.primary_color}
-                  onChange={(e) => updateField('primary_color', e.target.value)}
-                  className="h-12 w-20 border border-gray-300 rounded cursor-pointer"
-                />
-                <input
-                  type="text"
-                  value={customization.primary_color}
-                  onChange={(e) => updateField('primary_color', e.target.value)}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
-                  placeholder="#6B8E23"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Couleur Secondaire (Doré)
-              </label>
-              <div className="flex items-center space-x-3">
-                <input
-                  type="color"
-                  value={customization.secondary_color}
-                  onChange={(e) => updateField('secondary_color', e.target.value)}
-                  className="h-12 w-20 border border-gray-300 rounded cursor-pointer"
-                />
-                <input
-                  type="text"
-                  value={customization.secondary_color}
-                  onChange={(e) => updateField('secondary_color', e.target.value)}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
-                  placeholder="#8B7355"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Couleur d'Accent
-              </label>
-              <div className="flex items-center space-x-3">
-                <input
-                  type="color"
-                  value={customization.accent_color}
-                  onChange={(e) => updateField('accent_color', e.target.value)}
-                  className="h-12 w-20 border border-gray-300 rounded cursor-pointer"
-                />
-                <input
-                  type="text"
-                  value={customization.accent_color}
-                  onChange={(e) => updateField('accent_color', e.target.value)}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
-                  placeholder="#F59E0B"
-                />
-              </div>
             </div>
           </div>
 
-          <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-            <p className="text-sm text-gray-600 mb-3">
-              <strong>Aperçu :</strong> Les couleurs seront appliquées après sauvegarde et rechargement de la page.
-            </p>
-            <div className="flex space-x-4">
-              <div className="flex items-center space-x-2">
-                <div 
-                  className="w-8 h-8 rounded border border-gray-300"
-                  style={{ backgroundColor: customization.primary_color }}
-                ></div>
-                <span className="text-sm">Primaire</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div 
-                  className="w-8 h-8 rounded border border-gray-300"
-                  style={{ backgroundColor: customization.secondary_color }}
-                ></div>
-                <span className="text-sm">Secondaire</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div 
-                  className="w-8 h-8 rounded border border-gray-300"
-                  style={{ backgroundColor: customization.accent_color }}
-                ></div>
-                <span className="text-sm">Accent</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Contact Information Section */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center mb-4">
-            <Mail className="text-[#6B8E23] mr-2" size={24} />
-            <h2 className="text-2xl font-bold text-gray-900">Informations de Contact</h2>
-          </div>
-
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-                <Mail size={16} className="mr-2" />
-                Email de Contact
-              </label>
+          <div>
+            <label className="form-label">
+              {language === 'ar' ? 'اللون الثانوي' : language === 'en' ? 'Secondary Color' : 'Couleur secondaire'}
+            </label>
+            <div className="flex items-center space-x-3">
               <input
-                type="email"
-                value={customization.contact_email}
-                onChange={(e) => updateField('contact_email', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
+                type="color"
+                value={settings.secondary_color}
+                onChange={(e) => handleInputChange('secondary_color', null, e.target.value)}
+                className="h-12 w-20 border border-gray-300 rounded cursor-pointer"
               />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-                <Phone size={16} className="mr-2" />
-                Téléphone (optionnel)
-              </label>
-              <input
-                type="tel"
-                value={customization.contact_phone || ''}
-                onChange={(e) => updateField('contact_phone', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
-                placeholder="+213 XX XX XX XX"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-                <MapPin size={16} className="mr-2" />
-                Adresse (Français)
-              </label>
               <input
                 type="text"
-                value={customization.contact_address.fr}
-                onChange={(e) => updateMultilingualField('contact_address', 'fr', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
+                value={settings.secondary_color}
+                onChange={(e) => handleInputChange('secondary_color', null, e.target.value)}
+                className="form-input flex-1"
               />
             </div>
           </div>
-        </div>
 
-        {/* Page Texts Section */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center mb-4">
-            <Type className="text-[#6B8E23] mr-2" size={24} />
-            <h2 className="text-2xl font-bold text-gray-900">Textes des Pages</h2>
-          </div>
-
-          <div className="space-y-6">
-            {/* Home Page */}
-            <div className="border-b border-gray-200 pb-6">
-              <h3 className="text-lg font-semibold mb-4">Page d'Accueil</h3>
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Titre Principal (Français)
-                    </label>
-                    <input
-                      type="text"
-                      value={customization.home_title.fr}
-                      onChange={(e) => updateMultilingualField('home_title', 'fr', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Title (English)
-                    </label>
-                    <input
-                      type="text"
-                      value={customization.home_title.en}
-                      onChange={(e) => updateMultilingualField('home_title', 'en', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      العنوان (العربية)
-                    </label>
-                    <input
-                      type="text"
-                      value={customization.home_title.ar}
-                      onChange={(e) => updateMultilingualField('home_title', 'ar', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
-                      dir="rtl"
-                    />
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Sous-titre (Français)
-                    </label>
-                    <textarea
-                      value={customization.home_subtitle.fr}
-                      onChange={(e) => updateMultilingualField('home_subtitle', 'fr', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
-                      rows="3"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Subtitle (English)
-                    </label>
-                    <textarea
-                      value={customization.home_subtitle.en}
-                      onChange={(e) => updateMultilingualField('home_subtitle', 'en', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
-                      rows="3"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      العنوان الفرعي (العربية)
-                    </label>
-                    <textarea
-                      value={customization.home_subtitle.ar}
-                      onChange={(e) => updateMultilingualField('home_subtitle', 'ar', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
-                      rows="3"
-                      dir="rtl"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Shop Page */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Page Boutique</h3>
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Titre (Français)
-                    </label>
-                    <input
-                      type="text"
-                      value={customization.shop_title.fr}
-                      onChange={(e) => updateMultilingualField('shop_title', 'fr', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Title (English)
-                    </label>
-                    <input
-                      type="text"
-                      value={customization.shop_title.en}
-                      onChange={(e) => updateMultilingualField('shop_title', 'en', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      العنوان (العربية)
-                    </label>
-                    <input
-                      type="text"
-                      value={customization.shop_title.ar}
-                      onChange={(e) => updateMultilingualField('shop_title', 'ar', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
-                      dir="rtl"
-                    />
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Description (Français)
-                    </label>
-                    <textarea
-                      value={customization.shop_description.fr}
-                      onChange={(e) => updateMultilingualField('shop_description', 'fr', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
-                      rows="3"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Description (English)
-                    </label>
-                    <textarea
-                      value={customization.shop_description.en}
-                      onChange={(e) => updateMultilingualField('shop_description', 'en', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
-                      rows="3"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      الوصف (العربية)
-                    </label>
-                    <textarea
-                      value={customization.shop_description.ar}
-                      onChange={(e) => updateMultilingualField('shop_description', 'ar', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
-                      rows="3"
-                      dir="rtl"
-                    />
-                  </div>
-                </div>
-              </div>
+          <div>
+            <label className="form-label">
+              {language === 'ar' ? 'لون التمييز' : language === 'en' ? 'Accent Color' : 'Couleur d\'accent'}
+            </label>
+            <div className="flex items-center space-x-3">
+              <input
+                type="color"
+                value={settings.accent_color}
+                onChange={(e) => handleInputChange('accent_color', null, e.target.value)}
+                className="h-12 w-20 border border-gray-300 rounded cursor-pointer"
+              />
+              <input
+                type="text"
+                value={settings.accent_color}
+                onChange={(e) => handleInputChange('accent_color', null, e.target.value)}
+                className="form-input flex-1"
+              />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Save Button - Also at bottom */}
-      <div className="mt-6 flex justify-end">
-        <button
-          onClick={handleSave}
-          disabled={saving}
-          className="flex items-center space-x-2 bg-[#6B8E23] text-white px-6 py-3 rounded-lg hover:bg-[#5a7a1d] transition disabled:opacity-50"
-        >
-          {saving ? (
-            <>
-              <RefreshCw className="animate-spin" size={20} />
-              <span>Sauvegarde...</span>
-            </>
-          ) : (
-            <>
-              <Save size={20} />
-              <span>Sauvegarder les modifications</span>
-            </>
-          )}
+      {/* Typography Section */}
+      <div className="bg-white rounded-xl shadow-lg p-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+          <Type className="mr-2" size={24} />
+          {language === 'ar' ? 'الخطوط' : language === 'en' ? 'Typography' : 'Typographie'}
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="form-label">
+              {language === 'ar' ? 'خط العناوين' : language === 'en' ? 'Heading Font' : 'Police des titres'}
+            </label>
+            <select
+              value={settings.font_heading}
+              onChange={(e) => handleInputChange('font_heading', null, e.target.value)}
+              className="form-input"
+            >
+              {fontOptions.map(font => (
+                <option key={font} value={font} style={{ fontFamily: font }}>{font}</option>
+              ))}
+            </select>
+            <p className="mt-2 text-2xl font-bold" style={{ fontFamily: settings.font_heading }}>
+              {language === 'ar' ? 'نموذج العنوان' : language === 'en' ? 'Heading Example' : 'Exemple de titre'}
+            </p>
+          </div>
+
+          <div>
+            <label className="form-label">
+              {language === 'ar' ? 'خط النص' : language === 'en' ? 'Body Font' : 'Police du corps'}
+            </label>
+            <select
+              value={settings.font_body}
+              onChange={(e) => handleInputChange('font_body', null, e.target.value)}
+              className="form-input"
+            >
+              {fontOptions.map(font => (
+                <option key={font} value={font} style={{ fontFamily: font }}>{font}</option>
+              ))}
+            </select>
+            <p className="mt-2" style={{ fontFamily: settings.font_body }}>
+              {language === 'ar' ? 'نموذج النص الأساسي' : language === 'en' ? 'Body text example' : 'Exemple de texte'}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Save Button */}
+      <div className="flex justify-end">
+        <button onClick={handleSave} disabled={saving} className="btn-primary flex items-center px-8 py-3">
+          <Save size={20} className="mr-2" />
+          {saving ? (language === 'ar' ? 'جاري الحفظ...' : language === 'en' ? 'Saving...' : 'Sauvegarde...') :
+                   (language === 'ar' ? 'حفظ التغييرات' : language === 'en' ? 'Save Changes' : 'Enregistrer les modifications')}
         </button>
       </div>
     </div>
   );
-}
+};
+
+export default AdminCustomization;
