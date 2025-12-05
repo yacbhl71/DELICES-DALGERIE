@@ -362,7 +362,7 @@ function App() {
               <Route path="/*" element={
                 <>
                   <Header />
-                  <main>
+                  <main className="min-h-screen">
                     <Routes>
                       <Route path="/" element={<HomePage />} />
                       {/* Recipes removed - Délices et Trésors d'Algérie focuses on dates and olive oil */}
