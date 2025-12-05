@@ -81,12 +81,12 @@ const HomePage = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {features.map((feature, index) => {
               const Icon = feature.icon;
               return (
                 <div key={index} className="card group cursor-pointer animate-fadeInUp" style={{animationDelay: `${index * 0.2}s`}}>
-                  <div className="p-8">
+                  <div className="p-6 sm:p-8">
                     <div className={`w-16 h-16 bg-gradient-to-r ${feature.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
                       <Icon className="text-white" size={32} />
                     </div>
