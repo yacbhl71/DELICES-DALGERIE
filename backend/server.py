@@ -411,6 +411,43 @@ class FooterSettingsUpdate(BaseModel):
     copyright_text: Optional[Dict[str, str]] = None
     contact_info: Optional[Dict[str, Any]] = None
 
+# Banner Models (Homepage Slider)
+class Banner(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: Dict[str, str]  # {"fr": "Titre", "en": "Title", "ar": "العنوان"}
+    subtitle: Dict[str, str] = Field(default_factory=dict)
+    description: Dict[str, str] = Field(default_factory=dict)
+    image_url: str
+    cta_text: Dict[str, str] = Field(default_factory=dict)  # Call-to-action button text
+    cta_link: Optional[str] = None  # Link for the CTA button
+    order: int = 0
+    is_active: bool = True
+    background_color: Optional[str] = None  # Optional custom background
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class BannerCreate(BaseModel):
+    title: Dict[str, str]
+    subtitle: Optional[Dict[str, str]] = None
+    description: Optional[Dict[str, str]] = None
+    image_url: str
+    cta_text: Optional[Dict[str, str]] = None
+    cta_link: Optional[str] = None
+    order: Optional[int] = 0
+    is_active: Optional[bool] = True
+    background_color: Optional[str] = None
+
+class BannerUpdate(BaseModel):
+    title: Optional[Dict[str, str]] = None
+    subtitle: Optional[Dict[str, str]] = None
+    description: Optional[Dict[str, str]] = None
+    image_url: Optional[str] = None
+    cta_text: Optional[Dict[str, str]] = None
+    cta_link: Optional[str] = None
+    order: Optional[int] = None
+    is_active: Optional[bool] = None
+    background_color: Optional[str] = None
+
 # --- Authentication Functions ---
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
