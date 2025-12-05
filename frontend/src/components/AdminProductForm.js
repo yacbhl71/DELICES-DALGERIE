@@ -379,7 +379,7 @@ const AdminProductForm = () => {
                     {product.image_urls.length > 1 && (
                       <button
                         type="button"
-                        onClick={() => removeImageUrl(index)}
+                        onClick={() => removeImage(index)}
                         className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
                       >
                         <Minus size={20} />
@@ -389,7 +389,7 @@ const AdminProductForm = () => {
                 ))}
                 <button
                   type="button"
-                  onClick={addImageUrl}
+                  onClick={addImage}
                   className="flex items-center space-x-2 px-4 py-2 text-[#6B8E23] border border-[#6B8E23] rounded-lg hover:bg-[#6B8E23] hover:text-white transition"
                 >
                   <Plus size={20} />
