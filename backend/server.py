@@ -118,6 +118,11 @@ class Product(BaseModel):
     currency: str = "EUR"
     image_urls: List[str]
     in_stock: bool = True
+    # Inventory Management
+    track_inventory: bool = True  # Whether to track inventory for this product
+    stock_quantity: int = 0  # Current quantity in stock
+    low_stock_threshold: int = 5  # Alert when stock is below this
+    allow_backorder: bool = False  # Allow orders when out of stock
     origin: Dict[str, str]
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     created_by: Optional[str] = None
