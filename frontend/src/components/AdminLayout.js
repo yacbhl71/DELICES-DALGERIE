@@ -82,6 +82,11 @@ const AdminLayout = ({ children }) => {
       icon: MessageSquare
     },
     {
+      name: language === 'ar' ? 'قائمة التنقل' : language === 'en' ? 'Navigation Menu' : 'Menu Navigation',
+      href: '/admin/navigation',
+      icon: Navigation
+    },
+    {
       name: language === 'ar' ? 'التحليلات' : language === 'en' ? 'Analytics' : 'Analyses',
       href: '/admin/analytics',
       icon: BarChart3
