@@ -115,6 +115,11 @@ const AdminLayout = ({ children }) => {
       icon: BarChart3
     },
     {
+      name: language === 'ar' ? 'تحسين محركات البحث' : language === 'en' ? 'SEO' : 'SEO',
+      href: '/admin/seo',
+      icon: Search
+    },
+    {
       name: language === 'ar' ? 'التخصيص' : language === 'en' ? 'Customization' : 'Personnalisation',
       href: '/admin/customization',
       icon: Palette
