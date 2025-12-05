@@ -209,10 +209,10 @@ metadata:
 
 test_plan:
   current_focus:
-    - "ImageUpload Component"
-    - "Recipe Form Image Upload Integration"
-    - "Product Form Image Upload Integration"
-    - "History Form Image Upload Integration"
+    - "My Orders Route Implementation"
+    - "Profile Page My Orders Button"
+    - "My Orders Component Functionality"
+    - "Route Protection for My Orders"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
