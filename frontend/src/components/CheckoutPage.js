@@ -232,7 +232,7 @@ export default function CheckoutPage() {
             <div className="space-y-3 mb-4">
               {cartItems.map(item => (
                 <div key={item.id} className="flex justify-between text-sm">
-                  <span>{item.name} x{item.quantity}</span>
+                  <span>{typeof item.name === 'object' ? item.name.fr || item.name.en || item.name : item.name} x{item.quantity}</span>
                   <span>{(item.price * item.quantity).toFixed(2)} EUR</span>
                 </div>
               ))}
