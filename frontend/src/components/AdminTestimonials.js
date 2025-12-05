@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Star, Check, X, Trash2, Eye, Clock, CheckCircle } from 'lucide-react';
 import { useLanguage } from '../App';
 import axios from 'axios';
-import { useToast } from './ui/use-toast';
+import { useToast } from '../hooks/use-toast';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
