@@ -269,12 +269,18 @@ const ShopPage = () => {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => addToCart(product)}
-                    className="flex-1 bg-[#6B8E23] text-white py-3 rounded-lg hover:bg-[#5a7a1d] transition flex items-center justify-center font-semibold"
+                    disabled={product.track_inventory && product.stock_quantity === 0 && !product.allow_backorder}
+                    className={`flex-1 py-3 rounded-lg transition flex items-center justify-center font-semibold ${
+                      product.track_inventory && product.stock_quantity === 0 && !product.allow_backorder
+                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        : 'bg-[#6B8E23] text-white hover:bg-[#5a7a1d]'
+                    }`}
                   >
                     <ShoppingCart size={18} className="mr-2" />
-                    {language === 'ar' ? 'أضف للسلة' :
-                     language === 'en' ? 'Add to cart' :
-                     'Ajouter au panier'}
+                    {product.track_inventory && product.stock_quantity === 0 && !product.allow_backorder
+                      ? (language === 'ar' ? 'غير متوفر' : language === 'en' ? 'Unavailable' : 'Indisponible')
+                      : (language === 'ar' ? 'أضف للسلة' : language === 'en' ? 'Add to cart' : 'Ajouter au panier')
+                    }
                   </button>
                   <button className="p-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
                     <Eye size={18} className="text-gray-600" />
