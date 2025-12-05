@@ -103,8 +103,11 @@
 #====================================================================================================
 
 user_problem_statement: |
-  Build image upload functionality for the admin CMS. Phase 1 (admin access) completed successfully.
-  Phase 2 focus: Implement image upload for recipes, products, and historical content.
+  Test "Mes Commandes" (My Orders) functionality for customers. The implementation includes:
+  1. Route /profile/orders in App.js displaying MyOrders component
+  2. "Mes Commandes" button in ProfilePage.js Quick Actions section
+  3. MyOrders.js component fetching orders via /api/my-orders endpoint
+  Testing required: login, navigation, page display, multilingual support, route protection.
 
 backend:
   - task: "Image Upload API Endpoint"
