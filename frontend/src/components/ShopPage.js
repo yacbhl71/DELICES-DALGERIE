@@ -146,7 +146,10 @@ const ShopPage = () => {
     const catValue = typeof category === 'string' ? category : category?.value;
     const cat = categories.find(c => c.value === catValue);
     if (!cat) return catValue || '';
-    return getLocalizedText(cat);
+    // Access the correct label property based on language
+    if (language === 'ar') return cat.labelAr || cat.labelFr;
+    if (language === 'en') return cat.labelEn || cat.labelFr;
+    return cat.labelFr;
   };
 
   const getCategoryIcon = (category) => {
