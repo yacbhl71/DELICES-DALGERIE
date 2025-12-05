@@ -689,20 +689,27 @@ class DelicesAlgerieAPITester:
             "is_active": True
         }
         
-        success, response = self.run_test(
-            "Create BIENVENUE20 Promo Code",
-            "POST",
-            "admin/promo-codes",
-            200,
-            data=bienvenue_data,
-            use_admin_token=True
-        )
-        
-        if success and response and 'id' in response:
-            self.created_promo_codes.append(response['id'])
-            print(f"   Created BIENVENUE20 promo code ID: {response['id']}")
-        elif not success:
-            print(f"   ℹ️ BIENVENUE20 already exists (expected)")
+        # Try to create, but expect it might already exist
+        try:
+            url = f"{self.base_url}/admin/promo-codes"
+            headers = {'Authorization': f'Bearer {self.admin_token}', 'Content-Type': 'application/json'}
+            response = requests.post(url, json=bienvenue_data, headers=headers, timeout=10)
+            
+            if response.status_code == 200:
+                response_data = response.json()
+                self.created_promo_codes.append(response_data['id'])
+                print(f"✅ Created BIENVENUE20 promo code ID: {response_data['id']}")
+                self.tests_passed += 1
+            elif response.status_code == 400 and "déjà existant" in response.json().get('detail', ''):
+                print(f"✅ BIENVENUE20 already exists (expected)")
+                self.tests_passed += 1
+            else:
+                print(f"❌ Unexpected response: {response.status_code}")
+            
+            self.tests_run += 1
+        except Exception as e:
+            print(f"❌ Error testing BIENVENUE20 creation: {e}")
+            self.tests_run += 1
         
         # Try to create ETE2025 promo code (may already exist)
         ete_data = {
@@ -721,20 +728,26 @@ class DelicesAlgerieAPITester:
             "is_active": True
         }
         
-        success2, response2 = self.run_test(
-            "Create ETE2025 Promo Code",
-            "POST",
-            "admin/promo-codes",
-            200,
-            data=ete_data,
-            use_admin_token=True
-        )
-        
-        if success2 and response2 and 'id' in response2:
-            self.created_promo_codes.append(response2['id'])
-            print(f"   Created ETE2025 promo code ID: {response2['id']}")
-        elif not success2:
-            print(f"   ℹ️ ETE2025 already exists (expected)")
+        try:
+            url = f"{self.base_url}/admin/promo-codes"
+            headers = {'Authorization': f'Bearer {self.admin_token}', 'Content-Type': 'application/json'}
+            response = requests.post(url, json=ete_data, headers=headers, timeout=10)
+            
+            if response.status_code == 200:
+                response_data = response.json()
+                self.created_promo_codes.append(response_data['id'])
+                print(f"✅ Created ETE2025 promo code ID: {response_data['id']}")
+                self.tests_passed += 1
+            elif response.status_code == 400 and "déjà existant" in response.json().get('detail', ''):
+                print(f"✅ ETE2025 already exists (expected)")
+                self.tests_passed += 1
+            else:
+                print(f"❌ Unexpected response: {response.status_code}")
+            
+            self.tests_run += 1
+        except Exception as e:
+            print(f"❌ Error testing ETE2025 creation: {e}")
+            self.tests_run += 1
         
         # Return true if codes exist (either created or already existed)
         return True
