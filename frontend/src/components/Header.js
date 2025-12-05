@@ -57,11 +57,11 @@ const Header = () => {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3">
+          <Link to="/" className="flex items-center space-x-3 flex-shrink-0">
             <div className="w-10 h-10 bg-gradient-to-r from-olive to-green-700 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">DT</span>
             </div>
-            <span className="text-xl font-bold text-gray-900">
+            <span className="text-lg sm:text-xl font-bold text-gray-900 hidden sm:block">
               {language === 'ar' ? 
                 'لذائذ وكنوز الجزائر' :
                 language === 'en' ?
