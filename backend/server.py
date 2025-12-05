@@ -1017,10 +1017,14 @@ async def create_order(order_data: OrderCreate, background_tasks: BackgroundTask
                 
                 # Validate promo code
                 is_valid = True
-                if promo.valid_from and now < promo.valid_from:
-                    is_valid = False
-                if promo.valid_until and now > promo.valid_until:
-                    is_valid = False
+                if promo.valid_from:
+                    valid_from = promo.valid_from.replace(tzinfo=timezone.utc) if promo.valid_from.tzinfo is None else promo.valid_from
+                    if now < valid_from:
+                        is_valid = False
+                if promo.valid_until:
+                    valid_until = promo.valid_until.replace(tzinfo=timezone.utc) if promo.valid_until.tzinfo is None else promo.valid_until
+                    if now > valid_until:
+                        is_valid = False
                 if promo.usage_limit and promo.usage_count >= promo.usage_limit:
                     is_valid = False
                 if promo.min_order_amount and subtotal < promo.min_order_amount:
