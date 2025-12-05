@@ -103,12 +103,13 @@
 #====================================================================================================
 
 user_problem_statement: |
-  Test complete testimonials system with customer submission and admin moderation. The implementation includes:
-  1. Public testimonial submission form at /testimonials with star rating system
-  2. Admin moderation interface at /admin/testimonials with approve/reject/delete functionality
-  3. Public display of approved testimonials on /testimonials page
-  4. Backend API endpoints: POST /api/testimonials (public), GET /api/testimonials (approved), GET/PUT/DELETE /api/admin/testimonials
-  Testing required: form submission, admin authentication, moderation workflow, filtering, and public display.
+  Test complete editable navigation menu system. The implementation includes:
+  1. Backend: NavigationItem model with multilingual labels (FR/EN/AR), URL, order, active/inactive status, icons
+  2. API endpoints: GET /api/navigation (public), GET/POST/PUT/DELETE /api/admin/navigation, POST /api/admin/navigation/reorder
+  3. Frontend: Dynamic header loading menu from API, admin interface at /admin/navigation for management
+  4. Default items: Home, Shop, History, Testimonials, Contact with icons
+  5. Features: internal/external links, reordering with up/down buttons, activation/deactivation, icon support
+  Testing required: dynamic header display, admin CRUD operations, reordering, activation/deactivation, external links.
 
 backend:
   - task: "Testimonials API Endpoints"
