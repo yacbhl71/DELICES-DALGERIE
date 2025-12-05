@@ -191,20 +191,20 @@ const AdminLayout = ({ children }) => {
         </nav>
 
         {/* User section at bottom */}
-        <div className="p-4 border-t border-gray-200 flex-shrink-0 bg-gray-50">
-          <div className="flex items-center space-x-3 mb-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-white font-bold text-sm">
+        <div className="p-3 border-t border-gray-200 flex-shrink-0 bg-gray-50">
+          <div className="flex items-center space-x-2 mb-2">
+            <div className="w-8 h-8 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center flex-shrink-0">
+              <span className="text-white font-bold text-xs">
                 {user.full_name?.charAt(0).toUpperCase()}
               </span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-900 truncate" title={user.full_name}>
+              <p className="text-xs font-medium text-gray-900 truncate" title={user.full_name}>
                 {user.full_name}
               </p>
               <p className="text-xs text-gray-500 capitalize">
                 {user.role === 'admin' 
-                  ? (language === 'ar' ? 'مسؤول' : language === 'en' ? 'Admin' : 'Administrateur')
+                  ? (language === 'ar' ? 'مسؤول' : language === 'en' ? 'Admin' : 'Admin')
                   : (language === 'ar' ? 'مستخدم' : language === 'en' ? 'User' : 'Utilisateur')
                 }
               </p>
@@ -214,17 +214,17 @@ const AdminLayout = ({ children }) => {
           <div className="flex space-x-2">
             <Link
               to="/"
-              className="flex-1 flex items-center justify-center px-3 py-2 text-sm text-gray-600 hover:text-amber-600 hover:bg-gray-50 rounded-lg transition-colors duration-200"
+              className="flex-1 flex items-center justify-center px-2 py-1.5 text-xs text-gray-600 hover:text-amber-600 hover:bg-gray-50 rounded-lg transition-colors duration-200"
             >
-              <Home size={16} className="mr-2" />
-              {language === 'ar' ? 'الموقع' : language === 'en' ? 'Website' : 'Site Web'}
+              <Home size={14} className="mr-1" />
+              {language === 'ar' ? 'الموقع' : language === 'en' ? 'Site' : 'Site'}
             </Link>
             <button
               onClick={handleLogout}
-              className="flex-1 flex items-center justify-center px-3 py-2 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors duration-200"
+              className="flex-1 flex items-center justify-center px-2 py-1.5 text-xs text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors duration-200"
             >
-              <LogOut size={16} className="mr-2" />
-              {language === 'ar' ? 'خروج' : language === 'en' ? 'Logout' : 'Déconnexion'}
+              <LogOut size={14} className="mr-1" />
+              {language === 'ar' ? 'خروج' : language === 'en' ? 'Out' : 'Quitter'}
             </button>
           </div>
         </div>
