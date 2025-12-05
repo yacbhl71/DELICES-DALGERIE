@@ -128,7 +128,7 @@ const AdminDashboardNew = () => {
   }
 
   return (
-    <div>
+    <div className="w-full">
       <style>{`
         @keyframes slideInUp {
           from {
