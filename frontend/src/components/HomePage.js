@@ -144,12 +144,12 @@ const HomePage = () => {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="animate-fadeInUp">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
                 {language === 'ar' ? 'تراث قبائلي أصيل' :
                  language === 'en' ? 'Authentic Kabyle Heritage' :
                  'Patrimoine Kabyle Authentique'}
               </h2>
-              <p className="text-lg text-gray-600 mb-6">
+              <p className="text-base sm:text-lg text-gray-600 mb-6">
                 {language === 'ar' ? 'من منطقة أث ملكيتش وتازملت في وادي الصومام، نقدم لكم أجمل التقاليد والنكهات القبائلية الأصيلة.' :
                  language === 'en' ? 'From the region of Ath M\'lickech and Tazmalt in the Soumam valley, we bring you the most beautiful Kabyle traditions and authentic flavors.' :
                  'De la région d\'Ath M\'lickech et Tazmalt dans la vallée de Soumam, nous vous apportons les plus belles traditions et saveurs kabyles authentiques.'}
