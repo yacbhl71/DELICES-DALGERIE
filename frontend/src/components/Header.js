@@ -201,13 +201,10 @@ const Header = () => {
                       href={item.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-between px-3 py-2 text-gray-700 hover:text-olive hover:bg-olive-light rounded-md transition-colors duration-200"
+                      className="flex items-center justify-between px-3 py-2 text-gray-700 hover:text-[#6B8E23] hover:bg-olive-light rounded-md transition-colors duration-200"
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      <span>
-                        {item.icon && <span className="mr-2">{item.icon}</span>}
-                        {label}
-                      </span>
+                      <span>{label}</span>
                       <ExternalLink size={14} />
                     </a>
                   );
@@ -217,10 +214,9 @@ const Header = () => {
                   <Link
                     key={item.id}
                     to={item.url}
-                    className="block px-3 py-2 text-gray-700 hover:text-olive hover:bg-olive-light rounded-md transition-colors duration-200"
+                    className="block px-3 py-2 text-gray-700 hover:text-[#6B8E23] hover:bg-olive-light rounded-md transition-colors duration-200"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    {item.icon && <span className="mr-2">{item.icon}</span>}
                     {label}
                   </Link>
                 );
