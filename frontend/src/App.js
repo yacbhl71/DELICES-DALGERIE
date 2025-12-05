@@ -331,6 +331,16 @@ function App() {
                 )
               } />
               
+              <Route path="/admin/promo-codes" element={
+                user?.role === 'admin' ? (
+                  <AdminLayout>
+                    <AdminPromoCodes />
+                  </AdminLayout>
+                ) : (
+                  <Navigate to="/auth" />
+                )
+              } />
+              
               {/* Admin Form Routes */}
               <Route path="/admin/products/new" element={
                 user?.role === 'admin' ? (
