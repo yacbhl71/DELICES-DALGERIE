@@ -355,21 +355,55 @@ export default function AdminCategories() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Image de la Catégorie (optionnel)
                 </label>
-                <ImageUpload
-                  existingImages={formData.image_url ? [formData.image_url] : []}
-                  maxImages={1}
-                  onUploadComplete={(urls) => setFormData(prev => ({ ...prev, image_url: urls[0] || null }))}
-                  label="Image de catégorie"
-                />
-                {formData.image_url && (
-                  <div className="mt-3">
-                    <img 
-                      src={formData.image_url} 
-                      alt="Aperçu" 
-                      className="h-32 w-full object-cover rounded-lg"
+                
+                <div className="space-y-4">
+                  {/* Image Upload */}
+                  <div>
+                    <p className="text-xs text-gray-600 mb-2">Télécharger une image</p>
+                    <ImageUpload
+                      existingImages={formData.image_url ? [formData.image_url] : []}
+                      maxImages={1}
+                      onUploadComplete={(urls) => setFormData(prev => ({ ...prev, image_url: urls[0] || null }))}
+                      label="Image de catégorie"
                     />
                   </div>
-                )}
+
+                  <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                      <span className="px-2 bg-white text-gray-500">OU</span>
+                    </div>
+                  </div>
+
+                  {/* URL Input */}
+                  <div>
+                    <p className="text-xs text-gray-600 mb-2">Ajouter une URL d'image</p>
+                    <input
+                      type="url"
+                      value={formData.image_url || ''}
+                      onChange={(e) => setFormData(prev => ({ ...prev, image_url: e.target.value }))}
+                      placeholder="https://example.com/image.jpg"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
+                    />
+                  </div>
+
+                  {/* Preview */}
+                  {formData.image_url && (
+                    <div className="mt-3">
+                      <p className="text-xs text-gray-600 mb-2">Aperçu</p>
+                      <img 
+                        src={formData.image_url} 
+                        alt="Aperçu" 
+                        className="h-32 w-full object-cover rounded-lg"
+                        onError={(e) => {
+                          e.target.src = 'https://via.placeholder.com/300?text=Invalid+URL';
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Description - Multilingual */}
