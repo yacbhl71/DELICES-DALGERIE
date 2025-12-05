@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../App';
-import { ShoppingBag, Star, Search, Filter, Heart, Eye, ShoppingCart } from 'lucide-react';
+import { ShoppingBag, Star, Search, Filter, Heart, Eye, ShoppingCart, Truck } from 'lucide-react';
 import axios from 'axios';
 import { useCart } from '../contexts/CartContext';
 
@@ -11,357 +11,279 @@ const ShopPage = () => {
   const { t, language } = useLanguage();
   const { addToCart } = useCart();
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
 
-  // Sample products for initial display
-  const sampleProducts = [
-    {
-      id: '1',
-      name: {
-        fr: 'Mélange d\'épices Ras el Hanout',
-        ar: 'خليط بهارات راس الحانوت',
-        en: 'Ras el Hanout Spice Mix'
-      },
-      description: {
-        fr: 'Mélange traditionnel d\'épices algériennes, parfait pour le couscous et les tajines',
-        ar: 'خليط تقليدي من البهارات الجزائرية، مثالي للكسكس والطواجن',
-        en: 'Traditional Algerian spice blend, perfect for couscous and tagines'
-      },
-      category: 'epices',
-      price: 12.99,
-      currency: 'EUR',
-      image_urls: ['https://images.unsplash.com/photo-1596040033229-a9821ebd058d'],
-      in_stock: true,
-      origin: {
-        fr: 'Algérie, région de Kabylie',
-        ar: 'الجزائر، منطقة القبائل',
-        en: 'Algeria, Kabylie region'
-      }
-    },
-    {
-      id: '2',
-      name: {
-        fr: 'Thé à la menthe Premium',
-        ar: 'شاي النعناع الممتاز',
-        en: 'Premium Mint Tea'
-      },
-      description: {
-        fr: 'Thé vert de qualité supérieure avec menthe fraîche séchée de Kabylie',
-        ar: 'شاي أخضر عالي الجودة مع نعناع طازج مجفف من القبائل',
-        en: 'Superior quality green tea with dried fresh mint from Kabylie'
-      },
-      category: 'thes',
-      price: 15.50,
-      currency: 'EUR',
-      image_urls: ['https://images.unsplash.com/photo-1544787219-7f47ccb76574'],
-      in_stock: true,
-      origin: {
-        fr: 'Algérie, vallée de Soumam',
-        ar: 'الجزائر، وادي الصومام',
-        en: 'Algeria, Soumam valley'
-      }
-    },
-    {
-      id: '3',
-      name: {
-        fr: 'Robe Kabyle Traditionnelle',
-        ar: 'فستان قبائلي تقليدي',
-        en: 'Traditional Kabyle Dress'
-      },
-      description: {
-        fr: 'Magnifique robe kabyle brodée à la main avec motifs berbères authentiques',
-        ar: 'فستان قبائلي رائع مطرز يدوياً بزخارف بربرية أصيلة',
-        en: 'Beautiful hand-embroidered Kabyle dress with authentic Berber patterns'
-      },
-      category: 'robes-kabyles',
-      price: 180.00,
-      currency: 'EUR',
-      image_urls: ['https://images.unsplash.com/photo-1713007009692-c055a4a5e2df'],
-      in_stock: true,
-      origin: {
-        fr: 'Algérie, Ath M\'lickech',
-        ar: 'الجزائر، آث مليكش',
-        en: 'Algeria, Ath M\'lickech'
-      }
-    },
-    {
-      id: '4',
-      name: {
-        fr: 'Bijoux Kabyles en Argent',
-        ar: 'مجوهرات قبائلية فضية',
-        en: 'Silver Kabyle Jewelry'
-      },
-      description: {
-        fr: 'Ensemble de bijoux kabyles en argent massif avec motifs traditionnels berbères',
-        ar: 'طقم مجوهرات قبائلية من الفضة الخالصة بزخارف بربرية تقليدية',
-        en: 'Set of solid silver Kabyle jewelry with traditional Berber motifs'
-      },
-      category: 'bijoux-kabyles',
-      price: 250.00,
-      currency: 'EUR',
-      image_urls: ['https://images.unsplash.com/photo-1720718517204-a66cc17a1052'],
-      in_stock: true,
-      origin: {
-        fr: 'Algérie, Tazmalt',
-        ar: 'الجزائر، تازمالت',
-        en: 'Algeria, Tazmalt'
-      }
-    }
-  ];
-
-  const categories = [
-    { value: 'all', labelFr: 'Tous produits', labelAr: 'جميع المنتجات', labelEn: 'All products' },
-    { value: 'dates', labelFr: 'Dattes', labelAr: 'تمور', labelEn: 'Dates' },
-    { value: 'huile-olive', labelFr: 'Huiles d\'Olive', labelAr: 'زيت الزيتون', labelEn: 'Olive Oils' }
-  ];
-
   useEffect(() => {
     fetchProducts();
+    fetchCategories();
   }, []);
 
   const fetchProducts = async () => {
     try {
       const response = await axios.get(`${API}/products`);
-      if (response.data.length === 0) {
-        setProducts(sampleProducts);
-      } else {
-        setProducts(response.data);
-      }
+      setProducts(response.data);
     } catch (error) {
       console.error('Error fetching products:', error);
-      setProducts(sampleProducts);
     } finally {
       setLoading(false);
     }
   };
 
-  const getLocalizedText = (textObj) => {
-    return textObj[language] || textObj.fr || '';
-  };
-
-  const getCategoryLabel = (category) => {
-    // Handle both string values and objects with value property
-    const catValue = typeof category === 'string' ? category : category?.value;
-    const cat = categories.find(c => c.value === catValue);
-    if (!cat) return catValue || '';
-    // Access the correct label property based on language
-    if (language === 'ar') return cat.labelAr || cat.labelFr;
-    if (language === 'en') return cat.labelEn || cat.labelFr;
-    return cat.labelFr;
-  };
-
-  const getCategoryIcon = (category) => {
-    switch (category) {
-      case 'dates': return '🌴';
-      case 'huile-olive': return '🫒';
-      default: return '🛍️';
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(`${API}/categories`);
+      setCategories(response.data);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
     }
   };
 
+  const getLocalizedText = (textObj) => {
+    if (!textObj) return '';
+    return textObj[language] || textObj.fr || textObj.en || '';
+  };
+
   const filteredProducts = products.filter(product => {
-    const name = getLocalizedText(product.name).toLowerCase();
-    const matchesSearch = name.includes(searchTerm.toLowerCase());
+    const matchesSearch = getLocalizedText(product.name)
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
-    
     return matchesSearch && matchesCategory;
   });
 
+  const getCategoryLabel = (categorySlug) => {
+    const categoryLabels = {
+      'epices': { fr: 'Épices', en: 'Spices', ar: 'البهارات' },
+      'thes': { fr: 'Thés', en: 'Teas', ar: 'الشاي' },
+      'robes-kabyles': { fr: 'Robes Kabyles', en: 'Kabyle Dresses', ar: 'الفساتين القبائلية' },
+      'bijoux-kabyles': { fr: 'Bijoux Kabyles', en: 'Kabyle Jewelry', ar: 'المجوهرات القبائلية' },
+      'dattes': { fr: 'Dattes', en: 'Dates', ar: 'التمور' },
+      'huile-olive': { fr: 'Huile d\'Olive', en: 'Olive Oil', ar: 'زيت الزيتون' }
+    };
+    return categoryLabels[categorySlug]?.[language] || categorySlug;
+  };
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-amber-600"></div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#6B8E23]"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100">
-      {/* Header */}
-      <div className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              {language === 'ar' ? 'متجر لذائذ وكنوز الجزائر' :
-               language === 'en' ? 'Délices et Trésors d\'Algérie Shop' :
-               'Boutique Délices et Trésors d\'Algérie'}
-            </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              {language === 'ar' ? 'اكتشف كنوزنا: تمور دقلة نور وزيت الزيتون القبائلي الأصيل' :
-               language === 'en' ? 'Discover our treasures: Deglet Nour dates and authentic Kabyle olive oil' :
-               'Découvrez nos trésors : dattes Deglet Nour et huile d\'olive kabyle authentique'}
-            </p>
-          </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-[#6B8E23] to-[#8B7355] text-white py-16">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-5xl font-bold mb-4">
+            {language === 'ar' ? 'متجر لذائذ وكنوز الجزائر' : 
+             language === 'en' ? 'Délices et Trésors d\'Algérie Shop' : 
+             'Boutique Délices et Trésors d\'Algérie'}
+          </h1>
+          <p className="text-xl opacity-90">
+            {language === 'ar' ? 'اكتشف كنوزنا: تمور دقلة نور وزيت الزيتون القبائلي الأصيل' :
+             language === 'en' ? 'Discover our treasures: Deglet Nour dates and authentic Kabyle olive oil' :
+             'Découvrez nos trésors : dattes Deglet Nour et huile d\'olive kabyle authentique'}
+          </p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Filters */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Search */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-              <input
-                type="text"
-                placeholder={language === 'ar' ? 'البحث عن منتج...' :
-                            language === 'en' ? 'Search for a product...' :
-                            'Rechercher un produit...'}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-              />
-            </div>
-
-            {/* Category Filter */}
-            <div>
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-              >
-                {categories.map(category => (
-                  <option key={category.value} value={category.value}>
-                    {getCategoryIcon(category.value)} {getCategoryLabel(category)}
-                  </option>
-                ))}
-              </select>
-            </div>
+      <div className="container mx-auto px-4 py-8">
+        {/* Search Bar */}
+        <div className="mb-8">
+          <div className="relative max-w-2xl mx-auto">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+            <input
+              type="text"
+              placeholder={
+                language === 'ar' ? 'ابحث عن منتج...' :
+                language === 'en' ? 'Search for a product...' :
+                'Rechercher un produit...'
+              }
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-12 pr-4 py-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
+            />
           </div>
         </div>
 
-        {/* Category Showcase */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-          {categories.slice(1).map((category, index) => (
-            <button
-              key={category.value}
-              onClick={() => setSelectedCategory(category.value)}
-              className={`p-6 rounded-2xl text-center transition-all duration-300 hover:scale-105 ${
-                selectedCategory === category.value
-                  ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg'
-                  : 'bg-white text-gray-700 hover:bg-amber-50'
-              }`}
-            >
-              <div className="text-3xl mb-2">{getCategoryIcon(category.value)}</div>
-              <h3 className="font-semibold text-sm">{getCategoryLabel(category)}</h3>
-            </button>
-          ))}
-        </div>
+        {/* Category Icons */}
+        {categories.length > 0 && (
+          <div className="mb-8">
+            <div className="flex items-center justify-center gap-4 flex-wrap">
+              {/* All categories button */}
+              <button
+                onClick={() => setSelectedCategory('all')}
+                className={`flex flex-col items-center p-6 rounded-2xl border-2 transition-all ${
+                  selectedCategory === 'all'
+                    ? 'border-[#6B8E23] bg-[#6B8E23] bg-opacity-10 shadow-lg'
+                    : 'border-gray-200 hover:border-[#6B8E23] hover:shadow-md'
+                }`}
+              >
+                <span className="text-4xl mb-2">🛍️</span>
+                <span className="text-sm font-medium text-gray-700">
+                  {language === 'ar' ? 'الكل' : language === 'en' ? 'All' : 'Tous'}
+                </span>
+              </button>
 
-        {/* Results Count */}
+              {categories.map((category) => (
+                <button
+                  key={category.id}
+                  onClick={() => setSelectedCategory(category.slug)}
+                  className={`flex flex-col items-center p-6 rounded-2xl border-2 transition-all ${
+                    selectedCategory === category.slug
+                      ? 'border-[#6B8E23] bg-[#6B8E23] bg-opacity-10 shadow-lg'
+                      : 'border-gray-200 hover:border-[#6B8E23] hover:shadow-md'
+                  }`}
+                >
+                  {category.image_url ? (
+                    <img
+                      src={category.image_url}
+                      alt={getLocalizedText(category.name)}
+                      className="w-12 h-12 object-cover rounded-full mb-2"
+                    />
+                  ) : (
+                    <span className="text-4xl mb-2">{category.icon || '📦'}</span>
+                  )}
+                  <span className="text-sm font-medium text-gray-700">
+                    {getLocalizedText(category.name)}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Products Count */}
         <div className="mb-6">
           <p className="text-gray-600">
-            {language === 'ar' ? `${filteredProducts.length} منتج موجود` :
-             language === 'en' ? `${filteredProducts.length} products found` :
-             `${filteredProducts.length} produits trouvés`}
+            {filteredProducts.length} {language === 'ar' ? 'منتجات' : language === 'en' ? 'products found' : 'produits trouvés'}
           </p>
         </div>
 
         {/* Products Grid */}
-        <div className="product-grid">
-          {filteredProducts.map((product, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {filteredProducts.map((product) => (
             <div
               key={product.id}
-              className="card group animate-fadeInUp"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
             >
-              <div className="relative overflow-hidden">
-                <img
-                  src={product.image_urls[0]}
-                  alt={getLocalizedText(product.name)}
-                  className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute top-4 left-4">
-                  <span className="bg-white px-3 py-1 rounded-full text-sm font-medium text-gray-700 shadow-md">
-                    {getCategoryIcon(product.category)} {getCategoryLabel({ value: product.category })}
+              {/* Category Tag */}
+              <div className="relative">
+                <div className="absolute top-3 left-3 z-10">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-white text-[#6B8E23] shadow-md">
+                    <ShoppingBag size={14} className="mr-1" />
+                    {getCategoryLabel(product.category)}
                   </span>
                 </div>
-                <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <button className="bg-white p-2 rounded-full shadow-md hover:bg-gray-50 transition-colors duration-200">
-                    <Heart size={18} className="text-gray-600" />
-                  </button>
+                
+                {/* Wishlist Icon */}
+                <button className="absolute top-3 right-3 z-10 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition">
+                  <Heart size={18} className="text-gray-600" />
+                </button>
+
+                {/* Product Image */}
+                <div className="relative h-64 overflow-hidden">
+                  <img
+                    src={product.image_urls?.[0] || 'https://via.placeholder.com/300'}
+                    alt={getLocalizedText(product.name)}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-                {!product.in_stock && (
-                  <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                    <span className="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold">
-                      {language === 'ar' ? 'غير متوفر' :
-                       language === 'en' ? 'Out of Stock' :
-                       'Rupture de stock'}
-                    </span>
-                  </div>
-                )}
               </div>
-              
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
+
+              {/* Product Info */}
+              <div className="p-5">
+                <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2">
                   {getLocalizedText(product.name)}
                 </h3>
-                
-                <p className="text-gray-600 mb-4 line-clamp-2">
+                <p className="text-sm text-gray-600 mb-3 line-clamp-2">
                   {getLocalizedText(product.description)}
                 </p>
 
-                <div className="flex items-center justify-between mb-4">
+                {/* Rating */}
+                <div className="flex items-center mb-3">
                   <div className="flex items-center">
-                    <Star size={16} className="text-yellow-500 mr-1" />
-                    <span className="text-sm text-gray-600">4.9 (127)</span>
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star
+                        key={star}
+                        size={16}
+                        className="fill-yellow-400 text-yellow-400"
+                      />
+                    ))}
                   </div>
-                  <div className="text-sm text-gray-500">
-                    {getLocalizedText(product.origin)}
-                  </div>
+                  <span className="ml-2 text-sm text-gray-600">
+                    4.9 (127)
+                  </span>
                 </div>
 
-                <div className="flex items-center justify-between mb-6">
-                  <div className="text-2xl font-bold text-gray-900">
-                    {product.price.toFixed(2)} {product.currency}
-                  </div>
-                  <div className="text-sm text-green-600 font-medium">
-                    {language === 'ar' ? 'شحن مجاني' :
-                     language === 'en' ? 'Free shipping' :
+                {/* Origin */}
+                <p className="text-xs text-gray-500 mb-4">
+                  📍 {getLocalizedText(product.origin)}
+                </p>
+
+                {/* Price */}
+                <div className="mb-4">
+                  <span className="text-2xl font-bold text-[#6B8E23]">
+                    {product.price.toFixed(2)}
+                  </span>
+                  <span className="text-lg text-gray-600 ml-1">{product.currency}</span>
+                </div>
+
+                {/* Free Shipping Badge */}
+                <div className="flex items-center text-green-600 text-sm mb-4">
+                  <Truck size={16} className="mr-1" />
+                  <span className="font-medium">
+                    {language === 'ar' ? 'شحن مجاني' : 
+                     language === 'en' ? 'Free shipping' : 
                      'Livraison gratuite'}
-                  </div>
+                  </span>
                 </div>
 
-                <div className="flex space-x-2">
-                  <button 
-                    onClick={() => addToCart(product, 1)}
-                    className="flex-1 bg-[#6B8E23] text-white px-4 py-3 rounded-lg hover:bg-[#5a7a1d] transition flex items-center justify-center font-semibold"
+                {/* Actions */}
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => addToCart(product)}
+                    className="flex-1 bg-[#6B8E23] text-white py-3 rounded-lg hover:bg-[#5a7a1d] transition flex items-center justify-center font-semibold"
                   >
-                    <ShoppingCart className="mr-2" size={18} />
-                    {language === 'ar' ? 'أضف إلى السلة' :
-                     language === 'en' ? 'Add to Cart' :
+                    <ShoppingCart size={18} className="mr-2" />
+                    {language === 'ar' ? 'أضف للسلة' :
+                     language === 'en' ? 'Add to cart' :
                      'Ajouter au panier'}
                   </button>
-                  <button className="bg-gray-100 text-gray-600 p-3 rounded-lg hover:bg-gray-200 transition-colors duration-200">
-                    <Eye size={18} />
+                  <button className="p-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                    <Eye size={18} className="text-gray-600" />
                   </button>
                 </div>
-                
-                <div className="mt-4 text-center">
-                  <p className="text-sm text-gray-500">
-                    {language === 'ar' ? 'الدفع عند الاستلام متاح قريباً' :
-                     language === 'en' ? 'Online payment coming soon' :
-                     'Paiement en ligne bientôt disponible'}
-                  </p>
-                </div>
+
+                {/* Payment Info */}
+                <p className="text-xs text-gray-500 text-center mt-3">
+                  {language === 'ar' ? 'الدفع عبر الإنترنت متاح قريباً' :
+                   language === 'en' ? 'Online payment coming soon' :
+                   'Paiement en ligne bientôt disponible'}
+                </p>
               </div>
             </div>
           ))}
         </div>
 
+        {/* Empty State */}
         {filteredProducts.length === 0 && (
           <div className="text-center py-12">
-            <ShoppingBag size={64} className="mx-auto text-gray-400 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              {language === 'ar' ? 'لا توجد منتجات' :
+            <ShoppingBag className="mx-auto text-gray-400 mb-4" size={64} />
+            <h3 className="text-xl font-bold text-gray-900 mb-2">
+              {language === 'ar' ? 'لم يتم العثور على منتجات' :
                language === 'en' ? 'No products found' :
                'Aucun produit trouvé'}
             </h3>
-            <p className="text-gray-500">
-              {language === 'ar' ? 'جرب تغيير معايير البحث' :
-               language === 'en' ? 'Try changing your search criteria' :
-               'Essayez de modifier vos critères de recherche'}
+            <p className="text-gray-600">
+              {language === 'ar' ? 'جرب بحثاً مختلفاً أو تصفح جميع الفئات' :
+               language === 'en' ? 'Try a different search or browse all categories' :
+               'Essayez une recherche différente ou parcourez toutes les catégories'}
             </p>
           </div>
         )}
