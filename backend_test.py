@@ -1143,7 +1143,7 @@ class DelicesAlgerieAPITester:
             return False
 
 def main():
-    tester = SoumamHeritageAPITester()
+    tester = DelicesAlgerieAPITester()
     success = tester.run_all_tests()
     return 0 if success else 1
 
