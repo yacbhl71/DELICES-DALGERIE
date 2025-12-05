@@ -1250,6 +1250,41 @@ async def reorder_navigation_items(
     
     return {"message": "Navigation items reordered successfully"}
 
+# --- Footer Routes ---
+@api_router.get("/footer", response_model=FooterSettings)
+async def get_footer_settings():
+    """Get footer settings (public)"""
+    footer = await db.footer_settings.find_one({"id": "footer_config"}, {"_id": 0})
+    if not footer:
+        # Return default footer if none exists
+        default_footer = FooterSettings()
+        return default_footer
+    return FooterSettings(**footer)
+
+@api_router.put("/admin/footer", response_model=FooterSettings)
+async def update_footer_settings(
+    footer_data: FooterSettingsUpdate,
+    admin: User = Depends(get_admin_user)
+):
+    """Update footer settings (admin only)"""
+    footer = await db.footer_settings.find_one({"id": "footer_config"}, {"_id": 0})
+    
+    update_dict = {k: v for k, v in footer_data.model_dump().items() if v is not None}
+    update_dict["updated_at"] = datetime.now(timezone.utc)
+    
+    if footer:
+        await db.footer_settings.update_one(
+            {"id": "footer_config"},
+            {"$set": update_dict}
+        )
+        footer.update(update_dict)
+        return FooterSettings(**footer)
+    else:
+        # Create new footer settings
+        new_footer = FooterSettings(**update_dict)
+        await db.footer_settings.insert_one(new_footer.model_dump())
+        return new_footer
+
 # --- Custom Pages Routes ---
 @api_router.get("/pages", response_model=List[CustomPage])
 async def get_published_pages():
