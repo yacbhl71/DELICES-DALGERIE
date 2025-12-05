@@ -37,6 +37,7 @@ import AdminAnalytics from './components/AdminAnalytics';
 import AdminSettings from './components/AdminSettings';
 import AdminSettingsTest from './components/AdminSettingsTest';
 import AdminCustomization from './components/AdminCustomization';
+import AdminTestimonials from './components/AdminTestimonials';
 import AccountSettings from './components/AccountSettings';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
