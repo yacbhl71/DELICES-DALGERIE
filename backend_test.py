@@ -237,14 +237,14 @@ class DelicesAlgerieAPITester:
         return self.run_test("Create Recipe", "POST", "recipes", 200, data=recipe_data)[0]
 
     def test_admin_login(self):
-        """Test admin login with provided credentials"""
+        """Test admin login with provided credentials for Délices et Trésors d'Algérie"""
         admin_credentials = {
-            "email": "admin.soumam@gmail.com",
-            "password": "soumam2024"
+            "email": "admin@delices-algerie.com",
+            "password": "Admin2024!"
         }
         
         success, response = self.run_test(
-            "Admin Login",
+            "Admin Login (Délices Algérie)",
             "POST",
             "auth/login",
             200,
