@@ -71,7 +71,7 @@ const Header = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden lg:flex items-center space-x-8">
             {navigationItems.map((item) => {
               const label = item.label[language] || item.label.fr;
               
@@ -82,7 +82,7 @@ const Header = () => {
                     href={item.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center space-x-1 text-gray-700 hover:text-[#6B8E23] font-medium transition-colors duration-200 hover:underline underline-offset-4"
+                    className="flex items-center space-x-1 text-gray-700 hover:text-[#6B8E23] font-medium transition-colors duration-200 hover:underline underline-offset-4 whitespace-nowrap"
                   >
                     <span>{label}</span>
                     <ExternalLink size={14} />
@@ -94,7 +94,7 @@ const Header = () => {
                 <Link
                   key={item.id}
                   to={item.url}
-                  className="text-gray-700 hover:text-[#6B8E23] font-medium transition-colors duration-200 hover:underline underline-offset-4"
+                  className="text-gray-700 hover:text-[#6B8E23] font-medium transition-colors duration-200 hover:underline underline-offset-4 whitespace-nowrap"
                 >
                   {label}
                 </Link>
