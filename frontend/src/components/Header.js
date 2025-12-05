@@ -103,7 +103,7 @@ const Header = () => {
           </div>
 
           {/* Right Side - Language Selector & Auth */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden lg:flex items-center space-x-3">
             {/* Language Selector */}
             <div className="relative">
               <button
