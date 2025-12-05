@@ -33,7 +33,11 @@ const AdminProductForm = () => {
     price: 0,
     image_urls: [''],
     origin: { fr: '', ar: '', en: '' },
-    in_stock: true
+    in_stock: true,
+    track_inventory: true,
+    stock_quantity: 10,
+    low_stock_threshold: 5,
+    allow_backorder: false
   });
 
   const categories = [
