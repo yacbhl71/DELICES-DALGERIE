@@ -104,6 +104,11 @@ const AdminLayout = ({ children }) => {
       icon: Tag
     },
     {
+      name: language === 'ar' ? 'المخزون' : language === 'en' ? 'Inventory' : 'Inventaire',
+      href: '/admin/inventory',
+      icon: Package
+    },
+    {
       name: language === 'ar' ? 'التحليلات' : language === 'en' ? 'Analytics' : 'Analyses',
       href: '/admin/analytics',
       icon: BarChart3
