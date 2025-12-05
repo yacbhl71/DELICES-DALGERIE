@@ -231,9 +231,9 @@ const AdminLayout = ({ children }) => {
       </div>
 
       {/* Main content */}
-      <div className="lg:pl-64 min-h-screen bg-gray-50">
+      <div className="xl:pl-64 min-h-screen bg-gray-50">
         {/* Mobile/Tablet Header with Menu Button */}
-        <div className="lg:hidden sticky top-0 z-10 bg-white shadow-sm border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+        <div className="xl:hidden sticky top-0 z-10 bg-white shadow-sm border-b border-gray-200 px-4 py-3 flex items-center justify-between">
           <button
             onClick={() => setSidebarOpen(true)}
             className="p-2 text-gray-700 hover:text-amber-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
