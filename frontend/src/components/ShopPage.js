@@ -181,6 +181,27 @@ const ShopPage = () => {
                   </span>
                 </div>
                 
+                {/* Stock Badge */}
+                {product.track_inventory && (
+                  <div className="absolute top-14 left-3 z-10">
+                    {product.stock_quantity === 0 ? (
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-500 text-white shadow-md">
+                        {language === 'ar' ? 'نفذت الكمية' : language === 'en' ? 'Out of stock' : 'Rupture de stock'}
+                      </span>
+                    ) : product.stock_quantity <= product.low_stock_threshold ? (
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-orange-500 text-white shadow-md">
+                        {language === 'ar' ? `${product.stock_quantity} متبقي` : 
+                         language === 'en' ? `Only ${product.stock_quantity} left` : 
+                         `Plus que ${product.stock_quantity}`}
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-500 text-white shadow-md">
+                        {language === 'ar' ? 'متوفر' : language === 'en' ? 'In stock' : 'En stock'}
+                      </span>
+                    )}
+                  </div>
+                )}
+                
                 {/* Wishlist Icon */}
                 <button className="absolute top-3 right-3 z-10 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition">
                   <Heart size={18} className="text-gray-600" />
