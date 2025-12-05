@@ -31,6 +31,29 @@ export default function CheckoutPage() {
     return null;
   }
 
+  const applyPromoCode = async () => {
+    if (!promoCode.trim()) return;
+    
+    setPromoLoading(true);
+    try {
+      const response = await axios.post(`${API}/promo-codes/validate`, {
+        code: promoCode,
+        order_amount: getCartTotal()
+      });
+      setPromoApplied(response.data);
+    } catch (error) {
+      alert(error.response?.data?.detail || 'Code promo invalide');
+      setPromoApplied(null);
+    } finally {
+      setPromoLoading(false);
+    }
+  };
+
+  const removePromoCode = () => {
+    setPromoCode('');
+    setPromoApplied(null);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -44,13 +67,15 @@ export default function CheckoutPage() {
           quantity: item.quantity,
           price: item.price,
           image_url: item.image_urls?.[0]
-        }))
+        })),
+        promo_code: promoApplied?.promo_code || null
       };
 
       const response = await axios.post(`${API}/orders`, orderData);
       setOrderId(response.data.order_number);
       setOrderComplete(true);
       clearCart();
+      setPromoApplied(null);
     } catch (error) {
       console.error('Error creating order:', error);
       alert('Erreur lors de la commande. Veuillez réessayer.');
