@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from PIL import Image
 
 class DelicesAlgerieAPITester:
-    def __init__(self, base_url="https://delices-store.preview.emergentagent.com/api"):
+    def __init__(self, base_url="https://tasteofalgeria.preview.emergentagent.com/api"):
         self.base_url = base_url
         self.token = None
         self.admin_token = None
@@ -367,7 +367,7 @@ class DelicesAlgerieAPITester:
         
         # Test accessing the first uploaded file
         filename = self.uploaded_files[0]
-        static_url = f"https://delices-store.preview.emergentagent.com/uploads/{filename}"
+        static_url = f"https://tasteofalgeria.preview.emergentagent.com/uploads/{filename}"
         
         try:
             response = requests.get(static_url, timeout=10)
@@ -411,7 +411,7 @@ class DelicesAlgerieAPITester:
             self.uploaded_files.remove(filename)
             
             # Verify file is no longer accessible
-            static_url = f"https://delices-store.preview.emergentagent.com/uploads/{filename}"
+            static_url = f"https://tasteofalgeria.preview.emergentagent.com/uploads/{filename}"
             try:
                 response = requests.get(static_url, timeout=10)
                 if response.status_code == 404:

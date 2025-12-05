@@ -13,7 +13,7 @@ from datetime import datetime
 from PIL import Image
 
 class ImageUploadTester:
-    def __init__(self, base_url="https://delices-store.preview.emergentagent.com/api"):
+    def __init__(self, base_url="https://tasteofalgeria.preview.emergentagent.com/api"):
         self.base_url = base_url
         self.admin_token = None
         self.tests_run = 0
@@ -278,7 +278,7 @@ class ImageUploadTester:
             return False
         
         filename = self.uploaded_files[0]
-        static_url = f"https://delices-store.preview.emergentagent.com/api/uploads/{filename}"
+        static_url = f"https://tasteofalgeria.preview.emergentagent.com/api/uploads/{filename}"
         
         try:
             response = requests.get(static_url, timeout=10)
@@ -325,7 +325,7 @@ class ImageUploadTester:
                     self.log_test("Image Deletion", True, f"Successfully deleted {filename}")
                     
                     # Verify file is no longer accessible
-                    static_url = f"https://delices-store.preview.emergentagent.com/api/uploads/{filename}"
+                    static_url = f"https://tasteofalgeria.preview.emergentagent.com/api/uploads/{filename}"
                     verify_response = requests.get(static_url, timeout=10)
                     if verify_response.status_code == 404:
                         print("   ✅ File confirmed deleted from static serving")
