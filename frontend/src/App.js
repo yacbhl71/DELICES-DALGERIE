@@ -38,6 +38,7 @@ import AdminSettings from './components/AdminSettings';
 import AdminSettingsTest from './components/AdminSettingsTest';
 import AdminCustomization from './components/AdminCustomization';
 import AdminTestimonials from './components/AdminTestimonials';
+import AdminNavigation from './components/AdminNavigation';
 import TestimonialsPage from './components/TestimonialsPage';
 import AccountSettings from './components/AccountSettings';
 
