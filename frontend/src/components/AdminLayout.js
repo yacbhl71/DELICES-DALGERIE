@@ -167,7 +167,7 @@ const AdminLayout = ({ children }) => {
           </button>
         </div>
 
-        <nav className="mt-6 px-3 flex-1 overflow-y-auto">
+        <nav className="mt-4 px-3 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
           {menuItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.href;
@@ -176,14 +176,14 @@ const AdminLayout = ({ children }) => {
               <Link
                 key={item.href}
                 to={item.href}
-                className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 mb-2 ${
+                className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 mb-1 ${
                   isActive
                     ? 'bg-gradient-to-r from-amber-100 to-orange-50 text-amber-700 shadow-sm'
                     : 'text-gray-700 hover:bg-gray-50 hover:text-amber-600 hover:shadow-sm'
                 }`}
                 onClick={() => setSidebarOpen(false)}
               >
-                <Icon size={20} className="mr-3 flex-shrink-0" />
+                <Icon size={18} className="mr-3 flex-shrink-0" />
                 <span className="truncate">{item.name}</span>
               </Link>
             );
