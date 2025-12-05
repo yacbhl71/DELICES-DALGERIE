@@ -21,7 +21,8 @@ import {
   Navigation,
   Image,
   Tag,
-  Package
+  Package,
+  Search
 } from 'lucide-react';
 
 const AdminLayout = ({ children }) => {
