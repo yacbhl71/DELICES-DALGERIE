@@ -193,34 +193,40 @@ const Header = () => {
         {isMenuOpen && (
           <div className="md:hidden bg-white border-t border-gray-200">
             <div className="px-2 pt-2 pb-3 space-y-1">
-              <Link
-                to="/"
-                className="block px-3 py-2 text-gray-700 hover:text-olive hover:bg-olive-light rounded-md transition-colors duration-200"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {t('home')}
-              </Link>
-              <Link
-                to="/shop"
-                className="block px-3 py-2 text-gray-700 hover:text-olive hover:bg-olive-light rounded-md transition-colors duration-200"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {t('shop')}
-              </Link>
-              <Link
-                to="/history"
-                className="block px-3 py-2 text-gray-700 hover:text-olive hover:bg-olive-light rounded-md transition-colors duration-200"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {t('history')}
-              </Link>
-              <Link
-                to="/contact"
-                className="block px-3 py-2 text-gray-700 hover:text-olive hover:bg-olive-light rounded-md transition-colors duration-200"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {language === 'ar' ? 'اتصل بنا' : language === 'en' ? 'Contact' : 'Contact'}
-              </Link>
+              {navigationItems.map((item) => {
+                const label = item.label[language] || item.label.fr;
+                
+                if (item.is_external) {
+                  return (
+                    <a
+                      key={item.id}
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between px-3 py-2 text-gray-700 hover:text-olive hover:bg-olive-light rounded-md transition-colors duration-200"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <span>
+                        {item.icon && <span className="mr-2">{item.icon}</span>}
+                        {label}
+                      </span>
+                      <ExternalLink size={14} />
+                    </a>
+                  );
+                }
+                
+                return (
+                  <Link
+                    key={item.id}
+                    to={item.url}
+                    className="block px-3 py-2 text-gray-700 hover:text-olive hover:bg-olive-light rounded-md transition-colors duration-200"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {item.icon && <span className="mr-2">{item.icon}</span>}
+                    {label}
+                  </Link>
+                );
+              })}
               
               <div className="border-t border-gray-200 pt-4">
                 {/* Mobile Language Selector */}
