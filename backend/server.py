@@ -448,6 +448,17 @@ class BannerUpdate(BaseModel):
     is_active: Optional[bool] = None
     background_color: Optional[str] = None
 
+# Newsletter Models
+class NewsletterSubscriber(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    email: EmailStr
+    is_active: bool = True
+    subscribed_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    unsubscribed_at: Optional[datetime] = None
+
+class NewsletterSubscribe(BaseModel):
+    email: EmailStr
+
 # --- Authentication Functions ---
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
