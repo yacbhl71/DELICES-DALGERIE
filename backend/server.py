@@ -2017,6 +2017,41 @@ async def get_stock_history(
     
     return adjustments
 
+# --- SEO Settings Routes ---
+@api_router.get("/admin/seo-settings", response_model=SEOSettings)
+async def get_seo_settings(admin: User = Depends(get_admin_user)):
+    """Get SEO settings (admin only)"""
+    settings = await db.seo_settings.find_one({"id": "seo_settings"}, {"_id": 0})
+    if not settings:
+        # Return default settings if none exist
+        return SEOSettings()
+    return SEOSettings(**settings)
+
+@api_router.put("/admin/seo-settings", response_model=SEOSettings)
+async def update_seo_settings(
+    seo_data: SEOSettings,
+    admin: User = Depends(get_admin_user)
+):
+    """Update SEO settings (admin only)"""
+    seo_data.updated_at = datetime.now(timezone.utc)
+    
+    await db.seo_settings.update_one(
+        {"id": "seo_settings"},
+        {"$set": seo_data.model_dump()},
+        upsert=True
+    )
+    
+    updated = await db.seo_settings.find_one({"id": "seo_settings"}, {"_id": 0})
+    return SEOSettings(**updated)
+
+@api_router.get("/seo-settings")
+async def get_public_seo_settings():
+    """Get public SEO settings (for meta tags)"""
+    settings = await db.seo_settings.find_one({"id": "seo_settings"}, {"_id": 0})
+    if not settings:
+        return SEOSettings().model_dump()
+    return settings
+
 # --- Basic Routes ---
 @api_router.get("/")
 async def root():
