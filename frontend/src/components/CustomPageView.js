@@ -59,12 +59,56 @@ export default function CustomPageView() {
         </div>
       </div>
       <div className="container mx-auto px-4 py-12">
-        <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
-          <div className="prose max-w-none" style={{ whiteSpace: 'pre-wrap' }}>
-            {content}
-          </div>
+        <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8 md:p-12">
+          <div 
+            className="prose prose-lg max-w-none"
+            dangerouslySetInnerHTML={{ __html: content }}
+            style={{
+              lineHeight: '1.8'
+            }}
+          />
         </div>
       </div>
+      
+      <style jsx global>{`
+        .prose h2 {
+          color: #6B8E23;
+          font-size: 2rem;
+          font-weight: 700;
+          margin-top: 2rem;
+          margin-bottom: 1rem;
+        }
+        .prose h3 {
+          color: #374151;
+          font-size: 1.5rem;
+          font-weight: 600;
+          margin-top: 1.5rem;
+          margin-bottom: 0.75rem;
+        }
+        .prose p {
+          color: #4B5563;
+          margin-bottom: 1rem;
+        }
+        .prose ul, .prose ol {
+          margin-left: 1.5rem;
+          margin-bottom: 1rem;
+        }
+        .prose li {
+          color: #4B5563;
+          margin-bottom: 0.5rem;
+        }
+        .prose a {
+          color: #6B8E23;
+          text-decoration: underline;
+        }
+        .prose a:hover {
+          color: #5a7a1d;
+        }
+        .prose strong {
+          color: #1F2937;
+          font-weight: 600;
+        }
+      `}</style>
     </div>
   );
 }
