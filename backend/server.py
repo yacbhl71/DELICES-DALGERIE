@@ -1000,13 +1000,60 @@ async def create_order(order_data: OrderCreate, background_tasks: BackgroundTask
     # Calculate totals
     subtotal = sum(item.price * item.quantity for item in order_data.items)
     shipping_cost = 0.0  # Free shipping for now
-    total = subtotal + shipping_cost
+    discount_amount = 0.0
+    promo_code = None
+    
+    # Apply promo code if provided
+    if order_data.promo_code:
+        try:
+            code = await db.promo_codes.find_one(
+                {"code": order_data.promo_code.upper(), "is_active": True},
+                {"_id": 0}
+            )
+            
+            if code:
+                promo = PromoCode(**code)
+                now = datetime.now(timezone.utc)
+                
+                # Validate promo code
+                is_valid = True
+                if promo.valid_from and now < promo.valid_from:
+                    is_valid = False
+                if promo.valid_until and now > promo.valid_until:
+                    is_valid = False
+                if promo.usage_limit and promo.usage_count >= promo.usage_limit:
+                    is_valid = False
+                if promo.min_order_amount and subtotal < promo.min_order_amount:
+                    is_valid = False
+                
+                if is_valid:
+                    # Calculate discount
+                    if promo.discount_type == "percentage":
+                        discount_amount = subtotal * (promo.discount_value / 100)
+                        if promo.max_discount_amount:
+                            discount_amount = min(discount_amount, promo.max_discount_amount)
+                    else:  # fixed
+                        discount_amount = min(promo.discount_value, subtotal)
+                    
+                    promo_code = promo.code
+                    
+                    # Increment usage count
+                    await db.promo_codes.update_one(
+                        {"id": promo.id},
+                        {"$inc": {"usage_count": 1}}
+                    )
+        except Exception as e:
+            logger.warning(f"Error applying promo code: {e}")
+    
+    total = subtotal + shipping_cost - discount_amount
     
     # Create order
     order = Order(
-        **order_data.model_dump(),
+        **order_data.model_dump(exclude={'promo_code'}),
         subtotal=subtotal,
         shipping_cost=shipping_cost,
+        promo_code=promo_code,
+        discount_amount=discount_amount,
         total=total
     )
     
