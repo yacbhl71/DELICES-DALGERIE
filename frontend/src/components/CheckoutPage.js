@@ -65,12 +65,13 @@ export default function CheckoutPage() {
         ...formData,
         items: cartItems.map(item => ({
           product_id: item.id,
-          product_name: item.name,
+          product_name: typeof item.name === 'object' ? item.name : { fr: item.name, en: item.name, ar: item.name },
           quantity: item.quantity,
           price: item.price,
           image_url: item.image_urls?.[0]
         })),
-        promo_code: promoApplied?.promo_code || null
+        promo_code: promoApplied?.promo_code || null,
+        payment_method: paymentMethod
       };
 
       const response = await axios.post(`${API}/orders`, orderData);
@@ -80,7 +81,7 @@ export default function CheckoutPage() {
       setPromoApplied(null);
     } catch (error) {
       console.error('Error creating order:', error);
-      alert('Erreur lors de la commande. Veuillez réessayer.');
+      alert(error.response?.data?.detail || 'Erreur lors de la commande. Veuillez réessayer.');
     } finally {
       setLoading(false);
     }
