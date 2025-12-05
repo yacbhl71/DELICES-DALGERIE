@@ -191,9 +191,6 @@ metadata:
 test_plan:
   current_focus:
     - "Promo Code UI in Checkout"
-    - "Shop Page Product Display"
-    - "Cart Context and Functionality"
-    - "Promo Code API Endpoints"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
