@@ -65,32 +65,6 @@ const HomePage = () => {
       {/* Hero Slider */}
       <HeroSlider />
 
-      {/* Original Hero Section can be kept as fallback or removed */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-amber-50 via-orange-50 to-red-50 py-20">
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center animate-fadeInUp">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              <span className="text-gradient">Soumam</span>
-              {' '}
-              <span className="text-gradient">Heritage</span>
-            </h2>
-            <p className="text-xl md:text-2xl text-gray-700 mb-8 max-w-3xl mx-auto">
-              {t('discover')}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/recipes" className="btn-primary inline-flex items-center">
-                {t('exploreRecipes')}
-                <ArrowRight className="ml-2" size={20} />
-              </Link>
-              <Link to="/shop" className="btn-secondary inline-flex items-center">
-                {t('visitShop')}
-                <ShoppingBag className="ml-2" size={20} />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Features Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
