@@ -1160,6 +1160,79 @@ async def delete_testimonial(testimonial_id: str, admin: User = Depends(get_admi
     
     return {"message": "Testimonial deleted successfully"}
 
+# --- Navigation Menu Routes ---
+@api_router.get("/navigation", response_model=List[NavigationItem])
+async def get_navigation_menu():
+    """Get active navigation items (public)"""
+    items = await db.navigation.find({"is_active": True}, {"_id": 0}).sort("order", 1).to_list(1000)
+    return [NavigationItem(**item) for item in items]
+
+@api_router.get("/admin/navigation", response_model=List[NavigationItem])
+async def get_all_navigation_items(admin: User = Depends(get_admin_user)):
+    """Get all navigation items including inactive (admin only)"""
+    items = await db.navigation.find({}, {"_id": 0}).sort("order", 1).to_list(1000)
+    return [NavigationItem(**item) for item in items]
+
+@api_router.post("/admin/navigation", response_model=NavigationItem)
+async def create_navigation_item(item_data: NavigationItemCreate, admin: User = Depends(get_admin_user)):
+    """Create a new navigation item (admin only)"""
+    item = NavigationItem(**item_data.model_dump())
+    await db.navigation.insert_one(item.model_dump())
+    return item
+
+@api_router.get("/admin/navigation/{item_id}", response_model=NavigationItem)
+async def get_navigation_item(item_id: str, admin: User = Depends(get_admin_user)):
+    """Get a specific navigation item (admin only)"""
+    item = await db.navigation.find_one({"id": item_id}, {"_id": 0})
+    if not item:
+        raise HTTPException(status_code=404, detail="Navigation item not found")
+    return NavigationItem(**item)
+
+@api_router.put("/admin/navigation/{item_id}", response_model=NavigationItem)
+async def update_navigation_item(
+    item_id: str,
+    item_data: NavigationItemUpdate,
+    admin: User = Depends(get_admin_user)
+):
+    """Update a navigation item (admin only)"""
+    item = await db.navigation.find_one({"id": item_id}, {"_id": 0})
+    if not item:
+        raise HTTPException(status_code=404, detail="Navigation item not found")
+    
+    update_dict = {k: v for k, v in item_data.model_dump().items() if v is not None}
+    update_dict["updated_at"] = datetime.now(timezone.utc)
+    
+    if update_dict:
+        await db.navigation.update_one({"id": item_id}, {"$set": update_dict})
+        item.update(update_dict)
+    
+    return NavigationItem(**item)
+
+@api_router.delete("/admin/navigation/{item_id}")
+async def delete_navigation_item(item_id: str, admin: User = Depends(get_admin_user)):
+    """Delete a navigation item (admin only)"""
+    result = await db.navigation.delete_one({"id": item_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Navigation item not found")
+    
+    return {"message": "Navigation item deleted successfully"}
+
+@api_router.post("/admin/navigation/reorder")
+async def reorder_navigation_items(
+    items_order: List[Dict[str, Any]],
+    admin: User = Depends(get_admin_user)
+):
+    """Reorder navigation items (admin only)"""
+    # items_order format: [{"id": "...", "order": 0}, {"id": "...", "order": 1}, ...]
+    for item_order in items_order:
+        await db.navigation.update_one(
+            {"id": item_order["id"]},
+            {"$set": {"order": item_order["order"], "updated_at": datetime.now(timezone.utc)}}
+        )
+    
+    return {"message": "Navigation items reordered successfully"}
+
 # --- Custom Pages Routes ---
 @api_router.get("/pages", response_model=List[CustomPage])
 async def get_published_pages():
