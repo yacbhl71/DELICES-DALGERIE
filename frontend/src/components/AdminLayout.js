@@ -18,7 +18,8 @@ import {
   Layers,
   FileText,
   MessageSquare,
-  Navigation
+  Navigation,
+  Image
 } from 'lucide-react';
 
 const AdminLayout = ({ children }) => {
