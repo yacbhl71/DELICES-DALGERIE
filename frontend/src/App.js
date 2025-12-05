@@ -41,6 +41,7 @@ import AdminTestimonials from './components/AdminTestimonials';
 import AdminNavigation from './components/AdminNavigation';
 import AdminFooter from './components/AdminFooter';
 import AdminBanners from './components/AdminBanners';
+import AdminPromoCodes from './components/AdminPromoCodes';
 import TestimonialsPage from './components/TestimonialsPage';
 import AccountSettings from './components/AccountSettings';
 import Footer from './components/Footer';
