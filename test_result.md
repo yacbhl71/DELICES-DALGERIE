@@ -130,39 +130,48 @@ backend:
 frontend:
   - task: "Promo Code UI in Checkout"
     implemented: true
-    working: "NA"
+    working: false
     file: "/app/frontend/src/components/CheckoutPage.js"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented promo code section in CheckoutPage with input field, apply/remove buttons, discount display, and integration with order total calculation. Includes validation API calls and error handling."
+      - working: false
+        agent: "testing"
+        comment: "❌ BLOCKED: Cannot test promo code UI due to React runtime errors preventing frontend from loading properly. Error: 'Objects are not valid as a React child' suggests object being rendered as React child instead of string. CheckoutPage redirects to /shop when cart is empty, and cart functionality is not working due to React errors. Promo code section exists in code but cannot be accessed for testing."
 
   - task: "Shop Page Product Display"
     implemented: true
-    working: "NA"
+    working: false
     file: "/app/frontend/src/components/ShopPage.js"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Shop page displays products with add to cart functionality, category filtering, search functionality, and product details. Required for testing promo code flow with cart items."
+      - working: false
+        agent: "testing"
+        comment: "❌ BLOCKED: React runtime errors prevent proper functionality. Products display correctly but 'Add to cart' buttons not clickable due to JavaScript errors. Error: 'Objects are not valid as a React child' indicates data rendering issue. Shop page loads and shows 11 products with correct pricing, but cart functionality is broken."
 
   - task: "Cart Context and Functionality"
     implemented: true
-    working: "NA"
+    working: false
     file: "/app/frontend/src/contexts/CartContext.js"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Cart context provides add to cart, remove from cart, clear cart, and get cart total functionality. Essential for promo code testing workflow."
+      - working: false
+        agent: "testing"
+        comment: "❌ BLOCKED: Cart functionality not working due to React runtime errors. CartContext code is correct but cannot function properly due to frontend JavaScript errors. Even manually adding items to localStorage doesn't allow access to checkout page - still redirects to shop."
 
 metadata:
   created_by: "main_agent"
