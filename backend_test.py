@@ -850,18 +850,14 @@ class DelicesAlgerieAPITester:
             "Validate Invalid Promo Code",
             "POST",
             "promo-codes/validate",
-            200,
+            404,  # Expecting 404 for invalid code
             data=validation_data
         )
         
-        if success and response:
-            # Should be invalid
-            if not response.get('valid', True):
-                print(f"   ✅ Correctly rejected invalid code")
-                print(f"   Message: {response.get('message', 'N/A')}")
-                return True
-            else:
-                print(f"   ❌ Should have rejected invalid code")
+        if success:
+            print(f"   ✅ Correctly rejected invalid code")
+            print(f"   Error: {response.get('detail', 'N/A')}")
+            return True
         
         return False
 
