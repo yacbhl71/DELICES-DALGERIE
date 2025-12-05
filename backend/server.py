@@ -2055,6 +2055,90 @@ async def get_public_seo_settings():
         return SEOSettings().model_dump()
     return settings
 
+# --- Customization Settings ---
+class CustomizationSettings(BaseModel):
+    id: str = "customization_settings"
+    site_name: Dict[str, str] = {"fr": "Délices et Trésors", "ar": "لذائذ وكنوز الجزائر", "en": "Delights & Treasures"}
+    tagline: Dict[str, str] = {"fr": "Saveurs authentiques d'Algérie", "ar": "نكهات أصيلة من الجزائر", "en": "Authentic Algerian Flavors"}
+    logo_url: str = ""
+    favicon_url: str = ""
+    primary_color: str = "#6B8E23"
+    secondary_color: str = "#8B7355"
+    accent_color: str = "#F59E0B"
+    font_heading: str = "Inter"
+    font_body: str = "Inter"
+
+@api_router.get("/admin/customization")
+async def get_customization_settings(current_user: User = Depends(get_current_admin)):
+    """Get customization settings"""
+    settings = await db.customization_settings.find_one({"id": "customization_settings"}, {"_id": 0})
+    if not settings:
+        return CustomizationSettings().model_dump()
+    return settings
+
+@api_router.put("/admin/customization")
+async def update_customization_settings(settings: CustomizationSettings, current_user: User = Depends(get_current_admin)):
+    """Update customization settings"""
+    await db.customization_settings.update_one(
+        {"id": "customization_settings"},
+        {"$set": settings.model_dump()},
+        upsert=True
+    )
+    return {"message": "Customization settings updated successfully"}
+
+@api_router.get("/customization")
+async def get_public_customization():
+    """Get public customization settings"""
+    settings = await db.customization_settings.find_one({"id": "customization_settings"}, {"_id": 0})
+    if not settings:
+        return CustomizationSettings().model_dump()
+    return settings
+
+# --- General Settings ---
+class GeneralSettings(BaseModel):
+    id: str = "general_settings"
+    site_title: Dict[str, str] = {"fr": "", "ar": "", "en": ""}
+    site_description: Dict[str, str] = {"fr": "", "ar": "", "en": ""}
+    contact_email: str = ""
+    support_email: str = ""
+    phone: str = ""
+    address: Dict[str, str] = {"fr": "", "ar": "", "en": ""}
+    timezone: str = "Europe/Paris"
+    currency: str = "EUR"
+    currency_symbol: str = "€"
+    date_format: str = "DD/MM/YYYY"
+    facebook_url: str = ""
+    instagram_url: str = ""
+    twitter_url: str = ""
+    linkedin_url: str = ""
+
+@api_router.get("/admin/settings")
+async def get_general_settings(current_user: User = Depends(get_current_admin)):
+    """Get general settings"""
+    settings = await db.general_settings.find_one({"id": "general_settings"}, {"_id": 0})
+    if not settings:
+        return GeneralSettings().model_dump()
+    return settings
+
+@api_router.put("/admin/settings")
+async def update_general_settings(settings: GeneralSettings, current_user: User = Depends(get_current_admin)):
+    """Update general settings"""
+    await db.general_settings.update_one(
+        {"id": "general_settings"},
+        {"$set": settings.model_dump()},
+        upsert=True
+    )
+    return {"message": "General settings updated successfully"}
+
+@api_router.get("/settings")
+async def get_public_settings():
+    """Get public general settings"""
+    settings = await db.general_settings.find_one({"id": "general_settings"}, {"_id": 0})
+    if not settings:
+        return GeneralSettings().model_dump()
+    return settings
+
+
 # --- Basic Routes ---
 @api_router.get("/")
 async def root():
