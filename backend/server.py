@@ -394,6 +394,23 @@ class NavigationItemUpdate(BaseModel):
     is_active: Optional[bool] = None
     icon: Optional[str] = None
 
+# Footer Models
+class FooterSettings(BaseModel):
+    id: str = Field(default="footer_config")
+    about_text: Dict[str, str] = Field(default_factory=dict)  # {"fr": "À propos...", "en": "About...", "ar": "..."}
+    social_links: List[Dict[str, str]] = Field(default_factory=list)  # [{"name": "Facebook", "url": "...", "icon": "..."}]
+    footer_links: List[Dict[str, Any]] = Field(default_factory=list)  # [{"title": {"fr": "...", "en": "...", "ar": "..."}, "links": [...]}]
+    copyright_text: Dict[str, str] = Field(default_factory=dict)
+    contact_info: Dict[str, Any] = Field(default_factory=dict)  # {"email": "...", "phone": "...", "address": {...}}
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class FooterSettingsUpdate(BaseModel):
+    about_text: Optional[Dict[str, str]] = None
+    social_links: Optional[List[Dict[str, str]]] = None
+    footer_links: Optional[List[Dict[str, Any]]] = None
+    copyright_text: Optional[Dict[str, str]] = None
+    contact_info: Optional[Dict[str, Any]] = None
+
 # --- Authentication Functions ---
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
