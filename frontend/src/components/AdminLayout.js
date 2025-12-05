@@ -221,7 +221,7 @@ const AdminLayout = ({ children }) => {
       {/* Main content */}
       <div className="lg:pl-64">
         {/* Animated Header Banner */}
-        <div className="relative overflow-hidden">
+        <div className="relative overflow-hidden h-12">
           <style>{`
             @keyframes float-shapes {
               0%, 100% { transform: translateY(0px) rotate(0deg); }
