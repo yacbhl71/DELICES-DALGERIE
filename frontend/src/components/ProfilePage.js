@@ -347,6 +347,17 @@ const ProfilePage = () => {
                   </button>
                 )}
                 <button 
+                  onClick={() => navigate('/profile/orders')}
+                  className="w-full text-left p-3 hover:bg-gray-50 rounded-lg transition-colors duration-200 flex items-center"
+                >
+                  <Package size={20} className="mr-3 text-gray-600" />
+                  <span className="text-gray-700">
+                    {language === 'ar' ? 'طلباتي' :
+                     language === 'en' ? 'My Orders' :
+                     'Mes Commandes'}
+                  </span>
+                </button>
+                <button 
                   onClick={() => navigate('/account-settings')}
                   className="w-full text-left p-3 hover:bg-gray-50 rounded-lg transition-colors duration-200 flex items-center"
                 >
