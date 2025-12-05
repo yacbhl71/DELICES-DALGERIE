@@ -2,15 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../App';
 import { ChefHat, ShoppingBag, BookOpen, ArrowRight, Star, Users, Award } from 'lucide-react';
+import HeroSlider from './HeroSlider';
 
 const HomePage = () => {
   const { t, language } = useLanguage();
-
-  const heroImages = [
-    'https://images.unsplash.com/photo-1739217744880-472f59559cc5',
-    'https://images.unsplash.com/photo-1689245780587-a9a6725718b1',
-    'https://images.unsplash.com/photo-1746274394124-141a1d1c5af3'
-  ];
 
   const features = [
     {
