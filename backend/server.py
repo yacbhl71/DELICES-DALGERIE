@@ -1064,6 +1064,74 @@ async def delete_contact_message(message_id: str, admin: User = Depends(get_admi
     
     return {"message": "Contact message deleted successfully"}
 
+# --- Testimonial Routes ---
+@api_router.post("/testimonials", response_model=Testimonial)
+async def create_testimonial(testimonial_data: TestimonialCreate):
+    """Submit a new testimonial (public)"""
+    testimonial = Testimonial(**testimonial_data.model_dump())
+    await db.testimonials.insert_one(testimonial.model_dump())
+    return testimonial
+
+@api_router.get("/testimonials", response_model=List[Testimonial])
+async def get_approved_testimonials(limit: int = 10):
+    """Get approved testimonials (public)"""
+    testimonials = await db.testimonials.find(
+        {"is_approved": True},
+        {"_id": 0}
+    ).sort("approved_at", -1).limit(limit).to_list(limit)
+    return [Testimonial(**t) for t in testimonials]
+
+@api_router.get("/admin/testimonials", response_model=List[Testimonial])
+async def get_all_testimonials(admin: User = Depends(get_admin_user)):
+    """Get all testimonials including pending (admin only)"""
+    testimonials = await db.testimonials.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    return [Testimonial(**t) for t in testimonials]
+
+@api_router.get("/admin/testimonials/{testimonial_id}", response_model=Testimonial)
+async def get_testimonial(testimonial_id: str, admin: User = Depends(get_admin_user)):
+    """Get a specific testimonial (admin only)"""
+    testimonial = await db.testimonials.find_one({"id": testimonial_id}, {"_id": 0})
+    if not testimonial:
+        raise HTTPException(status_code=404, detail="Testimonial not found")
+    return Testimonial(**testimonial)
+
+@api_router.put("/admin/testimonials/{testimonial_id}", response_model=Testimonial)
+async def update_testimonial(
+    testimonial_id: str,
+    update_data: TestimonialUpdate,
+    admin: User = Depends(get_admin_user)
+):
+    """Update testimonial (approve/reject) (admin only)"""
+    testimonial = await db.testimonials.find_one({"id": testimonial_id}, {"_id": 0})
+    if not testimonial:
+        raise HTTPException(status_code=404, detail="Testimonial not found")
+    
+    update_dict = {k: v for k, v in update_data.model_dump().items() if v is not None}
+    
+    # If approving, set approval timestamp and admin ID
+    if update_dict.get("is_approved") is True:
+        update_dict["approved_at"] = datetime.now(timezone.utc)
+        update_dict["approved_by"] = admin.id
+    
+    if update_dict:
+        await db.testimonials.update_one(
+            {"id": testimonial_id},
+            {"$set": update_dict}
+        )
+        testimonial.update(update_dict)
+    
+    return Testimonial(**testimonial)
+
+@api_router.delete("/admin/testimonials/{testimonial_id}")
+async def delete_testimonial(testimonial_id: str, admin: User = Depends(get_admin_user)):
+    """Delete a testimonial (admin only)"""
+    result = await db.testimonials.delete_one({"id": testimonial_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Testimonial not found")
+    
+    return {"message": "Testimonial deleted successfully"}
+
 # --- Custom Pages Routes ---
 @api_router.get("/pages", response_model=List[CustomPage])
 async def get_published_pages():
