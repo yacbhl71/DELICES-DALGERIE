@@ -7,6 +7,13 @@ import { useLanguage } from '../App';
 export default function Cart() {
   const { cartItems, isCartOpen, setIsCartOpen, removeFromCart, updateQuantity, getCartTotal, getCartCount } = useCart();
   const navigate = useNavigate();
+  const { language } = useLanguage();
+
+  const getLocalizedText = (textObj) => {
+    if (!textObj) return '';
+    if (typeof textObj === 'string') return textObj;
+    return textObj[language] || textObj.fr || textObj.en || '';
+  };
 
   const handleCheckout = () => {
     setIsCartOpen(false);
