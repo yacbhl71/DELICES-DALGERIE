@@ -112,96 +112,78 @@ user_problem_statement: |
   Testing required: dynamic header display, admin CRUD operations, reordering, activation/deactivation, external links.
 
 backend:
-  - task: "Testimonials API Endpoints"
+  - task: "Navigation API Endpoints"
     implemented: true
-    working: true
+    working: "NA"
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
-        comment: "Created testimonials API endpoints: POST /api/testimonials (public submission), GET /api/testimonials (approved testimonials), GET/PUT/DELETE /api/admin/testimonials (admin management). Testimonial model includes name, email, rating (1-5), comment, approval status."
-      - working: true
-        agent: "testing"
-        comment: "✅ WORKING: All testimonials API endpoints functional. POST /api/testimonials accepts public submissions (200 OK), GET /api/testimonials returns approved testimonials only, admin endpoints require authentication and work correctly for approval/rejection/deletion. Backend logs show successful API calls and proper data handling."
+        comment: "Created navigation API endpoints: GET /api/navigation (public active items), GET/POST/PUT/DELETE /api/admin/navigation (admin management), POST /api/admin/navigation/reorder (reordering). NavigationItem model with multilingual labels (FR/EN/AR), URL, order, active status, icons."
 
 frontend:
-  - task: "Testimonials Page Route"
+  - task: "Dynamic Header Navigation"
     implemented: true
-    working: true
-    file: "/app/frontend/src/App.js"
+    working: "NA"
+    file: "/app/frontend/src/components/Header.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
-        comment: "Added /testimonials route in App.js that renders TestimonialsPage component with public access."
-      - working: true
-        agent: "testing"
-        comment: "✅ WORKING: Route /testimonials accessible and loads TestimonialsPage component correctly. Page displays hero section with 'Témoignages Clients' title and testimonial submission form."
+        comment: "Modified Header.js to dynamically load navigation items from GET /api/navigation endpoint. Supports multilingual labels, internal/external links, icons, and fallback to default navigation if API fails."
 
-  - task: "Testimonial Submission Form"
+  - task: "Admin Navigation Management Interface"
     implemented: true
-    working: true
-    file: "/app/frontend/src/components/TestimonialForm.js"
+    working: "NA"
+    file: "/app/frontend/src/components/AdminNavigation.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
-        comment: "TestimonialForm component with name, email, star rating (1-5), and comment fields. Submits to POST /api/testimonials endpoint with success feedback."
-      - working: true
-        agent: "testing"
-        comment: "✅ WORKING: Testimonial form fully functional. Star rating system works (5 clickable stars), form validation working, successful submission shows 'Merci pour votre témoignage!' message. API call to POST /api/testimonials returns 200 OK. Form resets after submission."
+        comment: "AdminNavigation component with full CRUD operations: create/edit/delete navigation items, multilingual label support (FR/EN/AR), URL management, external link checkbox, icon support, active/inactive toggle, reordering with up/down buttons."
 
-  - task: "Public Testimonials Display"
+  - task: "Navigation Route Protection"
     implemented: true
-    working: true
-    file: "/app/frontend/src/components/TestimonialsSection.js"
-    stuck_count: 0
-    priority: "high"
-    needs_retesting: false
-    status_history:
-      - working: "NA"
-        agent: "main"
-        comment: "TestimonialsSection component fetches approved testimonials via GET /api/testimonials and displays them with star ratings and customer details."
-      - working: true
-        agent: "testing"
-        comment: "✅ WORKING: Public testimonials display functional. Component fetches approved testimonials via GET /api/testimonials, displays testimonial cards with star ratings, customer names, and comments. Shows only approved testimonials to public users."
-
-  - task: "Admin Testimonials Management"
-    implemented: true
-    working: true
-    file: "/app/frontend/src/components/AdminTestimonials.js"
-    stuck_count: 0
-    priority: "high"
-    needs_retesting: false
-    status_history:
-      - working: "NA"
-        agent: "main"
-        comment: "AdminTestimonials component with stats display, filtering (all/pending/approved), approve/reject/delete actions. Requires admin authentication."
-      - working: true
-        agent: "testing"
-        comment: "✅ WORKING: Admin testimonials management fully functional. Stats display working (Total: 3, En attente: 2, Approuvés: 1), filtering system working (Tous/En attente/Approuvés buttons), approve/reject/delete actions working correctly. Testimonial status updates properly, deletion with confirmation dialog works."
-
-  - task: "Admin Testimonials Route Protection"
-    implemented: true
-    working: true
+    working: "NA"
     file: "/app/frontend/src/App.js"
     stuck_count: 0
     priority: "medium"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
-        comment: "Route /admin/testimonials is protected - requires admin role authentication, redirects to /auth if not admin."
-      - working: true
-        agent: "testing"
-        comment: "✅ WORKING: Admin route protection functional. Requires admin authentication (admin@delices-algerie.com/Admin2024!), redirects to /auth when not authenticated, allows access to admin testimonials page when properly authenticated."
+        comment: "Route /admin/navigation is protected - requires admin role authentication, redirects to /auth if not admin."
+
+  - task: "Navigation Item Reordering"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/AdminNavigation.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Reordering functionality with up/down arrow buttons, calls POST /api/admin/navigation/reorder endpoint to persist order changes."
+
+  - task: "External Link Support"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/Header.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Header supports external links with target='_blank', rel='noopener noreferrer', and ExternalLink icon indicator for external URLs."
 
 metadata:
   created_by: "main_agent"
