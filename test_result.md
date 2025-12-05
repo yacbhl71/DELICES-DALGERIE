@@ -153,53 +153,53 @@ backend:
         comment: "✅ WORKING: GET /api/admin/stats endpoint functional. Returns all required statistics: total_users, total_recipes, total_products, total_historical_content, recent_users, recent_recipes, recent_products. Requires admin authentication (403 for non-admin users). Currently showing: 4 users, 2 recipes, 0 products."
 
 frontend:
-  - task: "ImageUpload Component"
+  - task: "My Orders Route Implementation"
     implemented: true
-    working: "unknown"
-    file: "/app/frontend/src/components/ImageUpload.js"
+    working: "NA"
+    file: "/app/frontend/src/App.js"
     stuck_count: 0
     priority: "high"
     needs_retesting: true
     status_history:
-      - working: "unknown"
+      - working: "NA"
         agent: "main"
-        comment: "Created reusable ImageUpload component with drag-and-drop, file preview, progress indicator, multiple file support (configurable max), and image removal functionality."
+        comment: "Added /profile/orders route in App.js that renders MyOrders component with user authentication protection."
 
-  - task: "Recipe Form Image Upload Integration"
+  - task: "Profile Page My Orders Button"
     implemented: true
-    working: "unknown"
-    file: "/app/frontend/src/components/AdminRecipeForm.js"
+    working: "NA"
+    file: "/app/frontend/src/components/ProfilePage.js"
     stuck_count: 0
     priority: "high"
     needs_retesting: true
     status_history:
-      - working: "unknown"
+      - working: "NA"
         agent: "main"
-        comment: "Integrated ImageUpload component into recipe form, replacing URL input field. Set maxImages=1 for single recipe image."
+        comment: "Added 'Mes Commandes' button in Quick Actions section of ProfilePage.js that navigates to /profile/orders."
 
-  - task: "Product Form Image Upload Integration"
+  - task: "My Orders Component Functionality"
     implemented: true
-    working: "unknown"
-    file: "/app/frontend/src/components/AdminProductForm.js"
+    working: "NA"
+    file: "/app/frontend/src/components/MyOrders.js"
     stuck_count: 0
     priority: "high"
     needs_retesting: true
     status_history:
-      - working: "unknown"
+      - working: "NA"
         agent: "main"
-        comment: "Integrated ImageUpload component into product form. Set maxImages=5 for product gallery."
+        comment: "MyOrders component fetches orders via /api/my-orders endpoint, displays order list with details, supports multilingual interface (French, English, Arabic)."
 
-  - task: "History Form Image Upload Integration"
+  - task: "Route Protection for My Orders"
     implemented: true
-    working: "unknown"
-    file: "/app/frontend/src/components/AdminHistoryForm.js"
+    working: "NA"
+    file: "/app/frontend/src/App.js"
     stuck_count: 0
-    priority: "high"
+    priority: "medium"
     needs_retesting: true
     status_history:
-      - working: "unknown"
+      - working: "NA"
         agent: "main"
-        comment: "Integrated ImageUpload component into historical content form. Set maxImages=5 for historical image galleries."
+        comment: "Route /profile/orders is protected - redirects to /auth if user is not logged in."
 
 metadata:
   created_by: "main_agent"
