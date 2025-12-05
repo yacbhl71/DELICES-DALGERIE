@@ -169,12 +169,10 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Dynamic Header Navigation"
-    - "Admin Navigation Management Interface"
-    - "Navigation API Endpoints"
-    - "Navigation Item Reordering"
-    - "External Link Support"
-    - "Navigation Route Protection"
+    - "Promo Code UI in Checkout"
+    - "Shop Page Product Display"
+    - "Cart Context and Functionality"
+    - "Promo Code API Endpoints"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
