@@ -267,7 +267,7 @@ const AdminLayout = ({ children }) => {
             </div>
             
             {/* Content */}
-            <div className="relative z-10 flex items-center justify-between h-16 px-8">
+            <div className="relative z-10 flex items-center justify-between h-12 px-4">
               {/* Left side - Menu button */}
               <button
                 onClick={() => setSidebarOpen(true)}
