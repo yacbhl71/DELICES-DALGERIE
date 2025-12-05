@@ -114,7 +114,11 @@ const AdminProductForm = () => {
         price: parseFloat(product.price),
         image_urls: product.image_urls.filter(url => url.trim() !== ''),
         origin: product.origin,
-        in_stock: product.in_stock
+        in_stock: product.stock_quantity > 0,
+        track_inventory: product.track_inventory,
+        stock_quantity: parseInt(product.stock_quantity) || 0,
+        low_stock_threshold: parseInt(product.low_stock_threshold) || 5,
+        allow_backorder: product.allow_backorder || false
       };
 
       if (isEdit) {
