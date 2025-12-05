@@ -303,6 +303,8 @@ class Order(BaseModel):
     items: List[OrderItem]
     subtotal: float
     shipping_cost: float = 0.0
+    promo_code: Optional[str] = None
+    discount_amount: float = 0.0
     total: float
     status: str = "pending"  # pending, confirmed, processing, shipped, delivered, cancelled
     notes: Optional[str] = None
@@ -317,6 +319,7 @@ class OrderCreate(BaseModel):
     shipping_city: str
     shipping_postal_code: Optional[str] = None
     items: List[OrderItem]
+    promo_code: Optional[str] = None
     notes: Optional[str] = None
 
 class OrderUpdate(BaseModel):
