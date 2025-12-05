@@ -52,7 +52,7 @@ export default function Cart() {
               {cartItems.map((item) => (
                 <div key={item.id} className="flex space-x-3 border-b pb-4">
                   {item.image_urls && item.image_urls[0] && (
-                    <img src={item.image_urls[0]} alt={item.name} className="w-20 h-20 object-cover rounded" />
+                    <img src={item.image_urls[0]} alt={getLocalizedText(item.name)} className="w-20 h-20 object-cover rounded" />
                   )}
                   <div className="flex-1">
                     <h3 className="font-semibold text-sm">{getLocalizedText(item.name)}</h3>
