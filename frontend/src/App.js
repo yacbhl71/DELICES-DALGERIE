@@ -387,6 +387,7 @@ function App() {
                       />
                     </Routes>
                   </main>
+                  <Footer />
                 </>
               } />
             </Routes>
