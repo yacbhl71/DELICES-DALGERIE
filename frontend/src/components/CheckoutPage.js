@@ -16,6 +16,7 @@ export default function CheckoutPage() {
   const [promoCode, setPromoCode] = useState('');
   const [promoApplied, setPromoApplied] = useState(null);
   const [promoLoading, setPromoLoading] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState('cash'); // 'cash', 'bank_transfer', 'paypal'
   const [formData, setFormData] = useState({
     customer_name: '',
     customer_email: '',
