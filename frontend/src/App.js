@@ -43,6 +43,7 @@ import AdminFooter from './components/AdminFooter';
 import AdminBanners from './components/AdminBanners';
 import AdminPromoCodes from './components/AdminPromoCodes';
 import AdminInventory from './components/AdminInventory';
+import AdminSEO from './components/AdminSEO';
 import TestimonialsPage from './components/TestimonialsPage';
 import AccountSettings from './components/AccountSettings';
 import Footer from './components/Footer';
