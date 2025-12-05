@@ -2,6 +2,7 @@ import React from 'react';
 import { X, Trash2, Plus, Minus, ShoppingCart } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../App';
 
 export default function Cart() {
   const { cartItems, isCartOpen, setIsCartOpen, removeFromCart, updateQuantity, getCartTotal, getCartCount } = useCart();
