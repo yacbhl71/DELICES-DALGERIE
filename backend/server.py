@@ -1669,6 +1669,131 @@ async def update_customization(
     updated = await db.customization.find_one({"id": "site_customization"}, {"_id": 0})
     return SiteCustomization(**updated)
 
+# --- Promo Codes Routes ---
+@api_router.get("/admin/promo-codes", response_model=List[PromoCode])
+async def get_all_promo_codes(admin: User = Depends(get_admin_user)):
+    """Get all promo codes (admin only)"""
+    codes = await db.promo_codes.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    return [PromoCode(**code) for code in codes]
+
+@api_router.post("/admin/promo-codes", response_model=PromoCode)
+async def create_promo_code(
+    promo_data: PromoCodeCreate,
+    admin: User = Depends(get_admin_user)
+):
+    """Create a new promo code (admin only)"""
+    # Check if code already exists
+    existing = await db.promo_codes.find_one({"code": promo_data.code.upper()}, {"_id": 0})
+    if existing:
+        raise HTTPException(status_code=400, detail="Code promo déjà existant")
+    
+    # Create promo code
+    promo = PromoCode(
+        code=promo_data.code.upper(),
+        description=promo_data.description,
+        discount_type=promo_data.discount_type,
+        discount_value=promo_data.discount_value,
+        min_order_amount=promo_data.min_order_amount,
+        max_discount_amount=promo_data.max_discount_amount,
+        usage_limit=promo_data.usage_limit,
+        user_usage_limit=promo_data.user_usage_limit,
+        valid_from=promo_data.valid_from or datetime.now(timezone.utc),
+        valid_until=promo_data.valid_until,
+        is_active=promo_data.is_active if promo_data.is_active is not None else True
+    )
+    
+    await db.promo_codes.insert_one(promo.model_dump())
+    return promo
+
+@api_router.get("/admin/promo-codes/{promo_id}", response_model=PromoCode)
+async def get_promo_code(promo_id: str, admin: User = Depends(get_admin_user)):
+    """Get a specific promo code (admin only)"""
+    code = await db.promo_codes.find_one({"id": promo_id}, {"_id": 0})
+    if not code:
+        raise HTTPException(status_code=404, detail="Code promo non trouvé")
+    return PromoCode(**code)
+
+@api_router.put("/admin/promo-codes/{promo_id}", response_model=PromoCode)
+async def update_promo_code(
+    promo_id: str,
+    promo_data: PromoCodeUpdate,
+    admin: User = Depends(get_admin_user)
+):
+    """Update a promo code (admin only)"""
+    code = await db.promo_codes.find_one({"id": promo_id}, {"_id": 0})
+    if not code:
+        raise HTTPException(status_code=404, detail="Code promo non trouvé")
+    
+    update_data = {k: v for k, v in promo_data.model_dump().items() if v is not None}
+    update_data["updated_at"] = datetime.now(timezone.utc)
+    
+    if update_data:
+        await db.promo_codes.update_one({"id": promo_id}, {"$set": update_data})
+    
+    updated = await db.promo_codes.find_one({"id": promo_id}, {"_id": 0})
+    return PromoCode(**updated)
+
+@api_router.delete("/admin/promo-codes/{promo_id}")
+async def delete_promo_code(promo_id: str, admin: User = Depends(get_admin_user)):
+    """Delete a promo code (admin only)"""
+    result = await db.promo_codes.delete_one({"id": promo_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Code promo non trouvé")
+    return {"message": "Code promo supprimé avec succès"}
+
+@api_router.post("/promo-codes/validate")
+async def validate_promo_code(validation: PromoCodeValidation):
+    """Validate a promo code and calculate discount (public)"""
+    code = await db.promo_codes.find_one(
+        {"code": validation.code.upper(), "is_active": True},
+        {"_id": 0}
+    )
+    
+    if not code:
+        raise HTTPException(status_code=404, detail="Code promo invalide")
+    
+    promo = PromoCode(**code)
+    now = datetime.now(timezone.utc)
+    
+    # Check validity period
+    if promo.valid_from and now < promo.valid_from:
+        raise HTTPException(status_code=400, detail="Ce code promo n'est pas encore valide")
+    
+    if promo.valid_until and now > promo.valid_until:
+        raise HTTPException(status_code=400, detail="Ce code promo a expiré")
+    
+    # Check usage limit
+    if promo.usage_limit and promo.usage_count >= promo.usage_limit:
+        raise HTTPException(status_code=400, detail="Ce code promo a atteint sa limite d'utilisation")
+    
+    # Check minimum order amount
+    if promo.min_order_amount and validation.order_amount < promo.min_order_amount:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Commande minimum de {promo.min_order_amount:.2f} EUR requise pour ce code"
+        )
+    
+    # Calculate discount
+    if promo.discount_type == "percentage":
+        discount = validation.order_amount * (promo.discount_value / 100)
+        if promo.max_discount_amount:
+            discount = min(discount, promo.max_discount_amount)
+    else:  # fixed
+        discount = min(promo.discount_value, validation.order_amount)
+    
+    final_amount = validation.order_amount - discount
+    
+    return {
+        "valid": True,
+        "promo_code": promo.code,
+        "discount_type": promo.discount_type,
+        "discount_value": promo.discount_value,
+        "discount_amount": round(discount, 2),
+        "original_amount": validation.order_amount,
+        "final_amount": round(final_amount, 2),
+        "description": promo.description
+    }
+
 # --- Basic Routes ---
 @api_router.get("/")
 async def root():
