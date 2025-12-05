@@ -343,7 +343,7 @@ const AdminProductForm = () => {
                     <input
                       type="url"
                       value={url}
-                      onChange={(e) => handleImageUrlChange(index, e.target.value)}
+                      onChange={(e) => handleImageChange(index, e.target.value)}
                       placeholder={language === 'ar' ? 'https://exemple.com/image.jpg' : 'https://example.com/image.jpg'}
                       className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
                     />
