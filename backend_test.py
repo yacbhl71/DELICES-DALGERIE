@@ -1061,37 +1061,45 @@ class DelicesAlgerieAPITester:
             except Exception as e:
                 print(f"   ❌ Error deleting {filename}: {str(e)}")
 
-    def run_image_upload_tests(self):
-        """Run comprehensive image upload tests"""
-        print("\n🖼️  Starting Image Upload Tests")
+    def run_ecommerce_tests(self):
+        """Run comprehensive e-commerce tests for Délices et Trésors d'Algérie"""
+        print("\n🛒 Starting E-commerce Tests")
         print("=" * 50)
         
         # Test admin authentication first
         if not self.test_admin_login():
-            print("❌ Admin login failed - cannot test image upload functionality")
+            print("❌ Admin login failed - cannot test e-commerce functionality")
             return False
         
-        # Test image upload functionality
-        tests = [
-            self.test_image_upload_success,
-            self.test_image_upload_png,
-            self.test_image_upload_invalid_type,
-            self.test_image_upload_no_auth,
-            self.test_static_file_serving,
-            self.test_image_delete,
-            self.test_image_delete_nonexistent,
-            self.test_image_delete_no_auth,
-            self.test_admin_stats
-        ]
+        # Test JWT token validation
+        self.test_jwt_token_validation()
         
-        for test in tests:
-            try:
-                test()
-            except Exception as e:
-                print(f"❌ Test {test.__name__} failed with error: {str(e)}")
+        # Test product management with stock fields
+        self.test_create_product_with_stock_fields()
+        self.test_update_product_stock_fields()
         
-        # Cleanup
-        self.cleanup_uploaded_files()
+        # Test inventory management
+        self.test_inventory_management()
+        self.test_stock_adjustment()
+        
+        # Test promo codes
+        self.test_create_promo_codes()
+        self.test_get_promo_codes()
+        self.test_validate_promo_code_bienvenue20()
+        self.test_validate_promo_code_ete2025()
+        self.test_validate_promo_code_minimum_order()
+        self.test_validate_invalid_promo_code()
+        
+        # Test order creation with promo codes and stock decrementation
+        self.test_create_order_with_promo_code()
+        self.test_stock_decrementation_after_order()
+        
+        # Test SEO and custom pages
+        self.test_seo_settings()
+        self.test_custom_pages()
+        
+        # Test admin stats
+        self.test_admin_stats()
         
         return True
 
