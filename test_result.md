@@ -166,13 +166,13 @@ backend:
         agent: "testing"
         comment: "✅ WORKING: Complete promo code system functional. BIENVENUE20 and ETE2025 codes exist and working. BIENVENUE20 (20% discount, min 30 EUR) returns correct 17.59 EUR discount on 87.97 EUR order. ETE2025 (10 EUR fixed discount, min 50 EUR) returns correct 10 EUR discount. Invalid codes properly rejected with 404 'Code promo invalide'. Minimum order validation working (25 EUR order rejected with 400 'Commande minimum de 30.00 EUR requise'). GET /api/admin/promo-codes returns 2 active codes."
 
-  - task: "Order Creation with Payment Methods"
+  - task: "Complete Order Flow with Payment Methods"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: true
         agent: "testing"
@@ -180,6 +180,9 @@ backend:
       - working: "NA"
         agent: "main"
         comment: "Updated Order and OrderCreate models to include payment_method field with options: cash, bank_transfer, paypal. Backend order creation endpoint now accepts and stores payment method. Need to test complete flow with new payment methods."
+      - working: true
+        agent: "testing"
+        comment: "✅ WORKING: Complete order flow tested successfully. Cart functionality working - can add products from shop page (14 products available). Checkout accessible via 'Commander' button in cart modal. Customer form accepts all required data (Test Client, test@example.com, +213 555 123 456, 123 Rue Test, Alger, 16000). Order summary displays products correctly with EUR pricing. Payment method integration working with backend order creation. Fixed checkout page redirect issue by adding cart loading delay. Backend order creation endpoint accepts payment_method field and processes orders correctly with automatic stock decrementation."
 
   - task: "SEO Settings Management"
     implemented: true
