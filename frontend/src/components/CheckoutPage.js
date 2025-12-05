@@ -142,16 +142,77 @@ export default function CheckoutPage() {
           {/* Summary */}
           <div className="bg-white rounded-lg shadow p-6">
             <h2 className="text-xl font-bold mb-4">Récapitulatif</h2>
-            <div className="space-y-3">
+            <div className="space-y-3 mb-4">
               {cartItems.map(item => (
                 <div key={item.id} className="flex justify-between text-sm">
                   <span>{item.name} x{item.quantity}</span>
                   <span>{(item.price * item.quantity).toFixed(2)} EUR</span>
                 </div>
               ))}
-              <div className="border-t pt-3 flex justify-between font-bold text-lg">
+            </div>
+
+            {/* Promo Code Section */}
+            <div className="border-t pt-4 mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Code Promo
+              </label>
+              {!promoApplied ? (
+                <div className="flex space-x-2">
+                  <input
+                    type="text"
+                    value={promoCode}
+                    onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                    placeholder="ENTRER LE CODE"
+                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg uppercase"
+                    disabled={promoLoading}
+                  />
+                  <button
+                    onClick={applyPromoCode}
+                    disabled={promoLoading || !promoCode.trim()}
+                    className="px-4 py-2 bg-[#6B8E23] text-white rounded-lg hover:bg-[#5a7a1d] transition disabled:opacity-50"
+                  >
+                    {promoLoading ? 'Vérification...' : 'Appliquer'}
+                  </button>
+                </div>
+              ) : (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="font-mono font-bold text-green-700">{promoApplied.promo_code}</span>
+                      <p className="text-xs text-green-600 mt-1">
+                        -{promoApplied.discount_amount.toFixed(2)} EUR
+                      </p>
+                    </div>
+                    <button
+                      onClick={removePromoCode}
+                      className="text-red-500 hover:text-red-700 text-sm underline"
+                    >
+                      Retirer
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Totals */}
+            <div className="space-y-2 border-t pt-3">
+              <div className="flex justify-between text-sm">
+                <span>Sous-total</span>
+                <span>{getCartTotal().toFixed(2)} EUR</span>
+              </div>
+              {promoApplied && (
+                <div className="flex justify-between text-sm text-green-600">
+                  <span>Réduction</span>
+                  <span>-{promoApplied.discount_amount.toFixed(2)} EUR</span>
+                </div>
+              )}
+              <div className="flex justify-between font-bold text-lg">
                 <span>Total</span>
-                <span className="text-[#6B8E23]">{getCartTotal().toFixed(2)} EUR</span>
+                <span className="text-[#6B8E23]">
+                  {promoApplied
+                    ? promoApplied.final_amount.toFixed(2)
+                    : getCartTotal().toFixed(2)} EUR
+                </span>
               </div>
             </div>
           </div>
