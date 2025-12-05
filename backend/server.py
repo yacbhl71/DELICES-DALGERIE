@@ -312,6 +312,21 @@ class CustomPageUpdate(BaseModel):
     show_in_menu: Optional[bool] = None
     menu_order: Optional[int] = None
 
+# SEO Settings Model
+class SEOSettings(BaseModel):
+    id: str = "seo_settings"
+    site_title: Dict[str, str] = {"fr": "", "en": "", "ar": ""}
+    site_description: Dict[str, str] = {"fr": "", "en": "", "ar": ""}
+    site_keywords: Dict[str, str] = {"fr": "", "en": "", "ar": ""}
+    og_image: str = ""
+    twitter_handle: str = ""
+    google_analytics_id: str = ""
+    google_site_verification: str = ""
+    robots_txt: str = "User-agent: *\nAllow: /"
+    canonical_url: str = ""
+    structured_data_enabled: bool = True
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
 # Order Models
 class OrderItem(BaseModel):
     product_id: str
