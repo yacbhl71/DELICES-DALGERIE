@@ -39,7 +39,20 @@ export default function AdminFooter() {
       const response = await axios.get(`${API}/footer`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setFooterData(response.data);
+      
+      // Ensure all nested objects are properly initialized
+      const data = response.data;
+      setFooterData({
+        about_text: data.about_text || { fr: '', en: '', ar: '' },
+        social_links: data.social_links || [],
+        footer_links: data.footer_links || [],
+        copyright_text: data.copyright_text || { fr: '', en: '', ar: '' },
+        contact_info: {
+          email: data.contact_info?.email || '',
+          phone: data.contact_info?.phone || '',
+          address: data.contact_info?.address || { fr: '', en: '', ar: '' }
+        }
+      });
     } catch (error) {
       console.error('Error fetching footer settings:', error);
     } finally {
