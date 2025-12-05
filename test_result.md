@@ -130,11 +130,11 @@ backend:
 frontend:
   - task: "Promo Code UI in Checkout"
     implemented: true
-    working: false
+    working: "NA"
     file: "/app/frontend/src/components/CheckoutPage.js"
     stuck_count: 1
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
@@ -142,6 +142,9 @@ frontend:
       - working: false
         agent: "testing"
         comment: "❌ BLOCKED: Cannot test promo code UI due to React runtime errors preventing frontend from loading properly. Error: 'Objects are not valid as a React child' suggests object being rendered as React child instead of string. CheckoutPage redirects to /shop when cart is empty, and cart functionality is not working due to React errors. Promo code section exists in code but cannot be accessed for testing."
+      - working: "NA"
+        agent: "testing"
+        comment: "✅ UNBLOCKED: Fixed React rendering issue that was preventing cart functionality. Cart now works correctly and can add items. CheckoutPage should now be accessible with items in cart. Promo code UI needs retesting now that cart functionality is working."
 
   - task: "Shop Page Product Display"
     implemented: true
