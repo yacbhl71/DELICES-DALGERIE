@@ -87,9 +87,11 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* About Section */}
           <div className="space-y-4">
-            <h3 className="text-2xl font-bold text-[#D4AF37]">
-              Délices et Trésors
-            </h3>
+            <Link to="/" className="inline-block">
+              <h3 className="text-2xl font-bold text-[#D4AF37] hover:text-[#c9a135] transition-colors cursor-pointer">
+                Délices et Trésors
+              </h3>
+            </Link>
             <p className="text-gray-300 text-sm leading-relaxed">
               {getLocalizedText(footerSettings.about_text)}
             </p>
