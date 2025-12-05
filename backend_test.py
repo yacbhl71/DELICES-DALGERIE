@@ -1017,7 +1017,7 @@ class DelicesAlgerieAPITester:
         success2, response2 = self.run_test(
             "Get Footer Settings",
             "GET",
-            "footer-settings",
+            "footer",
             200
         )
         
