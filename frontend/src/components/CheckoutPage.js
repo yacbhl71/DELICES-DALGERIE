@@ -135,6 +135,73 @@ export default function CheckoutPage() {
               <textarea placeholder="Notes (optionnel)" value={formData.notes}
                 onChange={(e) => setFormData({...formData, notes: e.target.value})}
                 className="w-full px-4 py-2 border rounded-lg" rows="2" />
+              
+              {/* Payment Method Selection */}
+              <div className="border-t pt-4 mt-4">
+                <h3 className="font-semibold mb-3">Méthode de Paiement</h3>
+                <div className="space-y-3">
+                  {/* Cash Payment */}
+                  <label className={`flex items-center p-4 border-2 rounded-lg cursor-pointer transition ${
+                    paymentMethod === 'cash' ? 'border-[#6B8E23] bg-green-50' : 'border-gray-200 hover:border-gray-300'
+                  }`}>
+                    <input
+                      type="radio"
+                      name="payment"
+                      value="cash"
+                      checked={paymentMethod === 'cash'}
+                      onChange={(e) => setPaymentMethod(e.target.value)}
+                      className="mr-3"
+                    />
+                    <Banknote className="text-[#6B8E23] mr-2" size={24} />
+                    <div>
+                      <div className="font-semibold">Paiement à la livraison</div>
+                      <div className="text-xs text-gray-600">Payez en espèces au livreur</div>
+                    </div>
+                  </label>
+
+                  {/* Bank Transfer */}
+                  <label className={`flex items-center p-4 border-2 rounded-lg cursor-pointer transition ${
+                    paymentMethod === 'bank_transfer' ? 'border-[#6B8E23] bg-green-50' : 'border-gray-200 hover:border-gray-300'
+                  }`}>
+                    <input
+                      type="radio"
+                      name="payment"
+                      value="bank_transfer"
+                      checked={paymentMethod === 'bank_transfer'}
+                      onChange={(e) => setPaymentMethod(e.target.value)}
+                      className="mr-3"
+                    />
+                    <Building2 className="text-[#6B8E23] mr-2" size={24} />
+                    <div>
+                      <div className="font-semibold">Virement bancaire</div>
+                      <div className="text-xs text-gray-600">Paiement par virement</div>
+                    </div>
+                  </label>
+
+                  {/* PayPal */}
+                  <label className={`flex items-center p-4 border-2 rounded-lg cursor-pointer transition ${
+                    paymentMethod === 'paypal' ? 'border-[#6B8E23] bg-green-50' : 'border-gray-200 hover:border-gray-300'
+                  }`}>
+                    <input
+                      type="radio"
+                      name="payment"
+                      value="paypal"
+                      checked={paymentMethod === 'paypal'}
+                      onChange={(e) => setPaymentMethod(e.target.value)}
+                      className="mr-3"
+                    />
+                    <CreditCard className="text-[#6B8E23] mr-2" size={24} />
+                    <div>
+                      <div className="font-semibold">PayPal</div>
+                      <div className="text-xs text-gray-600">Paiement sécurisé en ligne</div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              {/* Payment Info Display */}
+              <PaymentInfo paymentMethod={paymentMethod} />
+              
               <button type="submit" disabled={loading}
                 className="w-full bg-[#6B8E23] text-white py-3 rounded-lg font-semibold hover:bg-[#5a7a1d] transition disabled:opacity-50">
                 {loading ? 'Traitement...' : 'Confirmer la commande'}
