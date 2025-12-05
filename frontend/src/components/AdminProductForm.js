@@ -283,21 +283,42 @@ const AdminProductForm = () => {
             </div>
 
             <div className="space-y-2">
-              <label className="form-label">
-                {language === 'ar' ? 'حالة المخزون' : language === 'en' ? 'Stock Status' : 'État du Stock'}
+              <label className="form-label flex items-center">
+                <Package size={16} className="mr-1" />
+                {language === 'ar' ? 'كمية المخزون' : language === 'en' ? 'Stock Quantity' : 'Quantité en Stock'}
               </label>
-              <select
-                value={product.in_stock}
-                onChange={(e) => handleInputChange('in_stock', null, e.target.value === 'true')}
+              <input
+                type="number"
+                min="0"
+                value={product.stock_quantity}
+                onChange={(e) => handleInputChange('stock_quantity', null, parseInt(e.target.value) || 0)}
                 className="form-input"
-              >
-                <option value={true}>
-                  {language === 'ar' ? 'متوفر' : language === 'en' ? 'In Stock' : 'En stock'}
-                </option>
-                <option value={false}>
-                  {language === 'ar' ? 'غير متوفر' : language === 'en' ? 'Out of Stock' : 'Rupture de stock'}
-                </option>
-              </select>
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="form-label">
+                {language === 'ar' ? 'عتبة التنبيه' : language === 'en' ? 'Low Stock Threshold' : 'Seuil d\'Alerte'}
+              </label>
+              <input
+                type="number"
+                min="0"
+                value={product.low_stock_threshold}
+                onChange={(e) => handleInputChange('low_stock_threshold', null, parseInt(e.target.value) || 5)}
+                className="form-input"
+              />
+            </div>
+
+            <div className="flex items-center space-x-3">
+              <input
+                type="checkbox"
+                checked={product.track_inventory}
+                onChange={(e) => handleInputChange('track_inventory', null, e.target.checked)}
+                className="h-4 w-4 text-[#6B8E23] focus:ring-[#6B8E23] border-gray-300 rounded"
+              />
+              <label className="text-sm text-gray-700">
+                {language === 'ar' ? 'تتبع المخزون' : language === 'en' ? 'Track Inventory' : 'Suivre l\'inventaire'}
+              </label>
             </div>
           </div>
         </div>
