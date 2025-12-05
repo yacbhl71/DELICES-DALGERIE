@@ -62,33 +62,18 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="hero relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-amber-50 via-orange-50 to-red-50 opacity-90"></div>
-        
-        {/* Background Images */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="grid grid-cols-3 h-full">
-            {heroImages.map((image, index) => (
-              <div
-                key={index}
-                className="bg-cover bg-center animate-float"
-                style={{
-                  backgroundImage: `url(${image})`,
-                  animationDelay: `${index * 0.5}s`
-                }}
-              ></div>
-            ))}
-          </div>
-        </div>
+      {/* Hero Slider */}
+      <HeroSlider />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      {/* Original Hero Section can be kept as fallback or removed */}
+      <section className="relative overflow-hidden bg-gradient-to-r from-amber-50 via-orange-50 to-red-50 py-20">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center animate-fadeInUp">
-            <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               <span className="text-gradient">Soumam</span>
-              <br />
+              {' '}
               <span className="text-gradient">Heritage</span>
-            </h1>
+            </h2>
             <p className="text-xl md:text-2xl text-gray-700 mb-8 max-w-3xl mx-auto">
               {t('discover')}
             </p>
