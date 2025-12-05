@@ -342,6 +342,30 @@ class ContactMessageCreate(BaseModel):
 class ContactMessageUpdate(BaseModel):
     status: Optional[str] = None
 
+# Testimonial Models
+class Testimonial(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    customer_name: str
+    customer_email: EmailStr
+    rating: int = Field(..., ge=1, le=5)  # Rating from 1 to 5
+    comment: str
+    product_id: Optional[str] = None  # Optional: testimonial for a specific product
+    is_approved: bool = False
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    approved_at: Optional[datetime] = None
+    approved_by: Optional[str] = None  # Admin user ID who approved
+
+class TestimonialCreate(BaseModel):
+    customer_name: str
+    customer_email: EmailStr
+    rating: int = Field(..., ge=1, le=5)
+    comment: str
+    product_id: Optional[str] = None
+
+class TestimonialUpdate(BaseModel):
+    is_approved: Optional[bool] = None
+    comment: Optional[str] = None
+
 # --- Authentication Functions ---
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
