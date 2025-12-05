@@ -128,7 +128,7 @@ const AdminDashboardNew = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 p-6">
+    <div>
       <style>{`
         @keyframes slideInUp {
           from {
