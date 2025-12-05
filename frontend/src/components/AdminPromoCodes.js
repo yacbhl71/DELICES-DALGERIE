@@ -154,8 +154,8 @@ export default function AdminPromoCodes() {
   }
 
   return (
-    <div className="p-8">
-      <div className="flex items-center justify-between mb-8">
+    <div className="p-4">
+      <div className="flex items-center justify-between mb-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Codes Promo</h1>
           <p className="text-gray-600">Gérez vos codes de réduction</p>
