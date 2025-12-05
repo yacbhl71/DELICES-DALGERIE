@@ -351,6 +351,8 @@ class Order(BaseModel):
     promo_code: Optional[str] = None
     discount_amount: float = 0.0
     total: float
+    payment_method: str = "cash"  # cash, bank_transfer, paypal
+    payment_status: str = "pending"  # pending, paid, failed
     status: str = "pending"  # pending, confirmed, processing, shipped, delivered, cancelled
     notes: Optional[str] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
