@@ -153,6 +153,23 @@ class ProductUpdate(BaseModel):
     low_stock_threshold: Optional[int] = None
     allow_backorder: Optional[bool] = None
 
+# Stock Adjustment Models
+class StockAdjustment(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    product_id: str
+    adjustment_type: str  # "increase", "decrease", "set", "order"
+    quantity: int
+    reason: Optional[str] = None
+    notes: Optional[str] = None
+    performed_by: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class StockAdjustmentRequest(BaseModel):
+    adjustment_type: str  # "increase", "decrease", "set"
+    quantity: int
+    reason: Optional[str] = None
+    notes: Optional[str] = None
+
 # Historical Content Models
 class HistoricalContent(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
