@@ -1482,6 +1482,45 @@ async def delete_order(order_id: str, admin: User = Depends(get_admin_user)):
     
     return {"message": "Order deleted successfully"}
 
+# --- Newsletter Routes ---
+@api_router.post("/newsletter/subscribe", response_model=NewsletterSubscriber)
+async def subscribe_newsletter(subscriber_data: NewsletterSubscribe):
+    """Subscribe to newsletter (public)"""
+    # Check if already subscribed
+    existing = await db.newsletter_subscribers.find_one({"email": subscriber_data.email}, {"_id": 0})
+    
+    if existing:
+        if existing.get("is_active"):
+            raise HTTPException(status_code=400, detail="Email already subscribed")
+        else:
+            # Reactivate subscription
+            await db.newsletter_subscribers.update_one(
+                {"email": subscriber_data.email},
+                {"$set": {"is_active": True, "subscribed_at": datetime.now(timezone.utc)}}
+            )
+            existing["is_active"] = True
+            return NewsletterSubscriber(**existing)
+    
+    subscriber = NewsletterSubscriber(**subscriber_data.model_dump())
+    await db.newsletter_subscribers.insert_one(subscriber.model_dump())
+    return subscriber
+
+@api_router.get("/admin/newsletter/subscribers", response_model=List[NewsletterSubscriber])
+async def get_newsletter_subscribers(admin: User = Depends(get_admin_user)):
+    """Get all newsletter subscribers (admin only)"""
+    subscribers = await db.newsletter_subscribers.find({}, {"_id": 0}).sort("subscribed_at", -1).to_list(1000)
+    return [NewsletterSubscriber(**s) for s in subscribers]
+
+@api_router.delete("/admin/newsletter/subscribers/{subscriber_id}")
+async def delete_newsletter_subscriber(subscriber_id: str, admin: User = Depends(get_admin_user)):
+    """Delete a newsletter subscriber (admin only)"""
+    result = await db.newsletter_subscribers.delete_one({"id": subscriber_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Subscriber not found")
+    
+    return {"message": "Subscriber deleted successfully"}
+
 # --- Custom Pages Routes ---
 @api_router.get("/pages", response_model=List[CustomPage])
 async def get_published_pages():
