@@ -187,9 +187,9 @@ const Header = () => {
           </button>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile & Tablet Menu */}
         {isMenuOpen && (
-          <div className="md:hidden bg-white border-t border-gray-200">
+          <div className="lg:hidden bg-white border-t border-gray-200">
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navigationItems.map((item) => {
                 const label = item.label[language] || item.label.fr;
