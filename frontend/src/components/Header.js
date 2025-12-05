@@ -82,9 +82,8 @@ const Header = () => {
                     href={item.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center space-x-1 text-gray-700 hover:text-olive font-medium transition-colors duration-200"
+                    className="flex items-center space-x-1 text-gray-700 hover:text-[#6B8E23] font-medium transition-colors duration-200 hover:underline underline-offset-4"
                   >
-                    {item.icon && <span className="mr-1">{item.icon}</span>}
                     <span>{label}</span>
                     <ExternalLink size={14} />
                   </a>
@@ -95,9 +94,8 @@ const Header = () => {
                 <Link
                   key={item.id}
                   to={item.url}
-                  className="text-gray-700 hover:text-olive font-medium transition-colors duration-200"
+                  className="text-gray-700 hover:text-[#6B8E23] font-medium transition-colors duration-200 hover:underline underline-offset-4"
                 >
-                  {item.icon && <span className="mr-2">{item.icon}</span>}
                   {label}
                 </Link>
               );
