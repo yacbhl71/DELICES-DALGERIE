@@ -24,6 +24,11 @@ export default function AdminFooter() {
     }
   });
 
+  // Helper function to safely get nested properties
+  const safeGet = (obj, path, defaultValue = '') => {
+    return path.split('.').reduce((acc, part) => acc?.[part], obj) ?? defaultValue;
+  };
+
   useEffect(() => {
     fetchFooterSettings();
   }, []);
