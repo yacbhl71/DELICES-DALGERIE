@@ -103,11 +103,12 @@
 #====================================================================================================
 
 user_problem_statement: |
-  Test "Mes Commandes" (My Orders) functionality for customers. The implementation includes:
-  1. Route /profile/orders in App.js displaying MyOrders component
-  2. "Mes Commandes" button in ProfilePage.js Quick Actions section
-  3. MyOrders.js component fetching orders via /api/my-orders endpoint
-  Testing required: login, navigation, page display, multilingual support, route protection.
+  Test complete testimonials system with customer submission and admin moderation. The implementation includes:
+  1. Public testimonial submission form at /testimonials with star rating system
+  2. Admin moderation interface at /admin/testimonials with approve/reject/delete functionality
+  3. Public display of approved testimonials on /testimonials page
+  4. Backend API endpoints: POST /api/testimonials (public), GET /api/testimonials (approved), GET/PUT/DELETE /api/admin/testimonials
+  Testing required: form submission, admin authentication, moderation workflow, filtering, and public display.
 
 backend:
   - task: "Image Upload API Endpoint"
