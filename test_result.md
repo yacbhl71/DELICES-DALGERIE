@@ -103,13 +103,16 @@
 #====================================================================================================
 
 user_problem_statement: |
-  Test complete promo code system for e-commerce site. The implementation includes:
-  1. Backend: PromoCode model with code, discount_type (percentage/fixed), discount_value, min_order_amount, usage limits, validity dates
-  2. API endpoints: POST /api/promo-codes/validate (public validation), GET/POST/PUT/DELETE /api/admin/promo-codes (admin management)
-  3. Frontend: Promo code section in CheckoutPage with apply/remove functionality, discount calculation display
-  4. Test codes: BIENVENUE20 (20% discount, min 30 EUR), ETE2025 (10 EUR fixed discount, min 50 EUR)
-  5. Features: code validation, discount calculation, minimum order requirements, error handling
-  Testing required: complete checkout flow with promo codes, validation, discount application, error handling for invalid codes.
+  Test complete order process with new payment methods for e-commerce site "Délices et Trésors d'Algérie". 
+  Flow to test:
+  1. Add 2-3 products to cart from /shop
+  2. Go to checkout (/checkout) and verify products display in summary
+  3. Fill form with test data: Test Client, test@example.com, +213 555 123 456, 123 Rue Test, Alger, 16000
+  4. Test 3 payment methods: "Paiement à la livraison" (cash), "Virement bancaire" (bank_transfer), "PayPal" (paypal)
+  5. Verify payment method info displays correctly for each option
+  6. Submit order with "Paiement à la livraison" method
+  7. Verify order creation, confirmation message with order number, and stock decrementation
+  Testing required: complete checkout flow, payment method selection, order submission, stock management.
 
 backend:
   - task: "Admin Authentication System"
