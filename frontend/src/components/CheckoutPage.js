@@ -18,6 +18,7 @@ export default function CheckoutPage() {
   const [promoApplied, setPromoApplied] = useState(null);
   const [promoLoading, setPromoLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('cash'); // 'cash', 'bank_transfer', 'paypal'
+  const [cartLoaded, setCartLoaded] = useState(false);
   const [formData, setFormData] = useState({
     customer_name: '',
     customer_email: '',
@@ -28,9 +29,25 @@ export default function CheckoutPage() {
     notes: ''
   });
 
-  if (cartItems.length === 0 && !orderComplete) {
+  // Wait for cart to load before checking if it's empty
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setCartLoaded(true);
+    }, 1000); // Give cart context time to load from localStorage
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (cartLoaded && cartItems.length === 0 && !orderComplete) {
     navigate('/shop');
     return null;
+  }
+
+  if (!cartLoaded) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#6B8E23]"></div>
+      </div>
+    );
   }
 
   const applyPromoCode = async () => {
