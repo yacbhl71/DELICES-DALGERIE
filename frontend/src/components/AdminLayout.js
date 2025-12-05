@@ -76,6 +76,11 @@ const AdminLayout = ({ children }) => {
       icon: Mail
     },
     {
+      name: language === 'ar' ? 'الشهادات' : language === 'en' ? 'Testimonials' : 'Témoignages',
+      href: '/admin/testimonials',
+      icon: MessageSquare
+    },
+    {
       name: language === 'ar' ? 'التحليلات' : language === 'en' ? 'Analytics' : 'Analyses',
       href: '/admin/analytics',
       icon: BarChart3
