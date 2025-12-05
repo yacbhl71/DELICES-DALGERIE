@@ -14,6 +14,7 @@ const Header = () => {
   const { setIsCartOpen, getCartCount } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
+  const [navigationItems, setNavigationItems] = useState([]);
   const navigate = useNavigate();
 
   const languages = [
@@ -21,6 +22,26 @@ const Header = () => {
     { code: 'ar', name: 'العربية', flag: '🇩🇿' },
     { code: 'en', name: 'English', flag: '🇬🇧' }
   ];
+
+  useEffect(() => {
+    fetchNavigationItems();
+  }, []);
+
+  const fetchNavigationItems = async () => {
+    try {
+      const response = await axios.get(`${API}/navigation`);
+      setNavigationItems(response.data);
+    } catch (error) {
+      console.error('Error fetching navigation items:', error);
+      // Fallback to default navigation if API fails
+      setNavigationItems([
+        { id: '1', label: { fr: 'Accueil', en: 'Home', ar: 'الرئيسية' }, url: '/', is_external: false, is_active: true, order: 0 },
+        { id: '2', label: { fr: 'Boutique', en: 'Shop', ar: 'المتجر' }, url: '/shop', is_external: false, is_active: true, order: 1 },
+        { id: '3', label: { fr: 'Histoire', en: 'History', ar: 'التاريخ' }, url: '/history', is_external: false, is_active: true, order: 2 },
+        { id: '4', label: { fr: 'Contact', en: 'Contact', ar: 'اتصل بنا' }, url: '/contact', is_external: false, is_active: true, order: 3 }
+      ]);
+    }
+  };
 
   const handleLogout = () => {
     logout();
