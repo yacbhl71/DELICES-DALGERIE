@@ -305,14 +305,97 @@ const AdminProductForm = () => {
             {language === 'ar' ? 'صور المنتج' : language === 'en' ? 'Product Images' : 'Images du Produit'}
           </h2>
 
-          <ImageUpload
-            label={language === 'ar' ? 'صور المنتج' : language === 'en' ? 'Product Images' : 'Images du Produit'}
-            maxImages={5}
-            existingImages={product.image_urls.filter(url => url.trim() !== '')}
-            onUploadComplete={(images) => {
-              setProduct(prev => ({ ...prev, image_urls: images.length > 0 ? images : [''] }));
-            }}
-          />
+          <div className="space-y-6">
+            {/* Image Upload Component */}
+            <div>
+              <h3 className="text-sm font-medium text-gray-700 mb-3">
+                {language === 'ar' ? 'تحميل الصور' : language === 'en' ? 'Upload Images' : 'Télécharger des images'}
+              </h3>
+              <ImageUpload
+                label={language === 'ar' ? 'صور المنتج' : language === 'en' ? 'Product Images' : 'Images du Produit'}
+                maxImages={5}
+                existingImages={product.image_urls.filter(url => url.trim() !== '')}
+                onUploadComplete={(images) => {
+                  setProduct(prev => ({ ...prev, image_urls: images.length > 0 ? images : [''] }));
+                }}
+              />
+            </div>
+
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-gray-500">
+                  {language === 'ar' ? 'أو' : language === 'en' ? 'OR' : 'OU'}
+                </span>
+              </div>
+            </div>
+
+            {/* Manual URL Input */}
+            <div>
+              <h3 className="text-sm font-medium text-gray-700 mb-3">
+                {language === 'ar' ? 'إضافة روابط الصور' : language === 'en' ? 'Add Image URLs' : 'Ajouter des URLs d\\'images'}
+              </h3>
+              <div className="space-y-3">
+                {product.image_urls.map((url, index) => (
+                  <div key={index} className="flex items-center space-x-2">
+                    <input
+                      type="url"
+                      value={url}
+                      onChange={(e) => handleImageUrlChange(index, e.target.value)}
+                      placeholder={language === 'ar' ? 'https://exemple.com/image.jpg' : 'https://example.com/image.jpg'}
+                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent"
+                    />
+                    {product.image_urls.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeImageUrl(index)}
+                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
+                      >
+                        <Minus size={20} />
+                      </button>
+                    )}
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={addImageUrl}
+                  className="flex items-center space-x-2 px-4 py-2 text-[#6B8E23] border border-[#6B8E23] rounded-lg hover:bg-[#6B8E23] hover:text-white transition"
+                >
+                  <Plus size={20} />
+                  <span>
+                    {language === 'ar' ? 'إضافة رابط' : language === 'en' ? 'Add URL' : 'Ajouter une URL'}
+                  </span>
+                </button>
+              </div>
+
+              {/* Preview */}
+              {product.image_urls.some(url => url.trim() !== '') && (
+                <div className="mt-4">
+                  <p className="text-sm font-medium text-gray-700 mb-2">
+                    {language === 'ar' ? 'معاينة' : language === 'en' ? 'Preview' : 'Aperçu'}
+                  </p>
+                  <div className="grid grid-cols-3 gap-4">
+                    {product.image_urls
+                      .filter(url => url.trim() !== '')
+                      .map((url, index) => (
+                        <div key={index} className="relative aspect-square">
+                          <img
+                            src={url}
+                            alt={`Preview ${index + 1}`}
+                            className="w-full h-full object-cover rounded-lg"
+                            onError={(e) => {
+                              e.target.src = 'https://via.placeholder.com/300?text=Invalid+URL';
+                            }}
+                          />
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Submit Button */}
