@@ -125,80 +125,41 @@ backend:
         comment: "Created promo code API endpoints: POST /api/promo-codes/validate (public validation), GET/POST/PUT/DELETE /api/admin/promo-codes (admin management). PromoCode model with code, discount_type (percentage/fixed), discount_value, min_order_amount, usage limits, validity dates. Integration with order creation for discount application."
 
 frontend:
-  - task: "Dynamic Header Navigation"
+  - task: "Promo Code UI in Checkout"
     implemented: true
-    working: true
-    file: "/app/frontend/src/components/Header.js"
+    working: "NA"
+    file: "/app/frontend/src/components/CheckoutPage.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
-        comment: "Modified Header.js to dynamically load navigation items from GET /api/navigation endpoint. Supports multilingual labels, internal/external links, icons, and fallback to default navigation if API fails."
-      - working: true
-        agent: "testing"
-        comment: "✅ WORKING: Dynamic header navigation fully functional. Header loads navigation items from API, displays 5 default items (Home, Shop, History, Testimonials, Contact) with icons, supports multilingual labels, handles internal/external links correctly with proper target attributes and external link icons. Navigation API call confirmed through network monitoring."
+        comment: "Implemented promo code section in CheckoutPage with input field, apply/remove buttons, discount display, and integration with order total calculation. Includes validation API calls and error handling."
 
-  - task: "Admin Navigation Management Interface"
+  - task: "Shop Page Product Display"
     implemented: true
-    working: true
-    file: "/app/frontend/src/components/AdminNavigation.js"
+    working: "NA"
+    file: "/app/frontend/src/components/ShopPage.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
-        comment: "AdminNavigation component with full CRUD operations: create/edit/delete navigation items, multilingual label support (FR/EN/AR), URL management, external link checkbox, icon support, active/inactive toggle, reordering with up/down buttons."
-      - working: true
-        agent: "testing"
-        comment: "✅ WORKING: Admin navigation management fully functional. Successfully tested: creating new items (Blog with ✍️ icon), editing existing items (Contact → Nous Contacter), deleting items (Blog removal), activation/deactivation toggle, multilingual label support (FR/EN/AR), external link creation (Facebook with 📱 icon), form validation and submission. All CRUD operations working correctly."
+        comment: "Shop page displays products with add to cart functionality, category filtering, search functionality, and product details. Required for testing promo code flow with cart items."
 
-  - task: "Navigation Route Protection"
+  - task: "Cart Context and Functionality"
     implemented: true
-    working: true
-    file: "/app/frontend/src/App.js"
-    stuck_count: 0
-    priority: "medium"
-    needs_retesting: false
-    status_history:
-      - working: "NA"
-        agent: "main"
-        comment: "Route /admin/navigation is protected - requires admin role authentication, redirects to /auth if not admin."
-      - working: true
-        agent: "testing"
-        comment: "✅ WORKING: Admin route protection functional. Requires admin authentication (admin@delices-algerie.com/Admin2024!), successfully accessed admin navigation interface after authentication. Route protection verified during testing workflow."
-
-  - task: "Navigation Item Reordering"
-    implemented: true
-    working: true
-    file: "/app/frontend/src/components/AdminNavigation.js"
+    working: "NA"
+    file: "/app/frontend/src/contexts/CartContext.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
-        comment: "Reordering functionality with up/down arrow buttons, calls POST /api/admin/navigation/reorder endpoint to persist order changes."
-      - working: true
-        agent: "testing"
-        comment: "✅ WORKING: Navigation item reordering functional. Successfully tested moving Blog item up in order using up arrow button, order changes persisted after page refresh, reorder API endpoint called correctly. Up/down arrow buttons working as expected."
-
-  - task: "External Link Support"
-    implemented: true
-    working: true
-    file: "/app/frontend/src/components/Header.js"
-    stuck_count: 0
-    priority: "medium"
-    needs_retesting: false
-    status_history:
-      - working: "NA"
-        agent: "main"
-        comment: "Header supports external links with target='_blank', rel='noopener noreferrer', and ExternalLink icon indicator for external URLs."
-      - working: true
-        agent: "testing"
-        comment: "✅ WORKING: External link support fully functional. Successfully created Facebook external link (https://facebook.com) with 📱 icon, link appears in header with target='_blank' attribute for new tab opening, external link icon indicator present, checkbox for external link option working correctly in admin interface."
+        comment: "Cart context provides add to cart, remove from cart, clear cart, and get cart total functionality. Essential for promo code testing workflow."
 
 metadata:
   created_by: "main_agent"
