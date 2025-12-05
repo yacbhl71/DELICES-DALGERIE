@@ -166,17 +166,20 @@ backend:
         agent: "testing"
         comment: "✅ WORKING: Complete promo code system functional. BIENVENUE20 and ETE2025 codes exist and working. BIENVENUE20 (20% discount, min 30 EUR) returns correct 17.59 EUR discount on 87.97 EUR order. ETE2025 (10 EUR fixed discount, min 50 EUR) returns correct 10 EUR discount. Invalid codes properly rejected with 404 'Code promo invalide'. Minimum order validation working (25 EUR order rejected with 400 'Commande minimum de 30.00 EUR requise'). GET /api/admin/promo-codes returns 2 active codes."
 
-  - task: "Order Creation with Stock Decrementation"
+  - task: "Order Creation with Payment Methods"
     implemented: true
-    working: true
+    working: "NA"
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: true
         agent: "testing"
         comment: "✅ WORKING: Order creation fully functional with promo code application and automatic stock decrementation. Created order with BIENVENUE20 promo code: subtotal 35.98 EUR, discount 7.20 EUR, total 28.78 EUR. Stock correctly decremented from 100 to 98 after ordering 2 items. Order calculations accurate. Email confirmation sent successfully."
+      - working: "NA"
+        agent: "main"
+        comment: "Updated Order and OrderCreate models to include payment_method field with options: cash, bank_transfer, paypal. Backend order creation endpoint now accepts and stores payment method. Need to test complete flow with new payment methods."
 
   - task: "SEO Settings Management"
     implemented: true
