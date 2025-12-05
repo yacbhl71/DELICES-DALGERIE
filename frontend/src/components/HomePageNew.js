@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../App';
 import { ShoppingBag, BookOpen, Sparkles, Award, Leaf, Heart } from 'lucide-react';
+import HeroSlider from './HeroSlider';
 
 const HomePageNew = () => {
   const { language } = useLanguage();
