@@ -103,13 +103,13 @@
 #====================================================================================================
 
 user_problem_statement: |
-  Test complete editable navigation menu system. The implementation includes:
-  1. Backend: NavigationItem model with multilingual labels (FR/EN/AR), URL, order, active/inactive status, icons
-  2. API endpoints: GET /api/navigation (public), GET/POST/PUT/DELETE /api/admin/navigation, POST /api/admin/navigation/reorder
-  3. Frontend: Dynamic header loading menu from API, admin interface at /admin/navigation for management
-  4. Default items: Home, Shop, History, Testimonials, Contact with icons
-  5. Features: internal/external links, reordering with up/down buttons, activation/deactivation, icon support
-  Testing required: dynamic header display, admin CRUD operations, reordering, activation/deactivation, external links.
+  Test complete promo code system for e-commerce site. The implementation includes:
+  1. Backend: PromoCode model with code, discount_type (percentage/fixed), discount_value, min_order_amount, usage limits, validity dates
+  2. API endpoints: POST /api/promo-codes/validate (public validation), GET/POST/PUT/DELETE /api/admin/promo-codes (admin management)
+  3. Frontend: Promo code section in CheckoutPage with apply/remove functionality, discount calculation display
+  4. Test codes: BIENVENUE20 (20% discount, min 30 EUR), ETE2025 (10 EUR fixed discount, min 50 EUR)
+  5. Features: code validation, discount calculation, minimum order requirements, error handling
+  Testing required: complete checkout flow with promo codes, validation, discount application, error handling for invalid codes.
 
 backend:
   - task: "Navigation API Endpoints"
