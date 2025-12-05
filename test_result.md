@@ -112,20 +112,17 @@ user_problem_statement: |
   Testing required: complete checkout flow with promo codes, validation, discount application, error handling for invalid codes.
 
 backend:
-  - task: "Navigation API Endpoints"
+  - task: "Promo Code API Endpoints"
     implemented: true
-    working: true
+    working: "NA"
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
-        comment: "Created navigation API endpoints: GET /api/navigation (public active items), GET/POST/PUT/DELETE /api/admin/navigation (admin management), POST /api/admin/navigation/reorder (reordering). NavigationItem model with multilingual labels (FR/EN/AR), URL, order, active status, icons."
-      - working: true
-        agent: "testing"
-        comment: "✅ WORKING: All navigation API endpoints functional. GET /api/navigation returns active items with multilingual labels, admin endpoints require authentication and work correctly for CRUD operations. POST /api/admin/navigation creates new items successfully, PUT updates items, DELETE removes items, POST /api/admin/navigation/reorder handles reordering. API calls verified through network monitoring during testing."
+        comment: "Created promo code API endpoints: POST /api/promo-codes/validate (public validation), GET/POST/PUT/DELETE /api/admin/promo-codes (admin management). PromoCode model with code, discount_type (percentage/fixed), discount_value, min_order_amount, usage limits, validity dates. Integration with order creation for discount application."
 
 frontend:
   - task: "Dynamic Header Navigation"
