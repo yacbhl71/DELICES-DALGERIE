@@ -77,14 +77,14 @@ const ShopPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-[#6B8E23] to-[#8B7355] text-white py-16">
+      <div className="bg-gradient-to-r from-[#6B8E23] to-[#8B7355] text-white py-12 sm:py-16">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-5xl font-bold mb-4">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
             {language === 'ar' ? 'متجر لذائذ وكنوز الجزائر' : 
              language === 'en' ? 'Délices et Trésors d\'Algérie Shop' : 
              'Boutique Délices et Trésors d\'Algérie'}
           </h1>
-          <p className="text-xl opacity-90">
+          <p className="text-base sm:text-lg lg:text-xl opacity-90">
             {language === 'ar' ? 'اكتشف كنوزنا: تمور دقلة نور وزيت الزيتون القبائلي الأصيل' :
              language === 'en' ? 'Discover our treasures: Deglet Nour dates and authentic Kabyle olive oil' :
              'Découvrez nos trésors : dattes Deglet Nour et huile d\'olive kabyle authentique'}
