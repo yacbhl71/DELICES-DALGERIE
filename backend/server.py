@@ -367,6 +367,7 @@ class OrderCreate(BaseModel):
     shipping_postal_code: Optional[str] = None
     items: List[OrderItem]
     promo_code: Optional[str] = None
+    payment_method: str = "cash"  # cash, bank_transfer, paypal
     notes: Optional[str] = None
 
 class OrderUpdate(BaseModel):
