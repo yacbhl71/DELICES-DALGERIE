@@ -16,6 +16,7 @@ import ProfilePage from './components/ProfilePage';
 import { Toaster } from './components/ui/toaster';
 import Cart from './components/Cart';
 import CheckoutPage from './components/CheckoutPage';
+import MyOrders from './components/MyOrders';
 
 // Admin Components
 import AdminLayout from './components/AdminLayout';
