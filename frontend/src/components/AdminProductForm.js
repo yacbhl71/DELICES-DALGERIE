@@ -18,6 +18,7 @@ import ImageUpload from './ImageUpload';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
+// Fixed: Changed addImageUrl to addImage and removeImageUrl to removeImage
 const AdminProductForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
