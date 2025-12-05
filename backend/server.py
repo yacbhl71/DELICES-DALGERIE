@@ -148,6 +148,10 @@ class ProductUpdate(BaseModel):
     image_urls: Optional[List[str]] = None
     origin: Optional[Dict[str, str]] = None
     in_stock: Optional[bool] = None
+    track_inventory: Optional[bool] = None
+    stock_quantity: Optional[int] = None
+    low_stock_threshold: Optional[int] = None
+    allow_backorder: Optional[bool] = None
 
 # Historical Content Models
 class HistoricalContent(BaseModel):
