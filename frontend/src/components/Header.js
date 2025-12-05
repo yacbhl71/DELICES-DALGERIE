@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage, useAuth } from '../App';
-import { Menu, X, Globe, User, LogOut, ShoppingCart } from 'lucide-react';
+import { Menu, X, Globe, User, LogOut, ShoppingCart, ExternalLink } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
+import axios from 'axios';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
 
 const Header = () => {
   const { language, setLanguage, t } = useLanguage();
