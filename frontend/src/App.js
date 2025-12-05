@@ -24,6 +24,7 @@ import AdminDashboard from './components/AdminDashboardNew';
 import AdminProducts from './components/AdminProducts';
 import AdminCategories from './components/AdminCategories';
 import AdminPages from './components/AdminPages';
+import AdminOrders from './components/AdminOrders';
 import AdminUsers from './components/AdminUsers';
 import AdminHistory from './components/AdminHistory';
 import AdminContact from './components/AdminContact';
