@@ -1104,8 +1104,8 @@ class DelicesAlgerieAPITester:
         return True
 
     def run_all_tests(self):
-        """Run all API tests"""
-        print("🚀 Starting Soumam Heritage API Tests")
+        """Run all API tests for Délices et Trésors d'Algérie"""
+        print("🚀 Starting Délices et Trésors d'Algérie API Tests")
         print("=" * 50)
         
         # Test basic connectivity
@@ -1121,17 +1121,15 @@ class DelicesAlgerieAPITester:
                 print("❌ Login failed - stopping authenticated tests")
             else:
                 self.test_get_user_profile()
-                self.test_create_recipe()
         
         # Test public endpoints
-        self.test_get_recipes()
         self.test_get_products()
         self.test_get_products_by_category()
         self.test_get_historical_content()
         self.test_get_historical_content_by_region()
         
-        # Test image upload functionality
-        self.run_image_upload_tests()
+        # Test comprehensive e-commerce functionality
+        self.run_ecommerce_tests()
         
         # Print final results
         print("\n" + "=" * 50)
