@@ -98,6 +98,11 @@ const AdminLayout = ({ children }) => {
       icon: Image
     },
     {
+      name: language === 'ar' ? 'رموز الترويج' : language === 'en' ? 'Promo Codes' : 'Codes Promo',
+      href: '/admin/promo-codes',
+      icon: Tag
+    },
+    {
       name: language === 'ar' ? 'التحليلات' : language === 'en' ? 'Analytics' : 'Analyses',
       href: '/admin/analytics',
       icon: BarChart3
