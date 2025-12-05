@@ -1322,6 +1322,78 @@ async def update_footer_settings(
         await db.footer_settings.insert_one(new_footer.model_dump())
         return new_footer
 
+# --- Banner/Slider Routes ---
+@api_router.get("/banners", response_model=List[Banner])
+async def get_active_banners():
+    """Get active banners (public)"""
+    banners = await db.banners.find({"is_active": True}, {"_id": 0}).sort("order", 1).to_list(1000)
+    return [Banner(**b) for b in banners]
+
+@api_router.get("/admin/banners", response_model=List[Banner])
+async def get_all_banners(admin: User = Depends(get_admin_user)):
+    """Get all banners including inactive (admin only)"""
+    banners = await db.banners.find({}, {"_id": 0}).sort("order", 1).to_list(1000)
+    return [Banner(**b) for b in banners]
+
+@api_router.post("/admin/banners", response_model=Banner)
+async def create_banner(banner_data: BannerCreate, admin: User = Depends(get_admin_user)):
+    """Create a new banner (admin only)"""
+    banner = Banner(**banner_data.model_dump())
+    await db.banners.insert_one(banner.model_dump())
+    return banner
+
+@api_router.get("/admin/banners/{banner_id}", response_model=Banner)
+async def get_banner(banner_id: str, admin: User = Depends(get_admin_user)):
+    """Get a specific banner (admin only)"""
+    banner = await db.banners.find_one({"id": banner_id}, {"_id": 0})
+    if not banner:
+        raise HTTPException(status_code=404, detail="Banner not found")
+    return Banner(**banner)
+
+@api_router.put("/admin/banners/{banner_id}", response_model=Banner)
+async def update_banner(
+    banner_id: str,
+    banner_data: BannerUpdate,
+    admin: User = Depends(get_admin_user)
+):
+    """Update a banner (admin only)"""
+    banner = await db.banners.find_one({"id": banner_id}, {"_id": 0})
+    if not banner:
+        raise HTTPException(status_code=404, detail="Banner not found")
+    
+    update_dict = {k: v for k, v in banner_data.model_dump().items() if v is not None}
+    update_dict["updated_at"] = datetime.now(timezone.utc)
+    
+    if update_dict:
+        await db.banners.update_one({"id": banner_id}, {"$set": update_dict})
+        banner.update(update_dict)
+    
+    return Banner(**banner)
+
+@api_router.delete("/admin/banners/{banner_id}")
+async def delete_banner(banner_id: str, admin: User = Depends(get_admin_user)):
+    """Delete a banner (admin only)"""
+    result = await db.banners.delete_one({"id": banner_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Banner not found")
+    
+    return {"message": "Banner deleted successfully"}
+
+@api_router.post("/admin/banners/reorder")
+async def reorder_banners(
+    banners_order: List[Dict[str, Any]],
+    admin: User = Depends(get_admin_user)
+):
+    """Reorder banners (admin only)"""
+    for banner_order in banners_order:
+        await db.banners.update_one(
+            {"id": banner_order["id"]},
+            {"$set": {"order": banner_order["order"], "updated_at": datetime.now(timezone.utc)}}
+        )
+    
+    return {"message": "Banners reordered successfully"}
+
 # --- Custom Pages Routes ---
 @api_router.get("/pages", response_model=List[CustomPage])
 async def get_published_pages():
