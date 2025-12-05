@@ -111,47 +111,17 @@ user_problem_statement: |
   Testing required: form submission, admin authentication, moderation workflow, filtering, and public display.
 
 backend:
-  - task: "Image Upload API Endpoint"
+  - task: "Testimonials API Endpoints"
     implemented: true
-    working: true
+    working: "NA"
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
-      - working: "unknown"
+      - working: "NA"
         agent: "main"
-        comment: "Created POST /api/upload endpoint with chunked file upload, file validation (image types, 10MB limit), UUID-based naming, and static file serving via /uploads route. Also added DELETE /api/upload/{filename} for image deletion."
-      - working: true
-        agent: "testing"
-        comment: "✅ COMPREHENSIVE TESTING COMPLETED: Admin authentication working (admin.soumam@gmail.com). Image upload API fully functional - JPEG/PNG upload successful with UUID filenames, file type validation working (rejects non-images), file size validation working (rejects >10MB), proper authentication required (403 for non-admin). Response includes all required fields: success, filename, url, size. Image deletion working correctly. Fixed static file serving by adding GET /api/uploads/{filename} endpoint due to ingress routing /uploads to frontend."
-
-  - task: "Static File Serving for Uploads"
-    implemented: true
-    working: true
-    file: "/app/backend/server.py"
-    stuck_count: 0
-    priority: "high"
-    needs_retesting: false
-    status_history:
-      - working: "unknown"
-        agent: "main"
-        comment: "Mounted /uploads directory as StaticFiles to serve uploaded images. Created UPLOAD_DIR at /app/backend/uploads."
-      - working: true
-        agent: "testing"
-        comment: "✅ WORKING: Static file serving functional via GET /api/uploads/{filename} endpoint. Files properly served with correct content-type (image/jpeg, image/png). Fixed routing issue where /uploads was being served by frontend instead of backend by creating API endpoint. File deletion properly removes files from both filesystem and API access."
-
-  - task: "Admin Stats Endpoint"
-    implemented: true
-    working: true
-    file: "/app/backend/server.py"
-    stuck_count: 0
-    priority: "medium"
-    needs_retesting: false
-    status_history:
-      - working: true
-        agent: "testing"
-        comment: "✅ WORKING: GET /api/admin/stats endpoint functional. Returns all required statistics: total_users, total_recipes, total_products, total_historical_content, recent_users, recent_recipes, recent_products. Requires admin authentication (403 for non-admin users). Currently showing: 4 users, 2 recipes, 0 products."
+        comment: "Created testimonials API endpoints: POST /api/testimonials (public submission), GET /api/testimonials (approved testimonials), GET/PUT/DELETE /api/admin/testimonials (admin management). Testimonial model includes name, email, rating (1-5), comment, approval status."
 
 frontend:
   - task: "Testimonials Page Route"
