@@ -1806,11 +1806,15 @@ async def validate_promo_code(validation: PromoCodeValidation):
     now = datetime.now(timezone.utc)
     
     # Check validity period
-    if promo.valid_from and now < promo.valid_from:
-        raise HTTPException(status_code=400, detail="Ce code promo n'est pas encore valide")
+    if promo.valid_from:
+        valid_from = promo.valid_from.replace(tzinfo=timezone.utc) if promo.valid_from.tzinfo is None else promo.valid_from
+        if now < valid_from:
+            raise HTTPException(status_code=400, detail="Ce code promo n'est pas encore valide")
     
-    if promo.valid_until and now > promo.valid_until:
-        raise HTTPException(status_code=400, detail="Ce code promo a expiré")
+    if promo.valid_until:
+        valid_until = promo.valid_until.replace(tzinfo=timezone.utc) if promo.valid_until.tzinfo is None else promo.valid_until
+        if now > valid_until:
+            raise HTTPException(status_code=400, detail="Ce code promo a expiré")
     
     # Check usage limit
     if promo.usage_limit and promo.usage_count >= promo.usage_limit:
