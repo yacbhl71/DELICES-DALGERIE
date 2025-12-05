@@ -154,65 +154,65 @@ backend:
         comment: "✅ WORKING: GET /api/admin/stats endpoint functional. Returns all required statistics: total_users, total_recipes, total_products, total_historical_content, recent_users, recent_recipes, recent_products. Requires admin authentication (403 for non-admin users). Currently showing: 4 users, 2 recipes, 0 products."
 
 frontend:
-  - task: "My Orders Route Implementation"
+  - task: "Testimonials Page Route"
     implemented: true
-    working: true
+    working: "NA"
     file: "/app/frontend/src/App.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
-        comment: "Added /profile/orders route in App.js that renders MyOrders component with user authentication protection."
-      - working: true
-        agent: "testing"
-        comment: "✅ WORKING: Route /profile/orders successfully implemented and accessible. Navigation from profile page works correctly, redirects to MyOrders component as expected."
+        comment: "Added /testimonials route in App.js that renders TestimonialsPage component with public access."
 
-  - task: "Profile Page My Orders Button"
+  - task: "Testimonial Submission Form"
     implemented: true
-    working: true
-    file: "/app/frontend/src/components/ProfilePage.js"
+    working: "NA"
+    file: "/app/frontend/src/components/TestimonialForm.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
-        comment: "Added 'Mes Commandes' button in Quick Actions section of ProfilePage.js that navigates to /profile/orders."
-      - working: true
-        agent: "testing"
-        comment: "✅ WORKING: 'Mes Commandes' button found in Quick Actions section of ProfilePage. Button click successfully navigates to /profile/orders route. UI properly styled and positioned."
+        comment: "TestimonialForm component with name, email, star rating (1-5), and comment fields. Submits to POST /api/testimonials endpoint with success feedback."
 
-  - task: "My Orders Component Functionality"
+  - task: "Public Testimonials Display"
     implemented: true
-    working: true
-    file: "/app/frontend/src/components/MyOrders.js"
+    working: "NA"
+    file: "/app/frontend/src/components/TestimonialsSection.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
-        comment: "MyOrders component fetches orders via /api/my-orders endpoint, displays order list with details, supports multilingual interface (French, English, Arabic)."
-      - working: true
-        agent: "testing"
-        comment: "✅ WORKING: MyOrders component fully functional. API call to /api/my-orders successful (200 OK). Displays 'Aucune commande' message when no orders exist. 'Voir la boutique' button redirects to shop correctly. Page layout and styling working properly. Minor: Multilingual switching needs improvement in language context state management."
+        comment: "TestimonialsSection component fetches approved testimonials via GET /api/testimonials and displays them with star ratings and customer details."
 
-  - task: "Route Protection for My Orders"
+  - task: "Admin Testimonials Management"
     implemented: true
-    working: true
+    working: "NA"
+    file: "/app/frontend/src/components/AdminTestimonials.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "AdminTestimonials component with stats display, filtering (all/pending/approved), approve/reject/delete actions. Requires admin authentication."
+
+  - task: "Admin Testimonials Route Protection"
+    implemented: true
+    working: "NA"
     file: "/app/frontend/src/App.js"
     stuck_count: 0
     priority: "medium"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
-        comment: "Route /profile/orders is protected - redirects to /auth if user is not logged in."
-      - working: true
-        agent: "testing"
-        comment: "✅ WORKING: Route protection functioning correctly. When not logged in, accessing /profile/orders redirects to /auth page as expected. Authentication required for access."
+        comment: "Route /admin/testimonials is protected - requires admin role authentication, redirects to /auth if not admin."
 
 metadata:
   created_by: "main_agent"
