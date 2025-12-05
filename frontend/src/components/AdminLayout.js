@@ -20,7 +20,8 @@ import {
   MessageSquare,
   Navigation,
   Image,
-  Tag
+  Tag,
+  Package
 } from 'lucide-react';
 
 const AdminLayout = ({ children }) => {
