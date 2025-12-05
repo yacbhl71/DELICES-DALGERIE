@@ -1394,6 +1394,83 @@ async def reorder_banners(
     
     return {"message": "Banners reordered successfully"}
 
+# --- Order Routes ---
+@api_router.post("/orders", response_model=Order)
+async def create_order(order_data: OrderCreate):
+    """Create a new order (public)"""
+    # Calculate totals
+    subtotal = sum(item.price * item.quantity for item in order_data.items)
+    shipping_cost = 0.0  # Free shipping for now
+    total = subtotal + shipping_cost
+    
+    order = Order(
+        **order_data.model_dump(),
+        subtotal=subtotal,
+        shipping_cost=shipping_cost,
+        total=total
+    )
+    
+    await db.orders.insert_one(order.model_dump())
+    
+    # TODO: Send confirmation email
+    
+    return order
+
+@api_router.get("/orders/my-orders", response_model=List[Order])
+async def get_my_orders(current_user: User = Depends(get_current_user)):
+    """Get orders for the logged-in user"""
+    orders = await db.orders.find(
+        {"customer_email": current_user.email},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(1000)
+    return [Order(**o) for o in orders]
+
+@api_router.get("/admin/orders", response_model=List[Order])
+async def get_all_orders(admin: User = Depends(get_admin_user)):
+    """Get all orders (admin only)"""
+    orders = await db.orders.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    return [Order(**o) for o in orders]
+
+@api_router.get("/admin/orders/{order_id}", response_model=Order)
+async def get_order(order_id: str, admin: User = Depends(get_admin_user)):
+    """Get a specific order (admin only)"""
+    order = await db.orders.find_one({"id": order_id}, {"_id": 0})
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    return Order(**order)
+
+@api_router.put("/admin/orders/{order_id}", response_model=Order)
+async def update_order(
+    order_id: str,
+    order_data: OrderUpdate,
+    admin: User = Depends(get_admin_user)
+):
+    """Update order status (admin only)"""
+    order = await db.orders.find_one({"id": order_id}, {"_id": 0})
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    update_dict = {k: v for k, v in order_data.model_dump().items() if v is not None}
+    update_dict["updated_at"] = datetime.now(timezone.utc)
+    
+    if update_dict:
+        await db.orders.update_one({"id": order_id}, {"$set": update_dict})
+        order.update(update_dict)
+    
+    # TODO: Send status update email to customer
+    
+    return Order(**order)
+
+@api_router.delete("/admin/orders/{order_id}")
+async def delete_order(order_id: str, admin: User = Depends(get_admin_user)):
+    """Delete an order (admin only)"""
+    result = await db.orders.delete_one({"id": order_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    return {"message": "Order deleted successfully"}
+
 # --- Custom Pages Routes ---
 @api_router.get("/pages", response_model=List[CustomPage])
 async def get_published_pages():
