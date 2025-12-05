@@ -366,6 +366,34 @@ class TestimonialUpdate(BaseModel):
     is_approved: Optional[bool] = None
     comment: Optional[str] = None
 
+# Navigation Menu Models
+class NavigationItem(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    label: Dict[str, str]  # {"fr": "Accueil", "en": "Home", "ar": "الرئيسية"}
+    url: str  # "/", "/shop", "/about", "https://external.com"
+    is_external: bool = False  # True for external links
+    order: int = 0  # For sorting
+    is_active: bool = True
+    icon: Optional[str] = None  # Optional icon name
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class NavigationItemCreate(BaseModel):
+    label: Dict[str, str]
+    url: str
+    is_external: Optional[bool] = False
+    order: Optional[int] = 0
+    is_active: Optional[bool] = True
+    icon: Optional[str] = None
+
+class NavigationItemUpdate(BaseModel):
+    label: Optional[Dict[str, str]] = None
+    url: Optional[str] = None
+    is_external: Optional[bool] = None
+    order: Optional[int] = None
+    is_active: Optional[bool] = None
+    icon: Optional[str] = None
+
 # --- Authentication Functions ---
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
