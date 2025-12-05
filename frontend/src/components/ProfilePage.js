@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth, useLanguage } from '../App';
-import { User, Mail, Calendar, Settings, Heart, ShoppingBag, BookOpen, Edit3, Save, X } from 'lucide-react';
+import { User, Mail, Calendar, Settings, Heart, ShoppingBag, BookOpen, Edit3, Save, X, Package } from 'lucide-react';
 
 const ProfilePage = () => {
   const { user, logout } = useAuth();
