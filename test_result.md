@@ -114,15 +114,18 @@ user_problem_statement: |
 backend:
   - task: "Promo Code API Endpoints"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Created promo code API endpoints: POST /api/promo-codes/validate (public validation), GET/POST/PUT/DELETE /api/admin/promo-codes (admin management). PromoCode model with code, discount_type (percentage/fixed), discount_value, min_order_amount, usage limits, validity dates. Integration with order creation for discount application."
+      - working: true
+        agent: "testing"
+        comment: "✅ WORKING: All promo code API endpoints functional. Fixed timezone comparison issue in validation logic. BIENVENUE20 (20% discount, min 30 EUR) returns correct 17.59 EUR discount on 87.97 EUR order. ETE2025 (10 EUR fixed discount, min 50 EUR) returns correct 10 EUR discount. Invalid codes properly rejected with 'Code promo invalide' error. Minimum order validation working (25 EUR order rejected for BIENVENUE20 with 'Commande minimum de 30.00 EUR requise' message)."
 
 frontend:
   - task: "Promo Code UI in Checkout"
