@@ -68,7 +68,7 @@ async def main():
     print("\n" + "=" * 50)
     if success:
         print("🎉 Admin role corrigé! Vous pouvez maintenant accéder au panel admin.")
-        print("🌐 URL: https://tresors-shop.preview.emergentagent.com/admin")
+        print("🌐 URL: https://delices-store.preview.emergentagent.com/admin")
         print("📧 Email: admin@soumam.com")
         print("🔑 Mot de passe: admin123")
     else:
