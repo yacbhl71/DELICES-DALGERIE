@@ -87,6 +87,11 @@ const AdminLayout = ({ children }) => {
       icon: Navigation
     },
     {
+      name: language === 'ar' ? 'تذييل الصفحة' : language === 'en' ? 'Footer' : 'Footer',
+      href: '/admin/footer',
+      icon: Layers
+    },
+    {
       name: language === 'ar' ? 'التحليلات' : language === 'en' ? 'Analytics' : 'Analyses',
       href: '/admin/analytics',
       icon: BarChart3
