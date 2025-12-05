@@ -55,6 +55,11 @@ const AdminLayout = ({ children }) => {
       icon: FileText
     },
     {
+      name: language === 'ar' ? 'الطلبات' : language === 'en' ? 'Orders' : 'Commandes',
+      href: '/admin/orders',
+      icon: ShoppingBag
+    },
+    {
       name: language === 'ar' ? 'المحتوى التاريخي' : language === 'en' ? 'Historical Content' : 'Contenu Historique',
       href: '/admin/history',
       icon: BookOpen
