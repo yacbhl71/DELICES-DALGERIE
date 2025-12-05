@@ -459,6 +459,53 @@ class NewsletterSubscriber(BaseModel):
 class NewsletterSubscribe(BaseModel):
     email: EmailStr
 
+# Promo Code Models
+class PromoCode(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    code: str  # The actual promo code (e.g., "SUMMER2025")
+    description: Optional[Dict[str, str]] = None  # {"fr": "...", "en": "...", "ar": "..."}
+    discount_type: str  # "percentage" or "fixed"
+    discount_value: float  # Percentage (e.g., 20 for 20%) or fixed amount (e.g., 10.00)
+    min_order_amount: Optional[float] = None  # Minimum order amount to use this code
+    max_discount_amount: Optional[float] = None  # Maximum discount for percentage codes
+    usage_limit: Optional[int] = None  # Total number of times this code can be used (None = unlimited)
+    usage_count: int = 0  # How many times it has been used
+    user_usage_limit: Optional[int] = None  # Max uses per user (None = unlimited)
+    valid_from: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    valid_until: Optional[datetime] = None
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class PromoCodeCreate(BaseModel):
+    code: str
+    description: Optional[Dict[str, str]] = None
+    discount_type: str
+    discount_value: float
+    min_order_amount: Optional[float] = None
+    max_discount_amount: Optional[float] = None
+    usage_limit: Optional[int] = None
+    user_usage_limit: Optional[int] = None
+    valid_from: Optional[datetime] = None
+    valid_until: Optional[datetime] = None
+    is_active: Optional[bool] = True
+
+class PromoCodeUpdate(BaseModel):
+    description: Optional[Dict[str, str]] = None
+    discount_type: Optional[str] = None
+    discount_value: Optional[float] = None
+    min_order_amount: Optional[float] = None
+    max_discount_amount: Optional[float] = None
+    usage_limit: Optional[int] = None
+    user_usage_limit: Optional[int] = None
+    valid_from: Optional[datetime] = None
+    valid_until: Optional[datetime] = None
+    is_active: Optional[bool] = None
+
+class PromoCodeValidation(BaseModel):
+    code: str
+    order_amount: float
+
 # --- Authentication Functions ---
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
