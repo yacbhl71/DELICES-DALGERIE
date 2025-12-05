@@ -13,6 +13,9 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [orderComplete, setOrderComplete] = useState(false);
   const [orderId, setOrderId] = useState(null);
+  const [promoCode, setPromoCode] = useState('');
+  const [promoApplied, setPromoApplied] = useState(null);
+  const [promoLoading, setPromoLoading] = useState(false);
   const [formData, setFormData] = useState({
     customer_name: '',
     customer_email: '',
