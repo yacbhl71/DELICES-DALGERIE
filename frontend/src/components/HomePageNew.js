@@ -48,71 +48,8 @@ const HomePageNew = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        {/* Animated Background */}
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-olive via-green-700 to-brown opacity-95"></div>
-          <div className="absolute inset-0" style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=1920)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            opacity: 0.2
-          }}></div>
-          
-          {/* Floating shapes */}
-          <div className="absolute top-20 left-10 w-32 h-32 bg-gold opacity-20 rounded-full blur-3xl animate-float"></div>
-          <div className="absolute bottom-20 right-20 w-40 h-40 bg-yellow-400 opacity-20 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
-        </div>
-
-        {/* Content */}
-        <div className="relative z-10 text-center px-4 max-w-5xl mx-auto">
-          <div className="mb-6 flex justify-center">
-            <Sparkles className="text-gold animate-pulse" size={48} />
-          </div>
-          
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-            {language === 'ar' ? 
-              'لذائذ وكنوز الجزائر' :
-              language === 'en' ?
-              'Delights & Treasures of Algeria' :
-              'Délices et Trésors d\'Algérie'}
-          </h1>
-          
-          <p className="text-xl md:text-2xl text-white text-opacity-90 mb-8 leading-relaxed">
-            {language === 'ar' ?
-              'تمور دقلة نور وزيت الزيتون الأصيل من الجزائر' :
-              language === 'en' ?
-              'Deglet Nour Dates and Authentic Olive Oil from Algeria' :
-              'Dattes Deglet Nour et Huile d\'Olive Authentique d\'Algérie'}
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link
-              to="/shop"
-              className="group px-8 py-4 bg-white text-olive font-bold rounded-full hover:bg-gold hover:text-white transition-all duration-300 flex items-center shadow-2xl transform hover:scale-105"
-            >
-              <ShoppingBag className="mr-2 group-hover:animate-bounce" size={24} />
-              {language === 'ar' ? 'تسوق الآن' : language === 'en' ? 'Shop Now' : 'Découvrir la Boutique'}
-            </Link>
-            
-            <Link
-              to="/history"
-              className="group px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-full hover:bg-white hover:text-olive transition-all duration-300 flex items-center transform hover:scale-105"
-            >
-              <BookOpen className="mr-2" size={24} />
-              {language === 'ar' ? 'قصتنا' : language === 'en' ? 'Our Story' : 'Notre Histoire'}
-            </Link>
-          </div>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-white rounded-full mt-2 animate-pulse"></div>
-          </div>
-        </div>
-      </section>
+      {/* Hero Slider - Dynamic banners from admin panel */}
+      <HeroSlider />
 
       {/* Features Section */}
       <section className="py-20 px-4 bg-gradient-to-b from-white to-gray-50">
