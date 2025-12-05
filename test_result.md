@@ -279,10 +279,7 @@ metadata:
   run_ui: false
 
 test_plan:
-  current_focus:
-    - "Payment Methods in Checkout"
-    - "Order Creation with Payment Methods"
-    - "Stock Decrementation"
+  current_focus: []
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
