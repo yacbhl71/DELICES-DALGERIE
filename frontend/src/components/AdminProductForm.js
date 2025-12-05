@@ -335,7 +335,7 @@ const AdminProductForm = () => {
             {/* Manual URL Input */}
             <div>
               <h3 className="text-sm font-medium text-gray-700 mb-3">
-                {language === 'ar' ? 'إضافة روابط الصور' : language === 'en' ? 'Add Image URLs' : 'Ajouter des URLs d\\'images'}
+                {language === 'ar' ? 'إضافة روابط الصور' : language === 'en' ? 'Add Image URLs' : 'Ajouter des URLs d\'images'}
               </h3>
               <div className="space-y-3">
                 {product.image_urls.map((url, index) => (
