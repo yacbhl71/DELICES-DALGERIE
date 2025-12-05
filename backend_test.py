@@ -828,18 +828,14 @@ class DelicesAlgerieAPITester:
             "Validate Promo Code - Below Minimum",
             "POST",
             "promo-codes/validate",
-            200,
+            400,  # Expecting 400 error for minimum order not met
             data=validation_data
         )
         
-        if success and response:
-            # Should be invalid due to minimum order amount
-            if not response.get('valid', True):
-                print(f"   ✅ Correctly rejected for minimum order amount")
-                print(f"   Message: {response.get('message', 'N/A')}")
-                return True
-            else:
-                print(f"   ❌ Should have been rejected for minimum order amount")
+        if success:
+            print(f"   ✅ Correctly rejected for minimum order amount")
+            print(f"   Error: {response.get('detail', 'N/A')}")
+            return True
         
         return False
 
