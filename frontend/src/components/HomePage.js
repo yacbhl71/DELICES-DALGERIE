@@ -89,9 +89,6 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-
-        {/* Cultural Pattern Overlay */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 cultural-pattern opacity-60"></div>
       </section>
 
       {/* Features Section */}
