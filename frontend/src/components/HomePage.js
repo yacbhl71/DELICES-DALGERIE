@@ -69,12 +69,12 @@ const HomePage = () => {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
               {language === 'ar' ? 'اكتشف تراثنا الغني' : 
                language === 'en' ? 'Discover Our Rich Heritage' : 
                'Découvrez Notre Riche Patrimoine'}
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto px-4">
               {language === 'ar' ? 'رحلة عبر النكهات والتقاليد والتاريخ الجزائري الأصيل' :
                language === 'en' ? 'A journey through authentic Algerian flavors, traditions and history' :
                'Un voyage à travers les saveurs, traditions et histoire authentiques algériennes'}
