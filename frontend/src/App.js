@@ -39,8 +39,10 @@ import AdminSettingsTest from './components/AdminSettingsTest';
 import AdminCustomization from './components/AdminCustomization';
 import AdminTestimonials from './components/AdminTestimonials';
 import AdminNavigation from './components/AdminNavigation';
+import AdminFooter from './components/AdminFooter';
 import TestimonialsPage from './components/TestimonialsPage';
 import AccountSettings from './components/AccountSettings';
+import Footer from './components/Footer';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
