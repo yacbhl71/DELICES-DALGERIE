@@ -192,10 +192,11 @@ metadata:
 
 test_plan:
   current_focus:
-    - "My Orders Route Implementation"
-    - "Profile Page My Orders Button"
-    - "My Orders Component Functionality"
-    - "Route Protection for My Orders"
+    - "Testimonial Submission Form"
+    - "Admin Testimonials Management"
+    - "Public Testimonials Display"
+    - "Admin Testimonials Route Protection"
+    - "Testimonials API Endpoints"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
