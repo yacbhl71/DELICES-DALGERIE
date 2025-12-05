@@ -55,7 +55,7 @@ export default function Cart() {
                     <img src={item.image_urls[0]} alt={item.name} className="w-20 h-20 object-cover rounded" />
                   )}
                   <div className="flex-1">
-                    <h3 className="font-semibold text-sm">{item.name}</h3>
+                    <h3 className="font-semibold text-sm">{getLocalizedText(item.name)}</h3>
                     <p className="text-[#6B8E23] font-bold">{item.price.toFixed(2)} EUR</p>
                     <div className="flex items-center space-x-2 mt-2">
                       <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="p-1 border rounded hover:bg-gray-100">
