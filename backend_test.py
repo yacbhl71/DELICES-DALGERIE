@@ -946,15 +946,16 @@ class DelicesAlgerieAPITester:
         
         if success and response:
             current_stock = response.get('stock_quantity', 0)
-            # Stock should have decreased by 2 (quantity ordered)
-            # Original was 75 (after update), so should now be 73
-            expected_stock = 73
+            # Stock flow: 75 (after update) + 25 (adjustment) - 2 (order) = 98
+            expected_stock = 98
             
             if current_stock == expected_stock:
                 print(f"   ✅ Stock correctly decremented to {current_stock}")
+                print(f"   Stock flow: 75 (updated) + 25 (adjustment) - 2 (order) = {current_stock}")
                 return True
             else:
                 print(f"   ❌ Stock not decremented correctly. Expected: {expected_stock}, Got: {current_stock}")
+                print(f"   Stock flow calculation may be incorrect")
         
         return False
 
