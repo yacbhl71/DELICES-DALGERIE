@@ -135,6 +135,10 @@ class ProductCreate(BaseModel):
     image_urls: List[str]
     origin: Dict[str, str]
     in_stock: bool = True
+    track_inventory: bool = True
+    stock_quantity: int = 0
+    low_stock_threshold: int = 5
+    allow_backorder: bool = False
 
 class ProductUpdate(BaseModel):
     name: Optional[Dict[str, str]] = None
