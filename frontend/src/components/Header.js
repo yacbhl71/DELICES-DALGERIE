@@ -72,31 +72,36 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link 
-              to="/" 
-              className="text-gray-700 hover:text-olive font-medium transition-colors duration-200"
-            >
-              {t('home')}
-            </Link>
-            {/* Recipes removed - focusing on dates and olive oil */}
-            <Link 
-              to="/shop" 
-              className="text-gray-700 hover:text-olive font-medium transition-colors duration-200"
-            >
-              {t('shop')}
-            </Link>
-            <Link 
-              to="/history" 
-              className="text-gray-700 hover:text-olive font-medium transition-colors duration-200"
-            >
-              {t('history')}
-            </Link>
-            <Link 
-              to="/contact" 
-              className="text-gray-700 hover:text-olive font-medium transition-colors duration-200"
-            >
-              {language === 'ar' ? 'اتصل بنا' : language === 'en' ? 'Contact' : 'Contact'}
-            </Link>
+            {navigationItems.map((item) => {
+              const label = item.label[language] || item.label.fr;
+              
+              if (item.is_external) {
+                return (
+                  <a
+                    key={item.id}
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center space-x-1 text-gray-700 hover:text-olive font-medium transition-colors duration-200"
+                  >
+                    {item.icon && <span className="mr-1">{item.icon}</span>}
+                    <span>{label}</span>
+                    <ExternalLink size={14} />
+                  </a>
+                );
+              }
+              
+              return (
+                <Link
+                  key={item.id}
+                  to={item.url}
+                  className="text-gray-700 hover:text-olive font-medium transition-colors duration-200"
+                >
+                  {item.icon && <span className="mr-2">{item.icon}</span>}
+                  {label}
+                </Link>
+              );
+            })}
           </div>
 
           {/* Right Side - Language Selector & Auth */}
