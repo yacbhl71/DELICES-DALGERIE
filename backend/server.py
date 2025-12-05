@@ -1081,6 +1081,42 @@ async def create_order(order_data: OrderCreate, background_tasks: BackgroundTask
     
     total = subtotal + shipping_cost - discount_amount
     
+    # Check stock availability and decrement
+    for item in order_data.items:
+        product = await db.products.find_one({"id": item.product_id}, {"_id": 0})
+        if product and product.get('track_inventory', True):
+            current_stock = product.get('stock_quantity', 0)
+            allow_backorder = product.get('allow_backorder', False)
+            
+            # Check if enough stock
+            if current_stock < item.quantity and not allow_backorder:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Stock insuffisant pour {item.product_name}. Disponible: {current_stock}"
+                )
+            
+            # Decrement stock
+            new_stock = max(0, current_stock - item.quantity)
+            await db.products.update_one(
+                {"id": item.product_id},
+                {
+                    "$set": {
+                        "stock_quantity": new_stock,
+                        "in_stock": new_stock > 0 or allow_backorder
+                    }
+                }
+            )
+            
+            # Log stock adjustment
+            adjustment = StockAdjustment(
+                product_id=item.product_id,
+                adjustment_type="order",
+                quantity=-item.quantity,
+                reason=f"Commande #{order.order_number if 'order' in locals() else 'N/A'}",
+                notes=f"Décrémenté par commande"
+            )
+            await db.stock_adjustments.insert_one(adjustment.model_dump())
+    
     # Create order
     order = Order(
         **order_data.model_dump(exclude={'promo_code'}),
