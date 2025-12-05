@@ -3,10 +3,10 @@ import sys
 import json
 import os
 import io
-from datetime import datetime
+from datetime import datetime, timezone
 from PIL import Image
 
-class SoumamHeritageAPITester:
+class DelicesAlgerieAPITester:
     def __init__(self, base_url="https://delices-store.preview.emergentagent.com/api"):
         self.base_url = base_url
         self.token = None
@@ -15,6 +15,9 @@ class SoumamHeritageAPITester:
         self.tests_passed = 0
         self.user_id = None
         self.uploaded_files = []  # Track uploaded files for cleanup
+        self.created_product_id = None
+        self.created_promo_codes = []
+        self.created_order_id = None
 
     def run_test(self, name, method, endpoint, expected_status, data=None, headers=None, files=None, use_admin_token=False):
         """Run a single API test"""
