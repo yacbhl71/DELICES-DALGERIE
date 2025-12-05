@@ -1918,6 +1918,90 @@ async def validate_promo_code(validation: PromoCodeValidation):
         "description": promo.description
     }
 
+# --- Stock Management Routes ---
+@api_router.get("/admin/inventory", response_model=List[Product])
+async def get_inventory_overview(admin: User = Depends(get_admin_user)):
+    """Get all products with inventory information (admin only)"""
+    products = await db.products.find({}, {"_id": 0}).sort("name.fr", 1).to_list(1000)
+    return [Product(**product) for product in products]
+
+@api_router.get("/admin/inventory/low-stock", response_model=List[Product])
+async def get_low_stock_products(admin: User = Depends(get_admin_user)):
+    """Get products with low stock (admin only)"""
+    products = await db.products.find(
+        {
+            "track_inventory": True,
+            "$expr": {"$lte": ["$stock_quantity", "$low_stock_threshold"]}
+        },
+        {"_id": 0}
+    ).to_list(1000)
+    return [Product(**product) for product in products]
+
+@api_router.post("/admin/inventory/{product_id}/adjust")
+async def adjust_stock(
+    product_id: str,
+    adjustment: StockAdjustmentRequest,
+    admin: User = Depends(get_admin_user)
+):
+    """Adjust stock for a product (admin only)"""
+    product = await db.products.find_one({"id": product_id}, {"_id": 0})
+    if not product:
+        raise HTTPException(status_code=404, detail="Produit non trouvé")
+    
+    current_stock = product.get('stock_quantity', 0)
+    
+    # Calculate new stock based on adjustment type
+    if adjustment.adjustment_type == "set":
+        new_stock = adjustment.quantity
+    elif adjustment.adjustment_type == "increase":
+        new_stock = current_stock + adjustment.quantity
+    elif adjustment.adjustment_type == "decrease":
+        new_stock = max(0, current_stock - adjustment.quantity)
+    else:
+        raise HTTPException(status_code=400, detail="Type d'ajustement invalide")
+    
+    # Update product stock
+    allow_backorder = product.get('allow_backorder', False)
+    await db.products.update_one(
+        {"id": product_id},
+        {
+            "$set": {
+                "stock_quantity": new_stock,
+                "in_stock": new_stock > 0 or allow_backorder
+            }
+        }
+    )
+    
+    # Log adjustment
+    stock_adjustment = StockAdjustment(
+        product_id=product_id,
+        adjustment_type=adjustment.adjustment_type,
+        quantity=adjustment.quantity if adjustment.adjustment_type == "set" else (
+            adjustment.quantity if adjustment.adjustment_type == "increase" else -adjustment.quantity
+        ),
+        reason=adjustment.reason,
+        notes=adjustment.notes,
+        performed_by=admin.get('email') if isinstance(admin, dict) else admin.email
+    )
+    await db.stock_adjustments.insert_one(stock_adjustment.model_dump())
+    
+    # Return updated product
+    updated_product = await db.products.find_one({"id": product_id}, {"_id": 0})
+    return Product(**updated_product)
+
+@api_router.get("/admin/inventory/{product_id}/history")
+async def get_stock_history(
+    product_id: str,
+    admin: User = Depends(get_admin_user)
+):
+    """Get stock adjustment history for a product (admin only)"""
+    adjustments = await db.stock_adjustments.find(
+        {"product_id": product_id},
+        {"_id": 0}
+    ).sort("created_at", -1).limit(50).to_list(50)
+    
+    return adjustments
+
 # --- Basic Routes ---
 @api_router.get("/")
 async def root():
