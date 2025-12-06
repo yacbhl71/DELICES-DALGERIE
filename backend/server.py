@@ -1101,10 +1101,21 @@ async def create_order(order_data: OrderCreate, background_tasks: BackgroundTask
     
     total = subtotal + shipping_cost - discount_amount
     
+    # Batch fetch all products (optimization: avoid N+1 query)
+    product_ids = [item.product_id for item in order_data.items]
+    products = await db.products.find(
+        {"id": {"$in": product_ids}},
+        {"_id": 0}
+    ).to_list(len(product_ids))
+    products_dict = {p["id"]: p for p in products}
+    
     # Check stock availability and decrement
     for item in order_data.items:
-        product = await db.products.find_one({"id": item.product_id}, {"_id": 0})
-        if product and product.get('track_inventory', True):
+        product = products_dict.get(item.product_id)
+        if not product:
+            raise HTTPException(status_code=404, detail=f"Produit {item.product_id} introuvable")
+            
+        if product.get('track_inventory', True):
             current_stock = product.get('stock_quantity', 0)
             allow_backorder = product.get('allow_backorder', False)
             
