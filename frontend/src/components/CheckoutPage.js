@@ -257,6 +257,34 @@ export default function CheckoutPage() {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Code Promo
               </label>
+              
+              {/* Active Promo Codes Display */}
+              {activePromoCodes.length > 0 && !promoApplied && (
+                <div className="mb-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+                  <p className="text-xs font-semibold text-green-800 mb-2">🎉 Codes promo disponibles :</p>
+                  <div className="space-y-2">
+                    {activePromoCodes.map((promo, index) => (
+                      <div key={index} className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <button
+                            onClick={() => setPromoCode(promo.code)}
+                            className="text-sm font-mono font-bold text-green-700 hover:text-green-900 underline"
+                          >
+                            {promo.code}
+                          </button>
+                          {promo.description && (
+                            <p className="text-xs text-gray-600">{promo.description}</p>
+                          )}
+                        </div>
+                        <span className="text-xs text-green-600 font-semibold">
+                          {promo.discount_type === 'percentage' ? '% OFF' : '€ OFF'}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
               {!promoApplied ? (
                 <div className="flex space-x-2">
                   <input
