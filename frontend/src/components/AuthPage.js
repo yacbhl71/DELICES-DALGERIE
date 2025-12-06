@@ -105,12 +105,12 @@ const AuthPage = () => {
   const getSubtitle = () => {
     if (isLogin) {
       return language === 'ar' ? 'مرحباً بعودتك إلى سومام هيريتاج' :
-             language === 'en' ? 'Welcome back to Soumam Heritage' :
-             'Bienvenue sur Soumam Heritage';
+             language === 'en' ? 'Welcome back to Délices et Trésors' :
+             'Bienvenue sur Délices et Trésors d\'Algérie';
     } else {
       return language === 'ar' ? 'انضم إلى مجتمع سومام هيريتاج' :
-             language === 'en' ? 'Join the Soumam Heritage community' :
-             'Rejoignez la communauté Soumam Heritage';
+             language === 'en' ? 'Join the Délices et Trésors community' :
+             'Rejoignez la communauté Délices et Trésors';
     }
   };
 
