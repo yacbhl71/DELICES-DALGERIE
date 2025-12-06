@@ -763,7 +763,7 @@ async def delete_category(category_id: str, admin: User = Depends(get_admin_user
 @api_router.get("/products", response_model=List[Product])
 async def get_products(category: Optional[str] = None):
     query = {"category": category} if category else {}
-    products = await db.products.find(query).to_list(1000)
+    products = await db.products.find(query, {"_id": 0}).to_list(1000)
     return [Product(**product) for product in products]
 
 @api_router.post("/products", response_model=Product)
