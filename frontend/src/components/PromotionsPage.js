@@ -19,7 +19,7 @@ const PromotionsPage = () => {
   const fetchPromoCodes = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${API}/promo-codes/active`);
+      const response = await axios.get(`${API}/promo-codes/active?lang=${language}`);
       setPromoCodes(response.data);
     } catch (error) {
       console.error('Error fetching promo codes:', error);
