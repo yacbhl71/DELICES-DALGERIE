@@ -309,19 +309,84 @@ const AdminSettings = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
-          {['fr', 'ar', 'en'].map(lang => (
-            <div key={lang}>
-              <label className="form-label">
-                {language === 'ar' ? 'العنوان' : language === 'en' ? 'Address' : 'Adresse'} ({lang.toUpperCase()})
-              </label>
-              <textarea
-                value={settings.address[lang]}
-                onChange={(e) => handleInputChange('address', lang, e.target.value)}
-                className="form-input min-h-20"
+        <div className="space-y-6 mt-6">
+          {/* Address 1 */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {['fr', 'ar', 'en'].map(lang => (
+              <div key={lang}>
+                <label className="form-label">
+                  {language === 'ar' ? 'العنوان 1' : language === 'en' ? 'Address 1' : 'Adresse 1'} ({lang.toUpperCase()})
+                </label>
+                <textarea
+                  value={settings.address[lang]}
+                  onChange={(e) => handleInputChange('address', lang, e.target.value)}
+                  className="form-input min-h-20"
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Address 2 */}
+          <div>
+            <div className="flex items-center mb-2">
+              <input
+                type="checkbox"
+                checked={settings.show_address_2}
+                onChange={(e) => handleInputChange('show_address_2', null, e.target.checked)}
+                className="mr-2"
               />
+              <label className="form-label mb-0">
+                {language === 'ar' ? 'إظهار العنوان 2' : language === 'en' ? 'Show Address 2' : 'Afficher Adresse 2'}
+              </label>
             </div>
-          ))}
+            {settings.show_address_2 && (
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {['fr', 'ar', 'en'].map(lang => (
+                  <div key={lang}>
+                    <label className="form-label">
+                      {language === 'ar' ? 'العنوان 2' : language === 'en' ? 'Address 2' : 'Adresse 2'} ({lang.toUpperCase()})
+                    </label>
+                    <textarea
+                      value={settings.address_2[lang]}
+                      onChange={(e) => handleInputChange('address_2', lang, e.target.value)}
+                      className="form-input min-h-20"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Address 3 */}
+          <div>
+            <div className="flex items-center mb-2">
+              <input
+                type="checkbox"
+                checked={settings.show_address_3}
+                onChange={(e) => handleInputChange('show_address_3', null, e.target.checked)}
+                className="mr-2"
+              />
+              <label className="form-label mb-0">
+                {language === 'ar' ? 'إظهار العنوان 3' : language === 'en' ? 'Show Address 3' : 'Afficher Adresse 3'}
+              </label>
+            </div>
+            {settings.show_address_3 && (
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {['fr', 'ar', 'en'].map(lang => (
+                  <div key={lang}>
+                    <label className="form-label">
+                      {language === 'ar' ? 'العنوان 3' : language === 'en' ? 'Address 3' : 'Adresse 3'} ({lang.toUpperCase()})
+                    </label>
+                    <textarea
+                      value={settings.address_3[lang]}
+                      onChange={(e) => handleInputChange('address_3', lang, e.target.value)}
+                      className="form-input min-h-20"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
