@@ -17,6 +17,7 @@ export default function CheckoutPage() {
   const [promoCode, setPromoCode] = useState('');
   const [promoApplied, setPromoApplied] = useState(null);
   const [promoLoading, setPromoLoading] = useState(false);
+  const [activePromoCodes, setActivePromoCodes] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState('cash'); // 'cash', 'bank_transfer', 'paypal'
   const [cartLoaded, setCartLoaded] = useState(false);
   const [formData, setFormData] = useState({
@@ -28,6 +29,19 @@ export default function CheckoutPage() {
     shipping_postal_code: '',
     notes: ''
   });
+
+  // Fetch active promo codes
+  useEffect(() => {
+    const fetchPromoCodes = async () => {
+      try {
+        const response = await axios.get(`${API}/promo-codes/active`);
+        setActivePromoCodes(response.data);
+      } catch (error) {
+        console.error('Error fetching promo codes:', error);
+      }
+    };
+    fetchPromoCodes();
+  }, []);
 
   // Wait for cart to load before checking if it's empty
   React.useEffect(() => {
