@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useCart } from '../contexts/CartContext';
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../App';
 import axios from 'axios';
 import { ShoppingBag, CheckCircle, CreditCard, Banknote, Building2 } from 'lucide-react';
 import PaymentInfo from './PaymentInfo';
@@ -10,6 +11,7 @@ const API = `${BACKEND_URL}/api`;
 
 export default function CheckoutPage() {
   const { cartItems, getCartTotal, clearCart } = useCart();
+  const { language } = useLanguage();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [orderComplete, setOrderComplete] = useState(false);
