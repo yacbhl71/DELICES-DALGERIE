@@ -34,14 +34,14 @@ export default function CheckoutPage() {
   useEffect(() => {
     const fetchPromoCodes = async () => {
       try {
-        const response = await axios.get(`${API}/promo-codes/active`);
+        const response = await axios.get(`${API}/promo-codes/active?lang=${language}`);
         setActivePromoCodes(response.data);
       } catch (error) {
         console.error('Error fetching promo codes:', error);
       }
     };
     fetchPromoCodes();
-  }, []);
+  }, [language]);
 
   // Wait for cart to load before checking if it's empty
   React.useEffect(() => {
