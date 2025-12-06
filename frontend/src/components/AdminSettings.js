@@ -177,10 +177,11 @@ const AdminSettings = () => {
           {language === 'ar' ? 'معلومات الاتصال' : language === 'en' ? 'Contact Information' : 'Informations de contact'}
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-6">
+          {/* Emails */}
           <div>
             <label className="form-label">
-              {language === 'ar' ? 'البريد الإلكتروني للاتصال' : language === 'en' ? 'Contact Email' : 'Email de contact'}
+              {language === 'ar' ? 'البريد الإلكتروني للاتصال' : language === 'en' ? 'Contact Email 1' : 'Email de contact 1'}
             </label>
             <input
               type="email"
@@ -188,6 +189,52 @@ const AdminSettings = () => {
               onChange={(e) => handleInputChange('contact_email', null, e.target.value)}
               className="form-input"
             />
+          </div>
+
+          <div>
+            <div className="flex items-center mb-2">
+              <input
+                type="checkbox"
+                checked={settings.show_email_2}
+                onChange={(e) => handleInputChange('show_email_2', null, e.target.checked)}
+                className="mr-2"
+              />
+              <label className="form-label mb-0">
+                {language === 'ar' ? 'إظهار البريد الإلكتروني 2' : language === 'en' ? 'Show Email 2' : 'Afficher Email 2'}
+              </label>
+            </div>
+            {settings.show_email_2 && (
+              <input
+                type="email"
+                value={settings.contact_email_2}
+                onChange={(e) => handleInputChange('contact_email_2', null, e.target.value)}
+                className="form-input"
+                placeholder="Email 2"
+              />
+            )}
+          </div>
+
+          <div>
+            <div className="flex items-center mb-2">
+              <input
+                type="checkbox"
+                checked={settings.show_email_3}
+                onChange={(e) => handleInputChange('show_email_3', null, e.target.checked)}
+                className="mr-2"
+              />
+              <label className="form-label mb-0">
+                {language === 'ar' ? 'إظهار البريد الإلكتروني 3' : language === 'en' ? 'Show Email 3' : 'Afficher Email 3'}
+              </label>
+            </div>
+            {settings.show_email_3 && (
+              <input
+                type="email"
+                value={settings.contact_email_3}
+                onChange={(e) => handleInputChange('contact_email_3', null, e.target.value)}
+                className="form-input"
+                placeholder="Email 3"
+              />
+            )}
           </div>
 
           <div>
@@ -202,9 +249,10 @@ const AdminSettings = () => {
             />
           </div>
 
+          {/* Phones */}
           <div>
             <label className="form-label">
-              {language === 'ar' ? 'الهاتف' : language === 'en' ? 'Phone' : 'Téléphone'}
+              {language === 'ar' ? 'الهاتف 1' : language === 'en' ? 'Phone 1' : 'Téléphone 1'}
             </label>
             <input
               type="tel"
@@ -212,6 +260,52 @@ const AdminSettings = () => {
               onChange={(e) => handleInputChange('phone', null, e.target.value)}
               className="form-input"
             />
+          </div>
+
+          <div>
+            <div className="flex items-center mb-2">
+              <input
+                type="checkbox"
+                checked={settings.show_phone_2}
+                onChange={(e) => handleInputChange('show_phone_2', null, e.target.checked)}
+                className="mr-2"
+              />
+              <label className="form-label mb-0">
+                {language === 'ar' ? 'إظهار الهاتف 2' : language === 'en' ? 'Show Phone 2' : 'Afficher Téléphone 2'}
+              </label>
+            </div>
+            {settings.show_phone_2 && (
+              <input
+                type="tel"
+                value={settings.phone_2}
+                onChange={(e) => handleInputChange('phone_2', null, e.target.value)}
+                className="form-input"
+                placeholder={language === 'ar' ? 'الهاتف 2' : language === 'en' ? 'Phone 2' : 'Téléphone 2'}
+              />
+            )}
+          </div>
+
+          <div>
+            <div className="flex items-center mb-2">
+              <input
+                type="checkbox"
+                checked={settings.show_phone_3}
+                onChange={(e) => handleInputChange('show_phone_3', null, e.target.checked)}
+                className="mr-2"
+              />
+              <label className="form-label mb-0">
+                {language === 'ar' ? 'إظهار الهاتف 3' : language === 'en' ? 'Show Phone 3' : 'Afficher Téléphone 3'}
+              </label>
+            </div>
+            {settings.show_phone_3 && (
+              <input
+                type="tel"
+                value={settings.phone_3}
+                onChange={(e) => handleInputChange('phone_3', null, e.target.value)}
+                className="form-input"
+                placeholder={language === 'ar' ? 'الهاتف 3' : language === 'en' ? 'Phone 3' : 'Téléphone 3'}
+              />
+            )}
           </div>
         </div>
 
