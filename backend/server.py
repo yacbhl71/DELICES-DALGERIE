@@ -1894,7 +1894,7 @@ async def delete_promo_code(promo_id: str, admin: User = Depends(get_admin_user)
 
 
 @api_router.get("/promo-codes/active")
-async def get_active_promo_codes():
+async def get_active_promo_codes(lang: str = "fr"):
     """Get list of active promo codes for display to customers (public)"""
     now = datetime.now(timezone.utc)
     codes = await db.promo_codes.find(
@@ -1906,9 +1906,29 @@ async def get_active_promo_codes():
                 {"valid_until": None}
             ]
         },
-        {"_id": 0, "code": 1, "description": 1, "discount_type": 1, "valid_until": 1}
+        {"_id": 0}
     ).to_list(100)
-    return codes
+    
+    # Format codes for client display
+    formatted_codes = []
+    for code in codes:
+        formatted_code = {
+            "code": code.get("code"),
+            "discount_type": code.get("discount_type"),
+            "valid_until": code.get("valid_until")
+        }
+        
+        # Handle multilingual description
+        description = code.get("description")
+        if description and isinstance(description, dict):
+            # Get description in requested language, fallback to fr, then en
+            formatted_code["description"] = description.get(lang) or description.get("fr") or description.get("en") or ""
+        else:
+            formatted_code["description"] = description or ""
+            
+        formatted_codes.append(formatted_code)
+    
+    return formatted_codes
 
 @api_router.post("/promo-codes/validate")
 async def validate_promo_code(validation: PromoCodeValidation):
