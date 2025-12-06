@@ -1892,6 +1892,24 @@ async def delete_promo_code(promo_id: str, admin: User = Depends(get_admin_user)
         raise HTTPException(status_code=404, detail="Code promo non trouvé")
     return {"message": "Code promo supprimé avec succès"}
 
+
+@api_router.get("/promo-codes/active")
+async def get_active_promo_codes():
+    """Get list of active promo codes for display to customers (public)"""
+    now = datetime.now(timezone.utc)
+    codes = await db.promo_codes.find(
+        {
+            "is_active": True,
+            "valid_from": {"$lte": now},
+            "$or": [
+                {"valid_until": {"$gte": now}},
+                {"valid_until": None}
+            ]
+        },
+        {"_id": 0, "code": 1, "description": 1, "discount_type": 1, "valid_until": 1}
+    ).to_list(100)
+    return codes
+
 @api_router.post("/promo-codes/validate")
 async def validate_promo_code(validation: PromoCodeValidation):
     """Validate a promo code and calculate discount (public)"""
