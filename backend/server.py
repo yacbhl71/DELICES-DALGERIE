@@ -2069,7 +2069,7 @@ class CustomizationSettings(BaseModel):
     font_body: str = "Inter"
 
 @api_router.get("/admin/customization")
-async def get_customization_settings(current_user: User = Depends(get_current_admin)):
+async def get_customization_settings(current_user: User = Depends(get_current_user)):
     """Get customization settings"""
     settings = await db.customization_settings.find_one({"id": "customization_settings"}, {"_id": 0})
     if not settings:
@@ -2077,7 +2077,7 @@ async def get_customization_settings(current_user: User = Depends(get_current_ad
     return settings
 
 @api_router.put("/admin/customization")
-async def update_customization_settings(settings: CustomizationSettings, current_user: User = Depends(get_current_admin)):
+async def update_customization_settings(settings: CustomizationSettings, current_user: User = Depends(get_current_user)):
     """Update customization settings"""
     await db.customization_settings.update_one(
         {"id": "customization_settings"},
@@ -2113,7 +2113,7 @@ class GeneralSettings(BaseModel):
     linkedin_url: str = ""
 
 @api_router.get("/admin/settings")
-async def get_general_settings(current_user: User = Depends(get_current_admin)):
+async def get_general_settings(current_user: User = Depends(get_current_user)):
     """Get general settings"""
     settings = await db.general_settings.find_one({"id": "general_settings"}, {"_id": 0})
     if not settings:
@@ -2121,7 +2121,7 @@ async def get_general_settings(current_user: User = Depends(get_current_admin)):
     return settings
 
 @api_router.put("/admin/settings")
-async def update_general_settings(settings: GeneralSettings, current_user: User = Depends(get_current_admin)):
+async def update_general_settings(settings: GeneralSettings, current_user: User = Depends(get_current_user)):
     """Update general settings"""
     await db.general_settings.update_one(
         {"id": "general_settings"},
