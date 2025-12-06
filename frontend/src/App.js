@@ -195,6 +195,7 @@ function App() {
           <div className="App">
             <Toaster />
             <BrowserRouter>
+              <ScrollToTop />
               <Cart />
             <Routes>
               {/* Admin Routes */}
