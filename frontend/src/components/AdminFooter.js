@@ -21,8 +21,10 @@ export default function AdminFooter() {
       email: '',
       phone: '',
       address: { fr: '', en: '', ar: '' }
-    }
+    },
+    use_settings_contact: true // Utiliser les contacts de AdminSettings par défaut
   });
+  const [settingsData, setSettingsData] = useState(null);
 
   // Helper function to safely get nested properties
   const safeGet = (obj, path, defaultValue = '') => {
