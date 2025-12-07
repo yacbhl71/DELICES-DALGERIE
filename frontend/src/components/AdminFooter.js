@@ -33,7 +33,20 @@ export default function AdminFooter() {
 
   useEffect(() => {
     fetchFooterSettings();
+    fetchGeneralSettings();
   }, []);
+  
+  const fetchGeneralSettings = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${API}/admin/settings`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setSettingsData(response.data);
+    } catch (error) {
+      console.error('Error fetching settings:', error);
+    }
+  };
 
   const fetchFooterSettings = async () => {
     try {
