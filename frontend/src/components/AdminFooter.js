@@ -362,6 +362,52 @@ export default function AdminFooter() {
           </div>
         </div>
 
+        {/* Contact Source Selection */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
+          <h2 className="text-xl font-semibold mb-4 text-blue-900">📞 Source des informations de contact</h2>
+          <div className="space-y-4">
+            <label className="flex items-start space-x-3 cursor-pointer">
+              <input
+                type="radio"
+                checked={footerData.use_settings_contact}
+                onChange={() => setFooterData(prev => ({...prev, use_settings_contact: true}))}
+                className="mt-1"
+              />
+              <div>
+                <p className="font-semibold text-gray-900">Utiliser les Paramètres Généraux</p>
+                <p className="text-sm text-gray-600">Les contacts du footer seront automatiquement synchronisés avec les paramètres généraux (recommandé)</p>
+                {settingsData && (
+                  <div className="mt-2 text-xs text-gray-500 bg-white p-3 rounded border">
+                    <p>✓ Email : {settingsData.contact_email || 'Non défini'}</p>
+                    <p>✓ Téléphone : {settingsData.phone || 'Non défini'}</p>
+                    {settingsData.show_phone_2 && <p>✓ Téléphone 2 : {settingsData.phone_2}</p>}
+                    {settingsData.show_phone_3 && <p>✓ Téléphone 3 : {settingsData.phone_3}</p>}
+                  </div>
+                )}
+              </div>
+            </label>
+            
+            <label className="flex items-start space-x-3 cursor-pointer">
+              <input
+                type="radio"
+                checked={!footerData.use_settings_contact}
+                onChange={() => setFooterData(prev => ({...prev, use_settings_contact: false}))}
+                className="mt-1"
+              />
+              <div>
+                <p className="font-semibold text-gray-900">Personnaliser pour le footer</p>
+                <p className="text-sm text-gray-600">Définir des contacts spécifiques juste pour le footer (section ci-dessous)</p>
+              </div>
+            </label>
+            
+            <div className="bg-yellow-50 border border-yellow-200 p-3 rounded">
+              <p className="text-sm text-yellow-800">
+                💡 <strong>Astuce</strong> : Pour modifier vos contacts, allez dans <strong>Paramètres → Informations de Contact</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Copyright */}
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-semibold mb-4">Texte Copyright</h2>
