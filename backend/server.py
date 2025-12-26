@@ -1796,6 +1796,18 @@ async def get_customization():
     
     return SiteCustomization(**customization)
 
+@api_router.get("/admin/customization")
+async def get_customization_admin(admin: User = Depends(get_admin_user)):
+    """Get site customization settings (admin only)"""
+    customization = await db.customization.find_one({"id": "site_customization"}, {"_id": 0})
+    
+    if not customization:
+        default_customization = SiteCustomization()
+        await db.customization.insert_one(default_customization.model_dump())
+        return default_customization.model_dump()
+    
+    return customization
+
 @api_router.put("/admin/customization", response_model=SiteCustomization)
 async def update_customization(
     customization_data: CustomizationUpdate,
