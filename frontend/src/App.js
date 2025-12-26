@@ -30,6 +30,7 @@ import AdminOrders from './components/AdminOrders';
 import AdminUsers from './components/AdminUsers';
 import AdminHistory from './components/AdminHistory';
 import AdminContact from './components/AdminContact';
+import AdminContactInfo from './components/AdminContactInfo';
 import CustomPageView from './components/CustomPageView';
 // AdminRecipeForm removed
 import AdminProductForm from './components/AdminProductForm';
