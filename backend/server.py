@@ -867,7 +867,10 @@ async def get_admin_stats(admin_user: User = Depends(get_admin_user)):
 
 @api_router.get("/admin/users", response_model=List[User])
 async def get_all_users(admin_user: User = Depends(get_admin_user)):
-    users = await db.users.find().to_list(1000)
+    users = await db.users.find({}, {"_id": 0, "hashed_password": 0}).to_list(1000)
+    # Add back hashed_password as empty string for Pydantic model
+    for user in users:
+        user["hashed_password"] = ""
     return [User(**user) for user in users]
 
 @api_router.put("/admin/users/{user_id}", response_model=User)
