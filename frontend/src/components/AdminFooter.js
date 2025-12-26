@@ -66,7 +66,8 @@ export default function AdminFooter() {
           email: data.contact_info?.email || '',
           phone: data.contact_info?.phone || '',
           address: data.contact_info?.address || { fr: '', en: '', ar: '' }
-        }
+        },
+        use_settings_contact: data.use_settings_contact !== undefined ? data.use_settings_contact : true
       });
     } catch (error) {
       console.error('Error fetching footer settings:', error);
