@@ -1,4 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@300;400;500;600;700&family=Lato:wght@300;400;700&family=Poppins:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&display=swap');
+
+/* CSS Variables for Dynamic Customization */
+:root {
+  --color-primary: #6B8E23;
+  --color-primary-rgb: 107, 142, 35;
+  --color-secondary: #8B7355;
+  --color-secondary-rgb: 139, 115, 85;
+  --color-accent: #F59E0B;
+  --color-accent-rgb: 245, 158, 11;
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Montserrat', sans-serif;
+}
 
 * {
   margin: 0;
@@ -7,7 +19,7 @@
 }
 
 body {
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--font-body), 'Montserrat', sans-serif;
   line-height: 1.6;
   color: #2d3748;
   background-color: #faf5f0;
@@ -19,7 +31,7 @@ body {
 
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading), 'Playfair Display', serif;
   font-weight: 600;
 }
 
