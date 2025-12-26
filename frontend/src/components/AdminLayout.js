@@ -22,7 +22,8 @@ import {
   Image,
   Tag,
   Package,
-  Search
+  Search,
+  Phone
 } from 'lucide-react';
 
 const AdminLayout = ({ children }) => {
