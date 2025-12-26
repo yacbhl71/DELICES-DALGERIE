@@ -121,7 +121,14 @@ const AdminCustomization = () => {
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
-      <div className="flex items-center justify-between">
+      {/* Preview Banner */}
+      {showPreview && (
+        <div className="fixed top-4 right-4 z-50 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg animate-pulse">
+          {language === 'ar' ? 'تم تطبيق المعاينة!' : language === 'en' ? 'Preview applied!' : 'Aperçu appliqué!'}
+        </div>
+      )}
+
+      <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">
             {language === 'ar' ? 'التخصيص' : language === 'en' ? 'Customization' : 'Personnalisation'}
@@ -130,11 +137,65 @@ const AdminCustomization = () => {
             {language === 'ar' ? 'خصص مظهر موقعك' : language === 'en' ? 'Customize your site appearance' : 'Personnalisez l\'apparence de votre site'}
           </p>
         </div>
-        <button onClick={handleSave} disabled={saving} className="btn-primary flex items-center">
-          <Save size={20} className="mr-2" />
-          {saving ? (language === 'ar' ? 'جاري الحفظ...' : language === 'en' ? 'Saving...' : 'Sauvegarde...') :
-                   (language === 'ar' ? 'حفظ' : language === 'en' ? 'Save' : 'Enregistrer')}
-        </button>
+        <div className="flex gap-3">
+          <button onClick={handlePreview} className="btn-secondary flex items-center">
+            <Eye size={20} className="mr-2" />
+            {language === 'ar' ? 'معاينة' : language === 'en' ? 'Preview' : 'Aperçu'}
+          </button>
+          <button onClick={handleSave} disabled={saving} className="btn-primary flex items-center">
+            <Save size={20} className="mr-2" />
+            {saving ? (language === 'ar' ? 'جاري الحفظ...' : language === 'en' ? 'Saving...' : 'Sauvegarde...') :
+                     (language === 'ar' ? 'حفظ' : language === 'en' ? 'Save' : 'Enregistrer')}
+          </button>
+        </div>
+      </div>
+
+      {/* Live Preview Card */}
+      <div className="bg-white rounded-xl shadow-lg p-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          {language === 'ar' ? 'معاينة مباشرة' : language === 'en' ? 'Live Preview' : 'Aperçu en direct'}
+        </h2>
+        <div 
+          className="border-2 border-dashed border-gray-200 rounded-lg p-6"
+          style={{ fontFamily: settings.font_body }}
+        >
+          <div className="flex items-center gap-4 mb-4">
+            {settings.logo_url && (
+              <img src={settings.logo_url} alt="Logo" className="h-12 w-auto object-contain" />
+            )}
+            <div>
+              <h3 
+                className="text-xl font-bold"
+                style={{ fontFamily: settings.font_heading, color: settings.primary_color }}
+              >
+                {settings.site_name?.fr || "Délices et Trésors d'Algérie"}
+              </h3>
+              <p className="text-sm text-gray-600">
+                {settings.tagline?.fr || "Saveurs authentiques d'Algérie"}
+              </p>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <button 
+              className="px-4 py-2 rounded-lg text-white font-medium"
+              style={{ backgroundColor: settings.primary_color }}
+            >
+              {language === 'ar' ? 'زر أساسي' : language === 'en' ? 'Primary Button' : 'Bouton principal'}
+            </button>
+            <button 
+              className="px-4 py-2 rounded-lg font-medium border-2"
+              style={{ borderColor: settings.accent_color, color: settings.accent_color }}
+            >
+              {language === 'ar' ? 'زر ثانوي' : language === 'en' ? 'Secondary Button' : 'Bouton secondaire'}
+            </button>
+            <span 
+              className="px-3 py-2 rounded-lg text-white"
+              style={{ backgroundColor: settings.accent_color }}
+            >
+              {language === 'ar' ? 'تمييز' : language === 'en' ? 'Accent' : 'Accent'}
+            </span>
+          </div>
+        </div>
       </div>
 
       {/* Branding Section */}
