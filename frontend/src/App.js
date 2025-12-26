@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import './App.css';
 import { CartProvider } from './contexts/CartContext';
+import { CustomizationProvider, useCustomization } from './contexts/CustomizationContext';
 import ScrollToTop from './components/ScrollToTop';
 
 // Components
