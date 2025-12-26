@@ -34,12 +34,13 @@ export default function AdminContactInfo() {
   }, []);
 
   const fetchSettings = async () => {
+    setLoading(true);
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(`${API}/admin/settings`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setSettings(response.data);
+      setSettings(prev => ({ ...prev, ...response.data }));
     } catch (error) {
       console.error('Error fetching settings:', error);
     } finally {
