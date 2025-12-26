@@ -10,8 +10,10 @@ const API = `${BACKEND_URL}/api`;
 
 const AdminCustomization = () => {
   const { language } = useLanguage();
+  const { refreshCustomization, applyStyles } = useCustomization();
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
   const [settings, setSettings] = useState({
     site_name: { fr: '', ar: '', en: '' },
     tagline: { fr: '', ar: '', en: '' },
