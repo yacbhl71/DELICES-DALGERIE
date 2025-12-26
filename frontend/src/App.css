@@ -37,7 +37,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Utilities */
 .text-gradient {
-  background: linear-gradient(135deg, #d97706 0%, #b91c1c 100%);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-primary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -51,7 +51,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #d97706 0%, #ea580c 100%);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-primary) 100%);
   color: white;
   padding: 12px 24px;
   border: none;
@@ -59,19 +59,19 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3);
+  box-shadow: 0 4px 15px rgba(var(--color-accent-rgb), 0.3);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(217, 119, 6, 0.4);
+  box-shadow: 0 8px 25px rgba(var(--color-accent-rgb), 0.4);
 }
 
 .btn-secondary {
-  background: rgba(217, 119, 6, 0.1);
-  color: #d97706;
+  background: rgba(var(--color-accent-rgb), 0.1);
+  color: var(--color-accent);
   padding: 12px 24px;
-  border: 2px solid #d97706;
+  border: 2px solid var(--color-accent);
   border-radius: 8px;
   font-weight: 500;
   cursor: pointer;
@@ -79,7 +79,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-secondary:hover {
-  background: #d97706;
+  background: var(--color-accent);
   color: white;
   transform: translateY(-2px);
 }
