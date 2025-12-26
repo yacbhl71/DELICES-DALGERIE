@@ -81,6 +81,11 @@ const AdminLayout = ({ children }) => {
       icon: Mail
     },
     {
+      name: language === 'ar' ? 'معلومات الاتصال' : language === 'en' ? 'Contact Info' : 'Infos Contact',
+      href: '/admin/contact-info',
+      icon: Phone
+    },
+    {
       name: language === 'ar' ? 'الشهادات' : language === 'en' ? 'Testimonials' : 'Témoignages',
       href: '/admin/testimonials',
       icon: MessageSquare
