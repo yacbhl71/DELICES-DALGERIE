@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../App';
-import { Save, Upload, Palette, Type, Image as ImageIcon } from 'lucide-react';
+import { useCustomization } from '../contexts/CustomizationContext';
+import { Save, Upload, Palette, Type, Image as ImageIcon, Eye } from 'lucide-react';
 import axios from 'axios';
 import ImageUpload from './ImageUpload';
 
