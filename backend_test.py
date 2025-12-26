@@ -1053,6 +1053,187 @@ class DelicesAlgerieAPITester:
         
         return success1 and success2 and success3
 
+    def test_customization_public(self):
+        """Test public customization endpoint"""
+        success, response = self.run_test(
+            "Get Public Customization",
+            "GET",
+            "customization",
+            200
+        )
+        
+        if success and response:
+            # Verify required fields are present
+            required_fields = ['site_name', 'primary_color', 'secondary_color', 'accent_color', 'font_heading', 'font_body']
+            if all(field in response for field in required_fields):
+                print(f"   Site name: {response.get('site_name', 'N/A')}")
+                print(f"   Primary color: {response.get('primary_color', 'N/A')}")
+                print(f"   Secondary color: {response.get('secondary_color', 'N/A')}")
+                print(f"   Accent color: {response.get('accent_color', 'N/A')}")
+                print(f"   Heading font: {response.get('font_heading', 'N/A')}")
+                print(f"   Body font: {response.get('font_body', 'N/A')}")
+                return True
+            else:
+                print(f"❌ Missing required customization fields. Got: {list(response.keys())}")
+        
+        return False
+
+    def test_customization_admin_get(self):
+        """Test admin customization GET endpoint"""
+        if not self.admin_token:
+            print("❌ Cannot test admin customization - no admin token")
+            return False
+        
+        success, response = self.run_test(
+            "Get Admin Customization",
+            "GET",
+            "admin/customization",
+            200,
+            use_admin_token=True
+        )
+        
+        if success and response:
+            # Store original values for later restoration
+            self.original_customization = response.copy()
+            print(f"   Retrieved admin customization settings")
+            print(f"   Site name: {response.get('site_name', 'N/A')}")
+            print(f"   Primary color: {response.get('primary_color', 'N/A')}")
+            return True
+        
+        return False
+
+    def test_customization_admin_update(self):
+        """Test admin customization UPDATE endpoint"""
+        if not self.admin_token:
+            print("❌ Cannot test admin customization update - no admin token")
+            return False
+        
+        # Test updating colors and site name
+        update_data = {
+            "site_name": "Délices et Trésors d'Algérie - Test",
+            "primary_color": "#FF5733",  # Change to orange-red for testing
+            "secondary_color": "#33FF57",  # Change to green for testing
+            "accent_color": "#3357FF",  # Change to blue for testing
+            "font_heading": "Georgia",
+            "font_body": "Arial"
+        }
+        
+        success, response = self.run_test(
+            "Update Admin Customization",
+            "PUT",
+            "admin/customization",
+            200,
+            data=update_data,
+            use_admin_token=True
+        )
+        
+        if success and response:
+            # Verify the update was applied
+            if (response.get('site_name') == update_data['site_name'] and
+                response.get('primary_color') == update_data['primary_color'] and
+                response.get('secondary_color') == update_data['secondary_color'] and
+                response.get('accent_color') == update_data['accent_color']):
+                print(f"   ✅ Customization updated successfully")
+                print(f"   New site name: {response.get('site_name')}")
+                print(f"   New primary color: {response.get('primary_color')}")
+                print(f"   New secondary color: {response.get('secondary_color')}")
+                print(f"   New accent color: {response.get('accent_color')}")
+                return True
+            else:
+                print(f"❌ Customization not updated correctly")
+                print(f"   Expected primary color: {update_data['primary_color']}, Got: {response.get('primary_color')}")
+        
+        return False
+
+    def test_customization_public_reflects_changes(self):
+        """Test that public endpoint reflects admin changes"""
+        success, response = self.run_test(
+            "Verify Public Customization Changes",
+            "GET",
+            "customization",
+            200
+        )
+        
+        if success and response:
+            # Check if the changes from admin update are reflected
+            expected_primary = "#FF5733"
+            expected_secondary = "#33FF57"
+            expected_accent = "#3357FF"
+            expected_site_name = "Délices et Trésors d'Algérie - Test"
+            
+            if (response.get('primary_color') == expected_primary and
+                response.get('secondary_color') == expected_secondary and
+                response.get('accent_color') == expected_accent and
+                response.get('site_name') == expected_site_name):
+                print(f"   ✅ Public endpoint reflects admin changes")
+                print(f"   Primary color: {response.get('primary_color')}")
+                print(f"   Secondary color: {response.get('secondary_color')}")
+                print(f"   Accent color: {response.get('accent_color')}")
+                print(f"   Site name: {response.get('site_name')}")
+                return True
+            else:
+                print(f"❌ Public endpoint does not reflect admin changes")
+                print(f"   Expected primary: {expected_primary}, Got: {response.get('primary_color')}")
+                print(f"   Expected secondary: {expected_secondary}, Got: {response.get('secondary_color')}")
+                print(f"   Expected accent: {expected_accent}, Got: {response.get('accent_color')}")
+        
+        return False
+
+    def test_customization_restore_original(self):
+        """Restore original customization settings"""
+        if not self.admin_token or not hasattr(self, 'original_customization'):
+            print("❌ Cannot restore customization - no admin token or original data")
+            return False
+        
+        # Restore original settings
+        restore_data = {
+            "site_name": self.original_customization.get('site_name'),
+            "primary_color": self.original_customization.get('primary_color'),
+            "secondary_color": self.original_customization.get('secondary_color'),
+            "accent_color": self.original_customization.get('accent_color'),
+            "font_heading": self.original_customization.get('font_heading'),
+            "font_body": self.original_customization.get('font_body')
+        }
+        
+        success, response = self.run_test(
+            "Restore Original Customization",
+            "PUT",
+            "admin/customization",
+            200,
+            data=restore_data,
+            use_admin_token=True
+        )
+        
+        if success:
+            print(f"   ✅ Original customization settings restored")
+            return True
+        
+        return False
+
+    def test_customization_unauthorized_access(self):
+        """Test unauthorized access to admin customization endpoints"""
+        # Test GET admin customization without token
+        success1, response1 = self.run_test(
+            "Admin Customization GET - No Auth",
+            "GET",
+            "admin/customization",
+            403,  # Should return 403 Forbidden
+            use_admin_token=False
+        )
+        
+        # Test PUT admin customization without token
+        update_data = {"primary_color": "#000000"}
+        success2, response2 = self.run_test(
+            "Admin Customization PUT - No Auth",
+            "PUT",
+            "admin/customization",
+            403,  # Should return 403 Forbidden
+            data=update_data,
+            use_admin_token=False
+        )
+        
+        return success1 and success2
+
     def cleanup_uploaded_files(self):
         """Clean up any remaining uploaded files"""
         if not self.admin_token or not self.uploaded_files:
