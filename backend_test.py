@@ -1290,6 +1290,14 @@ class DelicesAlgerieAPITester:
         self.test_seo_settings()
         self.test_custom_pages()
         
+        # Test customization endpoints
+        self.test_customization_public()
+        self.test_customization_admin_get()
+        self.test_customization_admin_update()
+        self.test_customization_public_reflects_changes()
+        self.test_customization_restore_original()
+        self.test_customization_unauthorized_access()
+        
         # Test admin stats
         self.test_admin_stats()
         
