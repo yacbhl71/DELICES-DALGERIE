@@ -273,6 +273,15 @@ function App() {
                   <Navigate to="/auth" />
                 )
               } />
+              <Route path="/admin/contact-info" element={
+                user?.role === 'admin' ? (
+                  <AdminLayout>
+                    <AdminContactInfo />
+                  </AdminLayout>
+                ) : (
+                  <Navigate to="/auth" />
+                )
+              } />
               <Route path="/admin/analytics" element={
                 user?.role === 'admin' ? (
                   <AdminLayout>
