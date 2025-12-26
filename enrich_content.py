@@ -6,7 +6,7 @@ import requests
 import json
 
 # Configuration
-API_BASE = "https://tasteofalgeria.preview.emergentagent.com/api"
+API_BASE = "https://ecommerce-admin-29.preview.emergentagent.com/api"
 ADMIN_EMAIL = "admin@soumam.com"
 ADMIN_PASSWORD = "admin123"
 
@@ -117,7 +117,7 @@ def main():
         
         if success_count > 0:
             print(f"\n🎉 {success_count} nouveaux contenus culturels ajoutés!")
-            print("Visibles sur: https://tasteofalgeria.preview.emergentagent.com/history")
+            print("Visibles sur: https://ecommerce-admin-29.preview.emergentagent.com/history")
         
     except Exception as e:
         print(f"❌ Erreur: {str(e)}")
