@@ -10,7 +10,24 @@ export default function AdminContactInfo() {
   const { language } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [settings, setSettings] = useState(null);
+  const [settings, setSettings] = useState({
+    contact_email: '',
+    contact_email_2: '',
+    contact_email_3: '',
+    support_email: '',
+    phone: '',
+    phone_2: '',
+    phone_3: '',
+    address: { fr: '', ar: '', en: '' },
+    address_2: { fr: '', ar: '', en: '' },
+    address_3: { fr: '', ar: '', en: '' },
+    show_email_2: false,
+    show_email_3: false,
+    show_phone_2: false,
+    show_phone_3: false,
+    show_address_2: false,
+    show_address_3: false
+  });
 
   useEffect(() => {
     fetchSettings();
