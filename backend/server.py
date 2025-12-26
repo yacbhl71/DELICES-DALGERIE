@@ -807,7 +807,7 @@ async def delete_product(product_id: str, admin_user: User = Depends(get_admin_u
 @api_router.get("/historical-content", response_model=List[HistoricalContent])
 async def get_historical_content(region: Optional[str] = None):
     query = {"region": region} if region else {}
-    content = await db.historical_content.find(query).to_list(1000)
+    content = await db.historical_content.find(query, {"_id": 0}).to_list(1000)
     return [HistoricalContent(**item) for item in content]
 
 @api_router.post("/historical-content", response_model=HistoricalContent)
