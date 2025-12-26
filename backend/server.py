@@ -227,12 +227,22 @@ class SiteCustomization(BaseModel):
         "en": "Discover our treasures: Deglet Nour dates and authentic Kabyle olive oil",
         "ar": "اكتشف كنوزنا: تمور دقلة نور وزيت الزيتون القبائلي الأصيل"
     }
+    tagline: Dict[str, str] = {
+        "fr": "Saveurs authentiques d'Algérie",
+        "en": "Authentic flavors of Algeria",
+        "ar": "نكهات الجزائر الأصيلة"
+    }
     logo_url: Optional[str] = None
+    favicon_url: Optional[str] = None
     
     # Colors
     primary_color: str = "#6B8E23"  # Olive green
     secondary_color: str = "#8B7355"  # Golden brown
     accent_color: str = "#F59E0B"  # Amber
+    
+    # Typography
+    font_heading: str = "Playfair Display"
+    font_body: str = "Montserrat"
     
     # Contact Info
     contact_email: str = "contact@delices-algerie.com"
