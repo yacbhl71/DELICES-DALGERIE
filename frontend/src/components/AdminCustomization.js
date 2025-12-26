@@ -52,9 +52,12 @@ const AdminCustomization = () => {
   const fetchSettings = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${API}/admin/customization`);
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${API}/admin/customization`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       if (response.data) {
-        setSettings({ ...settings, ...response.data });
+        setSettings(prev => ({ ...prev, ...response.data }));
       }
     } catch (error) {
       console.error('Error fetching settings:', error);
@@ -66,10 +69,13 @@ const AdminCustomization = () => {
   const handleSave = async () => {
     setSaving(true);
     try {
-      await axios.put(`${API}/admin/customization`, settings);
+      const token = localStorage.getItem('token');
+      await axios.put(`${API}/admin/customization`, settings, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      // Refresh the global customization context
+      await refreshCustomization();
       alert(language === 'ar' ? 'تم الحفظ بنجاح!' : language === 'en' ? 'Saved successfully!' : 'Sauvegarde réussie!');
-      // Apply colors immediately
-      applyColors();
     } catch (error) {
       console.error('Error saving settings:', error);
       alert(language === 'ar' ? 'خطأ في الحفظ' : language === 'en' ? 'Save error' : 'Erreur de sauvegarde');
@@ -78,10 +84,11 @@ const AdminCustomization = () => {
     }
   };
 
-  const applyColors = () => {
-    document.documentElement.style.setProperty('--color-primary', settings.primary_color);
-    document.documentElement.style.setProperty('--color-secondary', settings.secondary_color);
-    document.documentElement.style.setProperty('--color-accent', settings.accent_color);
+  const handlePreview = () => {
+    // Apply styles temporarily for preview
+    applyStyles(settings);
+    setShowPreview(true);
+    setTimeout(() => setShowPreview(false), 3000);
   };
 
   const handleInputChange = (field, lang, value) => {
