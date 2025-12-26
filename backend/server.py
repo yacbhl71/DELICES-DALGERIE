@@ -272,9 +272,12 @@ class CustomizationUpdate(BaseModel):
     site_name: Optional[str] = None
     site_slogan: Optional[Dict[str, str]] = None
     logo_url: Optional[str] = None
+    favicon_url: Optional[str] = None
     primary_color: Optional[str] = None
     secondary_color: Optional[str] = None
     accent_color: Optional[str] = None
+    font_heading: Optional[str] = None
+    font_body: Optional[str] = None
     contact_email: Optional[str] = None
     contact_phone: Optional[str] = None
     contact_address: Optional[Dict[str, str]] = None
@@ -282,6 +285,7 @@ class CustomizationUpdate(BaseModel):
     home_subtitle: Optional[Dict[str, str]] = None
     shop_title: Optional[Dict[str, str]] = None
     shop_description: Optional[Dict[str, str]] = None
+    tagline: Optional[Dict[str, str]] = None
 
 # Custom Page Models
 class CustomPage(BaseModel):
